@@ -1,4 +1,4 @@
-# Perth Traffic Watch 🚗📊
+# Perth Traffic Watch
 
 **Open-source vehicle detection system using Edge AI, ESP32-CAM, and FOMO (Faster Objects, More Objects)**
 
@@ -14,11 +14,11 @@ Monitor traffic flow in real-time using affordable IoT hardware and machine lear
 
 Perth Traffic Watch is a DIY traffic monitoring system that:
 
-- 📸 **Detects vehicles** using Edge Impulse FOMO (ML model)
-- 🌐 **Uploads data** via 4G/LTE (SIM7000A modem)
-- 📊 **Visualises traffic** on a real-time web dashboard
-- 💰 **Costs ~$143 AUD** per monitoring site
-- 🔋 **Runs 24/7** on mains or solar power
+- **Detects vehicles** using Edge Impulse FOMO (ML model)
+- **Uploads data** via 4G/LTE (SIM7000A modem)
+- **Visualises traffic** on a real-time web dashboard
+- **Costs ~$143 AUD** per monitoring site
+- **Runs 24/7** on mains or solar power
 
 Perfect for:
 - Traffic analysis (peak hours, trends)
@@ -33,10 +33,10 @@ Perfect for:
 ![Perth Traffic Watch Dashboard - Cottesloe Dark Theme](frontend/web-dashboard/screenshot-cottesloe-dark.png)
 
 **Real-time traffic monitoring dashboard featuring:**
-- 🗺️ **Interactive Map** - Live traffic visualization with color-coded markers
-- 📊 **Traffic Flow Corridor** - Directional flow analysis along Mounts Bay Road
-- 📈 **Hourly Charts** - Historical traffic patterns with Chart.js
-- 🎨 **WA-Themed UI** - Cottesloe Beach and Indigenous Earth color schemes (light/dark modes)
+- **Interactive Map** - Live traffic visualization with color-coded markers
+- **Traffic Flow Corridor** - Directional flow analysis along Mounts Bay Road
+- **Hourly Charts** - Historical traffic patterns with Chart.js
+- **WA-Themed UI** - Cottesloe Beach and Indigenous Earth color schemes (light/dark modes)
 
 ---
 
@@ -304,7 +304,7 @@ Dashboard → Fetch API → Chart.js → User
 
 ## Roadmap
 
-### ✅ Phase 1: Proof of Concept (Current)
+### Phase 1: Proof of Concept (Current)
 - [x] Hardware BOM and shopping list
 - [x] Firmware structure (PlatformIO)
 - [x] Backend API (Express + SQLite)
@@ -313,7 +313,7 @@ Dashboard → Fetch API → Chart.js → User
 - [ ] Edge Impulse model training
 - [ ] Field deployment at Mounts Bay Road
 
-### 🔄 Phase 2: Single Site Deployment (2-4 Weeks)
+### Phase 2: Single Site Deployment (2-4 Weeks)
 - [ ] ML model training (300-500 images)
 - [ ] Firmware integration with FOMO
 - [ ] Site survey (Mounts Bay Road)
@@ -321,14 +321,14 @@ Dashboard → Fetch API → Chart.js → User
 - [ ] 24-hour field testing
 - [ ] Accuracy validation (>70%)
 
-### 📋 Phase 3: Multi-Site Expansion (1-3 Months)
+### Phase 3: Multi-Site Expansion (1-3 Months)
 - [ ] Survey 5-10 additional sites
 - [ ] Bulk hardware order
 - [ ] Data pooling (shared SIM plan)
 - [ ] Staged rollout (1 site/week)
 - [ ] Central monitoring dashboard
 
-### 🚀 Phase 4: Advanced Features (3-6 Months)
+### Phase 4: Advanced Features (3-6 Months)
 - [ ] Multi-class detection (cars, trucks, motorcycles)
 - [ ] Direction detection (northbound vs. southbound)
 - [ ] Speed estimation (optional)
@@ -442,12 +442,12 @@ Validate with manual counts.
 Contributions welcome! See [docs/contributing.md](docs/contributing.md) for guidelines.
 
 Ways to contribute:
-- 🐛 Report bugs
-- 💡 Suggest features
-- 📝 Improve documentation
-- 🧪 Field testing
-- 🤖 ML model improvements
-- �� Hardware alternatives
+- Report bugs
+- Suggest features
+- Improve documentation
+- Field testing
+- ML model improvements
+- Hardware alternatives
 
 ---
 
@@ -494,11 +494,11 @@ Free to use, modify, and distribute. No warranty.
 
 ## Next Steps (For You!)
 
-1. ⭐ Star this repository
-2. 🛒 Order hardware (see [hardware/shopping-lists.md](hardware/shopping-lists.md))
-3. 📸 Collect training images
-4. 🤖 Train FOMO model (see [docs/ml-development-guide.md](docs/ml-development-guide.md))
-5. 🚀 Deploy and share your results!
+1. Star this repository
+2. Order hardware (see [hardware/shopping-lists.md](hardware/shopping-lists.md))
+3. Collect training images
+4. Train FOMO model (see [docs/ml-development-guide.md](docs/ml-development-guide.md))
+5. Deploy and share your results!
 
 **Questions?** Open an issue or discussion on GitHub.
 
