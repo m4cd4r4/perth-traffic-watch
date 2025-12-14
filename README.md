@@ -17,7 +17,7 @@ Perth Traffic Watch is a DIY traffic monitoring system that:
 - 📸 **Detects vehicles** using Edge Impulse FOMO (ML model)
 - 🌐 **Uploads data** via 4G/LTE (SIM7000A modem)
 - 📊 **Visualises traffic** on a real-time web dashboard
-- 💰 **Costs ~$150 AUD** per monitoring site
+- 💰 **Costs ~$143 AUD** per monitoring site
 - 🔋 **Runs 24/7** on mains or solar power
 
 Perfect for:
@@ -84,7 +84,7 @@ See [hardware/shopping-lists.md](hardware/shopping-lists.md) for complete shoppi
 - Register at [m2msim.com.au](https://m2msim.com.au)
 - 1GB/month plan (~$5-8/month)
 
-**Total Budget**: ~$150 AUD (Phase 1)
+**Total Budget**: ~$143 AUD (Phase 1)
 
 ### Phase 2: Train ML Model (While Hardware Ships)
 
@@ -270,10 +270,12 @@ Dashboard → Fetch API → Chart.js → User
 | ESP32-CAM | $12 |
 | SIM7000A LTE module | $20 |
 | MicroSD card | $8 |
-| Junction box + mounting | $25 |
-| Cables, glands, misc | $15 |
-| M2M SIM (first month) | $7 |
-| **Total** | **~$150** |
+| USB-to-TTL programmer | $10 |
+| Junction box + mounting | $40 |
+| Power supply/adapter | $15 |
+| Cables, glands, misc | $30 |
+| M2M SIM (first month) | $8 |
+| **Total** | **~$143** |
 
 ### Phase 2: Multi-Site (5 sites)
 
