@@ -6,21 +6,27 @@
 
 | Component | Description | Source | Est. Cost |
 |-----------|-------------|--------|-----------|
-| ESP32-CAM | AI-Thinker ESP32-CAM with OV2640 | AliExpress/eBay | $8 |
+| ESP32-CAM | AI-Thinker ESP32-CAM with OV2640 + PSRAM | AliExpress/eBay | $8 |
 | SIM7000A | LTE Cat-M1/NB-IoT + GPS module | AliExpress | $15 |
 | 18650 Battery | 3.7V 3000mAh Li-ion cell | Local electronics | $5 |
 | BMS Board | 1S 3A protection + charging | AliExpress | $2 |
 | TP4056 | USB charging module (optional) | AliExpress | $1 |
 | Solar Panel | 5W 6V monocrystalline | AliExpress/eBay | $10 |
 
-### Enclosure & Mounting
+### Enclosure & Mounting (Updated: Using Bunnings IP65 Junction Boxes)
 
 | Component | Description | Source | Est. Cost |
 |-----------|-------------|--------|-----------|
-| 3D Printed Case | PETG or ASA (weather resistant) | Self-print | $3-5 |
-| Mounting Bracket | Pole/fence mount, stainless steel | Hardware store | $2 |
-| Cable Gland | IP68 waterproof, PG7 or PG9 | AliExpress | $1 |
-| Silicone Sealant | Weatherproofing joints | Hardware store | $1 |
+| IP65 Junction Box | HPM 190x140x70mm or similar | Bunnings | $10-15 |
+| Cable Gland x2 | IP68 PG7/PG9 for solar + antenna | Bunnings/AliExpress | $3 |
+| Clear Acrylic/Polycarbonate | Camera window (optional, can drill hole) | Bunnings | $2-5 |
+| Mounting Bracket | L-bracket or pole mount, stainless | Bunnings | $5 |
+| Silicone Sealant | Clear RTV for weatherproofing | Bunnings | $8 (shared) |
+| Step Drill Bit | For clean camera hole | Bunnings | $15 (one-time tool) |
+
+**Bunnings Product Suggestions:**
+- HPM Junction Box 190x140x70mm (SKU: 4430042) - ~$12
+- Alternatively: Legrand IP66 boxes, Clipsal enclosures
 
 ### Connectivity
 
