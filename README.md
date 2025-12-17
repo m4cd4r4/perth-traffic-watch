@@ -316,12 +316,12 @@ Dashboard → Fetch API → Chart.js → User
 **Target**: >70% detection accuracy in real-world conditions
 
 **Factors affecting accuracy**:
-- ✅ Good lighting (daytime, well-lit roads)
-- ❌ Poor lighting (night, heavy shadows)
-- ✅ Clear camera view
-- ❌ Occlusions (trees, rain, fog)
-- ✅ Medium traffic density
-- ❌ Very high density (overlapping vehicles)
+- Good lighting (daytime, well-lit roads)
+- Poor lighting (night, heavy shadows)
+- Clear camera view
+- Occlusions (trees, rain, fog)
+- Medium traffic density
+- Very high density (overlapping vehicles)
 
 **Validation**: Manual count vs. automated count over 1 hour
 
@@ -436,11 +436,11 @@ Validate with manual counts.
 ### Q: What about privacy?
 
 **A**: Perth Traffic Watch:
-- ✅ Uses low-resolution images (QVGA 320x240)
-- ✅ No facial recognition
-- ✅ No number plate recognition
-- ✅ No audio recording
-- ✅ Anonymous vehicle counts only
+- Uses low-resolution images (QVGA 320x240)
+- No facial recognition
+- No number plate recognition
+- No audio recording
+- Anonymous vehicle counts only
 
 ### Q: Can I use this commercially?
 
@@ -536,7 +536,7 @@ Free to use, modify, and distribute. No warranty.
 
 ---
 
-**Built with ❤️ in Perth, Western Australia**
+**Built with love in Perth, Western Australia**
 
 *Open-source traffic monitoring for everyone.*
 
