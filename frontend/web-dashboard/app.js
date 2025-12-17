@@ -154,10 +154,10 @@ function getThemeColors() {
 // ============================================================================
 
 function initMap() {
-  // Center on Mounts Bay Road, Perth (middle of the monitored stretch)
-  const center = [-31.9685, 115.8531]; // Center of route
+  // Center on full CBD to Fremantle corridor (midpoint of all 3 stretches)
+  const center = [-31.995, 115.785]; // Centered on Swanbourne
 
-  trafficMap = L.map('traffic-map').setView(center, 14); // Zoom 14 for better view of road
+  trafficMap = L.map('traffic-map').setView(center, 12); // Zoom 12 to show full corridor
 
   // Use different tile layers based on theme
   const isDark = currentTheme.includes('dark');
@@ -262,110 +262,108 @@ function updateMapMarkers(sites) {
   siteMarkers = {};
   roadPolylines = [];
 
-  // Group sites by location (NB/SB pairs)
-  const locations = ['Kings Park', 'Mill Point', 'Fraser Ave', 'Malcolm St'];
+  // Define all 3 corridor stretches
+  const corridors = [
+    {
+      name: 'Mounts Bay Road',
+      shortName: 'Mounts Bay Rd',
+      filter: 'Mounts Bay Rd',
+      start: L.latLng(-31.97339, 115.82564),  // Crawley
+      end: L.latLng(-31.963231, 115.842311),  // Point Lewis
+      label: 'Crawley → Point Lewis'
+    },
+    {
+      name: 'Stirling Highway - Swanbourne',
+      shortName: 'Swanbourne',
+      filter: 'Stirling Hwy @ Grant St|Stirling Hwy @ Campbell Barracks|Stirling Hwy @ Eric St',
+      start: L.latLng(-31.985, 115.763),  // Grant St
+      end: L.latLng(-31.998, 115.762),    // Eric St
+      label: 'Grant St → Eric St'
+    },
+    {
+      name: 'Stirling Highway - Mosman Park',
+      shortName: 'Mosman Park',
+      filter: 'Stirling Hwy @ Forrest St|Stirling Hwy @ Bay View|Stirling Hwy @ McCabe|Stirling Hwy @ Victoria',
+      start: L.latLng(-32.008, 115.757),  // Forrest St
+      end: L.latLng(-32.035, 115.751),    // Victoria St
+      label: 'Forrest St → Victoria St'
+    }
+  ];
 
-  // Draw routes between consecutive monitoring locations for each direction
-  ['Northbound', 'Southbound'].forEach(direction => {
-    const offset = direction === 'Southbound' ? 0.0001 : -0.0001; // Slight offset for parallel routes
+  // Process each corridor
+  corridors.forEach(corridor => {
+    ['Northbound', 'Southbound'].forEach(direction => {
+      const offset = direction === 'Southbound' ? 0.00015 : -0.00015;
 
-    for (let i = 0; i < locations.length - 1; i++) {
-      const startSite = sites.find(s => s.name.includes(locations[i]) && s.name.includes(direction));
-      const endSite = sites.find(s => s.name.includes(locations[i + 1]) && s.name.includes(direction));
+      // Filter sites for this specific corridor and direction
+      const filterRegex = new RegExp(corridor.filter);
+      const corridorSites = sites.filter(s =>
+        filterRegex.test(s.name) && s.name.includes(direction)
+      );
 
-      if (startSite && endSite && startSite.latitude && endSite.latitude) {
-        const startCoord = L.latLng(startSite.latitude + offset, startSite.longitude);
-        const endCoord = L.latLng(endSite.latitude + offset, endSite.longitude);
+      if (corridorSites.length === 0) return; // Skip if no sites
 
-        const hourlyCount = Math.round(startSite.current_hourly || 0);
-        const color = getTrafficColor(hourlyCount);
-        const estimatedSpeed = Math.round(estimateSpeed(hourlyCount));
-        const trafficLevel = getTrafficLevel(hourlyCount);
+      // Calculate average traffic across all sites in this corridor + direction
+      const totalTraffic = corridorSites.reduce((sum, site) => sum + (site.current_hourly || 0), 0);
+      const avgTraffic = corridorSites.length > 0 ? Math.round(totalTraffic / corridorSites.length) : 0;
 
-        // Create routing control with custom styling
-        const routingControl = L.Routing.control({
-          waypoints: [startCoord, endCoord],
-          router: L.Routing.osrmv1({
-            serviceUrl: 'https://router.project-osrm.org/route/v1'
-          }),
-          lineOptions: {
-            styles: [{
-              color: color,
-              weight: 6,
-              opacity: 0.85
-            }]
-          },
-          createMarker: () => null, // Don't create default markers
-          addWaypoints: false,
-          routeWhileDragging: false,
-          fitSelectedRoutes: false,
-          show: false, // Hide the instruction panel
-          collapsible: false
-        }).addTo(trafficMap);
+      const color = getTrafficColor(avgTraffic);
+      const estimatedSpeed = Math.round(estimateSpeed(avgTraffic));
+      const trafficLevel = getTrafficLevel(avgTraffic);
 
-        // Store for cleanup
-        roadPolylines.push(routingControl);
+      // Create route with offset for direction
+      const startCoord = L.latLng(corridor.start.lat + offset, corridor.start.lng);
+      const endCoord = L.latLng(corridor.end.lat + offset, corridor.end.lng);
 
-        // Add popup to the route line when it's created
-        routingControl.on('routesfound', function(e) {
-          const routes = e.routes;
-          const line = routes[0].coordinates;
+      const routingControl = L.Routing.control({
+        waypoints: [startCoord, endCoord],
+        router: L.Routing.osrmv1({
+          serviceUrl: 'https://router.project-osrm.org/route/v1'
+        }),
+        lineOptions: {
+          styles: [{
+            color: color,
+            weight: 5,
+            opacity: 0.8
+          }]
+        },
+        createMarker: () => null,
+        addWaypoints: false,
+        routeWhileDragging: false,
+        fitSelectedRoutes: false,
+        show: false,
+        collapsible: false
+      }).addTo(trafficMap);
 
-          // Find the polyline and add popup
+      roadPolylines.push(routingControl);
+
+      // Add popup to route line
+      const routeId = `${corridor.shortName}-${direction}`;
+      routingControl.on('routesfound', function(e) {
+        setTimeout(() => {
           trafficMap.eachLayer(layer => {
             if (layer instanceof L.Polyline && layer.options.color === color) {
-              layer.bindPopup(`
-                <div style="font-family: sans-serif;">
-                  <strong>${locations[i]} to ${locations[i + 1]} (${direction.substring(0, 2)})</strong><br>
-                  <span style="color: #666;">Flow: ${hourlyCount} veh/hr</span><br>
-                  <span style="color: #666;">Est. Speed: ${estimatedSpeed} km/h</span><br>
-                  <span style="color: #666;">Level: ${trafficLevel}</span>
-                </div>
-              `);
+              // Only bind if not already bound (avoid duplicates)
+              if (!layer._routePopupBound) {
+                layer.bindPopup(`
+                  <div style="font-family: sans-serif;">
+                    <strong>${corridor.name} (${direction.substring(0, 2)})</strong><br>
+                    <span style="color: #666;">${corridor.label}</span><br>
+                    <span style="color: #666;">Avg Flow: ${avgTraffic} veh/hr</span><br>
+                    <span style="color: #666;">Est. Speed: ${estimatedSpeed} km/h</span><br>
+                    <span style="color: #666;">Level: ${trafficLevel}</span>
+                  </div>
+                `);
+                layer._routePopupBound = true;
+              }
             }
           });
-        });
-      }
-    }
-  });
-
-  // Add markers at monitoring sites
-  sites.forEach((site, index) => {
-    if (!site.latitude || !site.longitude) return;
-
-    const hourlyCount = Math.round(site.current_hourly || 0);
-    const estimatedSpeed = hourlyCount > 0 ? Math.round(estimateSpeed(hourlyCount)) : '-';
-    const trafficLevel = getTrafficLevel(hourlyCount);
-
-    // Small marker to show monitoring point
-    const marker = L.circleMarker([site.latitude, site.longitude], {
-      radius: 5,
-      fillColor: '#fff',
-      color: getTrafficColor(site.current_hourly),
-      weight: 2,
-      opacity: 1,
-      fillOpacity: 0.9
-    }).addTo(trafficMap);
-
-    const popupContent = `
-      <div style="font-family: sans-serif;">
-        <strong>${site.name}</strong><br>
-        <span style="color: #666;">Traffic: ${hourlyCount} vehicles/hr</span><br>
-        <span style="color: #666;">Est. Speed: ${estimatedSpeed} km/h</span><br>
-        <span style="color: #666;">Level: ${trafficLevel}</span><br>
-        <span style="color: #666;">Confidence: ${site.avg_confidence ? (site.avg_confidence * 100).toFixed(1) + '%' : '-'}</span>
-      </div>
-    `;
-
-    marker.bindPopup(popupContent);
-    marker.on('click', () => {
-      currentSite = site.name;
-      siteSelect.value = site.name;
-      loadDashboard();
+        }, 200);
+      });
     });
-
-    siteMarkers[site.name] = marker;
   });
+
+  // Monitoring site dots removed - showing only route lines for cleaner visualization
 }
 
 function updateMapTiles() {

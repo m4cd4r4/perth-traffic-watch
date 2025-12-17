@@ -14,15 +14,18 @@ Monitor traffic flow in real-time using affordable IoT hardware and machine lear
 
 Perth Traffic Watch is a DIY traffic monitoring system that:
 
-- **Detects vehicles** using Edge Impulse FOMO (ML model)
-- **Uploads data** via 4G/LTE (SIM7000A modem)
-- **Visualises traffic** on a real-time web dashboard
+- **Monitors 6 km corridor** from CBD to Fremantle (3 stretches)
+- **24 monitoring sites** with bidirectional tracking (Northbound/Southbound)
+- **Real-time speed estimation** using traffic flow theory
+- **Edge AI detection** using Edge Impulse FOMO (ML model on ESP32)
+- **Closed-segment monitoring** for accurate flow measurement
 - **Costs ~$143 AUD** per monitoring site
 - **Runs 24/7** on mains or solar power
 
 Perfect for:
-- Traffic analysis (peak hours, trends)
-- Research projects (urban planning, transport)
+- **Commuter intelligence**: "Should I drive now?" recommendations
+- Traffic analysis (peak hours, congestion patterns, journey times)
+- Research projects (urban planning, transport optimisation)
 - Hobbyists (IoT, ML, embedded systems)
 - Community projects (local traffic advocacy)
 
@@ -33,10 +36,12 @@ Perfect for:
 ![Perth Traffic Watch Dashboard - Cottesloe Dark Theme](frontend/web-dashboard/screenshot-cottesloe-dark.png)
 
 **Real-time traffic monitoring dashboard featuring:**
-- **Interactive Map** - Live traffic visualization with color-coded markers
-- **Traffic Flow Corridor** - Directional flow analysis along Mounts Bay Road
-- **Hourly Charts** - Historical traffic patterns with Chart.js
-- **WA-Themed UI** - Cottesloe Beach and Indigenous Earth color schemes (light/dark modes)
+- **Full Corridor Visualisation** - CBD to Fremantle (3 stretches, 6 km)
+- **Speed Estimation** - Real-time traffic flow analysis using density theory
+- **Interactive Map** - Colour-coded routes showing congestion levels (Green → Orange → Red → Dark Red)
+- **Bidirectional Tracking** - Separate Northbound/Southbound monitoring
+- **Hourly Charts** - Historical patterns across 24 monitoring sites
+- **WA-Themed UI** - Cottesloe Beach and Indigenous Earth colour schemes (light/dark modes)
 
 ---
 
@@ -211,6 +216,40 @@ perth-traffic-watch/
 
 ---
 
+## Monitored Stretches
+
+### CBD to Fremantle Corridor (6 km total)
+
+#### 1. **Mounts Bay Road** (PoC ✅)
+**Crawley → Point Lewis** (~1.5 km)
+
+- **Status**: Proof of Concept Complete
+- **Monitoring Sites**: Kings Park, Mill Point, Fraser Ave, Malcolm St (4 × 2 directions = 8 sites)
+- **Characteristics**: Waterfront arterial, minimal side access, ideal closed segment
+- **Why It Works**: No side streets → vehicles entering at Crawley are counted at Point Lewis
+
+#### 2. **Stirling Highway - Swanbourne** (Phase 1 ✅)
+**Grant St → Eric St** (~1.5 km)
+
+- **Status**: Phase 1 Pilot Complete
+- **Monitoring Sites**: Grant St, Campbell Barracks, Eric St (3 × 2 directions = 6 sites)
+- **Characteristics**: Campbell Barracks creates natural barrier, very few side access points
+- **Key Feature**: Army facility on one side = no civilian traffic entry/exit
+
+#### 3. **Stirling Highway - Mosman Park** (Phase 1 ✅)
+**Forrest St → Victoria St** (~3 km)
+
+- **Status**: Phase 1 Pilot Complete
+- **Monitoring Sites**: Forrest St, Bay View Terrace, McCabe St, Victoria St (4 × 2 directions = 8 sites)
+- **Characteristics**: Longest stretch, residential arterial, tests algorithm robustness
+- **Purpose**: Validate algorithm with more complex side street access
+
+**Total**: 24 monitoring sites (11 locations × 2 directions each) across 3 stretches
+
+**See**: [docs/corridor-architecture.md](docs/corridor-architecture.md) for detailed technical architecture
+
+---
+
 ## How It Works
 
 ### 1. Vehicle Detection (ESP32-CAM)
@@ -244,15 +283,30 @@ API → SQLite → Aggregation → Dashboard
 - Aggregates statistics (hourly, daily)
 - Serves data to web dashboard via REST API
 
-### 4. Visualisation (Web Dashboard)
+### 4. Speed Estimation Algorithm
+
+```
+Vehicle Counts → Traffic Flow Theory → Estimated Speed
+(Per stretch)     (Flow ÷ Density)      (5-65 km/h)
+```
+
+- Calculate average vehicle flow per stretch per direction
+- Apply traffic flow theory: Speed = Flow ÷ Density
+- Calibrated for 60 km/h arterial roads
+- Colour-code routes: Green (flowing) → Orange (moderate) → Red (heavy) → Dark Red (gridlock)
+
+**See**: [docs/corridor-architecture.md](docs/corridor-architecture.md) for algorithm details and evolution roadmap
+
+### 5. Visualisation (Web Dashboard)
 
 ```
 Dashboard → Fetch API → Chart.js → User
 ```
 
-- Real-time traffic statistics
-- Hourly traffic flow chart
-- Recent detections table
+- Real-time traffic statistics across 3 stretches
+- Colour-coded route visualisation (6 routes: 3 stretches × 2 directions)
+- Hourly traffic flow chart with speed estimates
+- "Should I drive now?" intelligence
 - Auto-refresh every 60 seconds
 
 ---
@@ -344,6 +398,7 @@ See [docs/requirements-and-todos.md](docs/requirements-and-todos.md) for full ro
 
 | Document | Description |
 |----------|-------------|
+| [**docs/corridor-architecture.md**](docs/corridor-architecture.md) | **3-stretch system architecture, algorithm details, ML integration** |
 | [hardware/bom.md](hardware/bom.md) | Bill of materials |
 | [hardware/shopping-lists.md](hardware/shopping-lists.md) | AliExpress + Bunnings orders |
 | [docs/ml-development-guide.md](docs/ml-development-guide.md) | Edge Impulse FOMO training |
