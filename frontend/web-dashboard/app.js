@@ -445,6 +445,45 @@ function updateFlowCorridor(sites) {
 }
 
 // ============================================================================
+// Hero Status Card
+// ============================================================================
+
+function updateHeroStatusCard(sites) {
+  if (!sites || sites.length === 0) return;
+
+  const totalTraffic = sites.reduce((sum, site) => sum + (site.current_hourly || 0), 0);
+  const avgTraffic = Math.round(totalTraffic / sites.length);
+  const avgSpeed = Math.round(estimateSpeed(avgTraffic));
+  const trafficLevel = getTrafficLevel(avgTraffic);
+
+  const corridorStatus = document.getElementById('corridor-status');
+  if (corridorStatus) corridorStatus.textContent = trafficLevel;
+
+  const avgSpeedElement = document.getElementById('avg-speed-hero');
+  if (avgSpeedElement) avgSpeedElement.textContent = avgSpeed;
+
+  const recommendationElement = document.getElementById('drive-recommendation');
+  if (recommendationElement) {
+    let icon, text, bgColor;
+    if (avgSpeed >= 50) {
+      icon = '✓'; text = 'Excellent - flowing freely'; bgColor = 'rgba(16, 185, 129, 0.3)';
+    } else if (avgSpeed >= 35) {
+      icon = '⚠️'; text = 'Moderate - allow extra time'; bgColor = 'rgba(245, 158, 11, 0.3)';
+    } else if (avgSpeed >= 20) {
+      icon = '🚗'; text = 'Heavy - consider alternatives'; bgColor = 'rgba(239, 68, 68, 0.3)';
+    } else {
+      icon = '⛔'; text = 'Gridlock - avoid if possible'; bgColor = 'rgba(153, 27, 27, 0.3)';
+    }
+
+    const recIcon = recommendationElement.querySelector('.rec-icon');
+    const recText = recommendationElement.querySelector('.rec-text');
+    if (recIcon) recIcon.textContent = icon;
+    if (recText) recText.textContent = text;
+    recommendationElement.style.background = bgColor;
+  }
+}
+
+// ============================================================================
 // UI Updates
 // ============================================================================
 
@@ -596,11 +635,12 @@ async function loadAllSitesData() {
 
   allSitesData = sitesWithStats;
 
-  // Update map and flow
+  // Update map, flow, and hero status card
   if (trafficMap) {
     updateMapMarkers(sitesWithStats);
     updateFlowCorridor(sitesWithStats);
   }
+  updateHeroStatusCard(sitesWithStats);
 }
 
 async function loadDashboard() {
