@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: perth-traffic-watch-api
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd backend/api && npm install && npm run init-db
+    startCommand: cd backend/api && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: API_KEY
+        generateValue: true
+      - key: PORT
+        value: 3000
+    healthCheckPath: /health
+    autoDeploy: true

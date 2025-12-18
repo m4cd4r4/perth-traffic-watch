@@ -5,7 +5,7 @@
 // Configuration
 const API_BASE_URL = window.location.hostname === 'localhost'
   ? 'http://localhost:3000'
-  : 'https://your-backend-url.com'; // Change in production
+  : 'https://perth-traffic-watch.onrender.com'; // Render backend
 
 const REFRESH_INTERVAL = 60000; // 60 seconds
 
@@ -418,8 +418,13 @@ function updateFlowCorridor(sites) {
       const estimatedSpeed = Math.round(estimateSpeed(hourlyCount));
       const trafficLevel = getTrafficLevel(hourlyCount);
 
-      // Update count display
-      countEl.textContent = `${hourlyCount}/hr`;
+      // Update count display with animation
+      const newCountText = `${hourlyCount}/hr`;
+      if (countEl.textContent !== newCountText) {
+        countEl.classList.add('value-updated');
+        setTimeout(() => countEl.classList.remove('value-updated'), 300);
+      }
+      countEl.textContent = newCountText;
 
       // Color code based on traffic level
       const color = getTrafficColor(hourlyCount);
@@ -427,7 +432,12 @@ function updateFlowCorridor(sites) {
 
       // Update speed display if element exists
       if (speedEl) {
-        speedEl.textContent = `~${estimatedSpeed} km/h`;
+        const newSpeedText = `~${estimatedSpeed} km/h`;
+        if (speedEl.textContent !== newSpeedText) {
+          speedEl.classList.add('value-updated');
+          setTimeout(() => speedEl.classList.remove('value-updated'), 300);
+        }
+        speedEl.textContent = newSpeedText;
         speedEl.style.color = color;
         speedEl.title = `Traffic Level: ${trafficLevel}`;
       }
@@ -445,6 +455,58 @@ function updateFlowCorridor(sites) {
 }
 
 // ============================================================================
+// Hero Status Card
+// ============================================================================
+
+function updateHeroStatusCard(sites) {
+  if (!sites || sites.length === 0) return;
+
+  const totalTraffic = sites.reduce((sum, site) => sum + (site.current_hourly || 0), 0);
+  const avgTraffic = Math.round(totalTraffic / sites.length);
+  const avgSpeed = Math.round(estimateSpeed(avgTraffic));
+  const trafficLevel = getTrafficLevel(avgTraffic);
+
+  const corridorStatus = document.getElementById('corridor-status');
+  if (corridorStatus) {
+    if (corridorStatus.textContent !== trafficLevel) {
+      corridorStatus.classList.add('value-updated');
+      setTimeout(() => corridorStatus.classList.remove('value-updated'), 400);
+    }
+    corridorStatus.textContent = trafficLevel;
+  }
+
+  const avgSpeedElement = document.getElementById('avg-speed-hero');
+  if (avgSpeedElement) {
+    const newSpeed = avgSpeed.toString();
+    if (avgSpeedElement.textContent !== newSpeed) {
+      avgSpeedElement.classList.add('value-updated');
+      setTimeout(() => avgSpeedElement.classList.remove('value-updated'), 400);
+    }
+    avgSpeedElement.textContent = newSpeed;
+  }
+
+  const recommendationElement = document.getElementById('drive-recommendation');
+  if (recommendationElement) {
+    let icon, text, bgColor;
+    if (avgSpeed >= 50) {
+      icon = '✓'; text = 'Excellent - flowing freely'; bgColor = 'rgba(16, 185, 129, 0.3)';
+    } else if (avgSpeed >= 35) {
+      icon = '⚠️'; text = 'Moderate - allow extra time'; bgColor = 'rgba(245, 158, 11, 0.3)';
+    } else if (avgSpeed >= 20) {
+      icon = '🚗'; text = 'Heavy - consider alternatives'; bgColor = 'rgba(239, 68, 68, 0.3)';
+    } else {
+      icon = '⛔'; text = 'Gridlock - avoid if possible'; bgColor = 'rgba(153, 27, 27, 0.3)';
+    }
+
+    const recIcon = recommendationElement.querySelector('.rec-icon');
+    const recText = recommendationElement.querySelector('.rec-text');
+    if (recIcon) recIcon.textContent = icon;
+    if (recText) recText.textContent = text;
+    recommendationElement.style.background = bgColor;
+  }
+}
+
+// ============================================================================
 // UI Updates
 // ============================================================================
 
@@ -453,12 +515,79 @@ function setStatus(status, text) {
   statusText.textContent = text;
 }
 
+// Helper function to count up numbers (odometer effect)
+function countUpAnimation(element, endValue, duration = 800) {
+  const startValue = parseInt(element.textContent.replace(/,/g, '')) || 0;
+  const endNum = parseInt(endValue.replace(/,/g, ''));
+
+  if (isNaN(endNum) || startValue === endNum) return false;
+
+  const range = endNum - startValue;
+  const stepTime = Math.abs(Math.floor(duration / range));
+  const increment = range > 0 ? 1 : -1;
+
+  let current = startValue;
+  const timer = setInterval(() => {
+    current += increment * Math.ceil(Math.abs(range) / 50); // Speed up for large numbers
+    if ((increment > 0 && current >= endNum) || (increment < 0 && current <= endNum)) {
+      current = endNum;
+      clearInterval(timer);
+    }
+    element.textContent = current.toLocaleString();
+  }, stepTime);
+
+  return true;
+}
+
+// Helper function to animate value updates
+function animateValueUpdate(element, newValue, useCountUp = false) {
+  if (!element) return;
+
+  const oldValue = element.textContent;
+  if (oldValue !== newValue && newValue !== '-') {
+    // Try count-up animation for numeric values
+    if (useCountUp && countUpAnimation(element, newValue)) {
+      // Count-up animation started, still flash the card
+      const statCard = element.closest('.stat-card');
+      if (statCard) {
+        statCard.classList.add('data-updated');
+        setTimeout(() => statCard.classList.remove('data-updated'), 600);
+      }
+      return;
+    }
+
+    // Add pulse animation to the value
+    element.classList.add('value-updated');
+
+    // Find parent stat-card and flash it
+    const statCard = element.closest('.stat-card');
+    if (statCard) {
+      statCard.classList.add('data-updated');
+      setTimeout(() => statCard.classList.remove('data-updated'), 600);
+    }
+
+    // Remove animation class after animation completes
+    setTimeout(() => element.classList.remove('value-updated'), 400);
+  }
+
+  element.textContent = newValue;
+}
+
 function updateStatsCards(stats) {
-  document.getElementById('total-count').textContent = stats.current_total?.toLocaleString() || '-';
-  document.getElementById('avg-hourly').textContent = stats.avg_hourly ? Math.round(stats.avg_hourly) : '-';
-  document.getElementById('avg-confidence').textContent = stats.avg_confidence
-    ? `${(stats.avg_confidence * 100).toFixed(1)}%`
-    : '-';
+  // Use count-up animation for total-count (large number)
+  animateValueUpdate(
+    document.getElementById('total-count'),
+    stats.current_total?.toLocaleString() || '-',
+    true  // Enable count-up animation
+  );
+  animateValueUpdate(
+    document.getElementById('avg-hourly'),
+    stats.avg_hourly ? Math.round(stats.avg_hourly) : '-'
+  );
+  animateValueUpdate(
+    document.getElementById('avg-confidence'),
+    stats.avg_confidence ? `${(stats.avg_confidence * 100).toFixed(1)}%` : '-'
+  );
 
   // Calculate time since last update
   if (stats.last_seen) {
@@ -557,7 +686,8 @@ function updateDetectionsTable(detections) {
       day: 'numeric',
       hour: 'numeric',
       minute: '2-digit',
-      hour12: true
+      hour12: true,
+      timeZone: 'Australia/Perth'
     });
 
     const uptimeHours = Math.floor(d.uptime / 3600);
@@ -596,11 +726,12 @@ async function loadAllSitesData() {
 
   allSitesData = sitesWithStats;
 
-  // Update map and flow
+  // Update map, flow, and hero status card
   if (trafficMap) {
     updateMapMarkers(sitesWithStats);
     updateFlowCorridor(sitesWithStats);
   }
+  updateHeroStatusCard(sitesWithStats);
 }
 
 async function loadDashboard() {
@@ -702,6 +833,34 @@ async function init() {
   themeSelect.addEventListener('change', (e) => {
     applyTheme(e.target.value);
   });
+
+  // Mobile theme FAB and menu
+  const themeFab = document.getElementById('theme-fab');
+  const themeMenu = document.getElementById('theme-menu');
+  const themeOptions = document.querySelectorAll('.theme-option');
+
+  if (themeFab && themeMenu) {
+    // Toggle theme menu
+    themeFab.addEventListener('click', () => {
+      themeMenu.classList.toggle('open');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!themeFab.contains(e.target) && !themeMenu.contains(e.target)) {
+        themeMenu.classList.remove('open');
+      }
+    });
+
+    // Handle theme selection from mobile menu
+    themeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        const theme = option.dataset.theme;
+        applyTheme(theme);
+        themeMenu.classList.remove('open');
+      });
+    });
+  }
 
   refreshBtn.addEventListener('click', async () => {
     refreshBtn.disabled = true;

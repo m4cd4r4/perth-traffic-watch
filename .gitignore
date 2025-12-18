@@ -134,3 +134,6 @@ env/
 
 # Exception: Keep release archives
 !releases/*.zip
+
+.vercel
+.env*.local
