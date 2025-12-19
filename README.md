@@ -409,6 +409,7 @@ See [docs/requirements-and-todos.md](docs/requirements-and-todos.md) for full ro
 | [**docs/freeway-expansion-plan.md**](docs/freeway-expansion-plan.md) | **Aspirational Phase 5: Mitchell & Kwinana Freeway simulation, UFD, advocacy** |
 | [**docs/cost-effectiveness-analysis.md**](docs/cost-effectiveness-analysis.md) | **$143 vs $500M: Citizen monitoring vs government infrastructure** |
 | [**docs/academic-paper-plan.md**](docs/academic-paper-plan.md) | **Research publication roadmap: structure, venues, contributions** |
+| [**docs/mainroads-api-investigation.md**](docs/mainroads-api-investigation.md) | **API outage research: 16+ months offline, internal systems, Auditor General findings** |
 | [hardware/bom.md](hardware/bom.md) | Bill of materials |
 | [hardware/shopping-lists.md](hardware/shopping-lists.md) | AliExpress + Bunnings orders |
 | [docs/ml-development-guide.md](docs/ml-development-guide.md) | Edge Impulse FOMO training |

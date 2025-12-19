@@ -19,6 +19,8 @@ This document compares the cost-effectiveness of Perth Traffic Watch's citizen-l
 
 > **The irony**: Main Roads WA spent hundreds of millions on traffic infrastructure, yet their public real-time data API has been broken for over a year. Meanwhile, a $143 DIY device can provide functional, open traffic data.
 
+> **See also**: [Main Roads API Investigation](./mainroads-api-investigation.md) for detailed research on the API outage, internal data systems, and WA Auditor General findings.
+
 ---
 
 ## Government Infrastructure Costs

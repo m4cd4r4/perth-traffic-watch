@@ -159,20 +159,35 @@
   - Reliability considerations
   - Scale factors
 
-### 6. Open Data Accessibility Audit (~1,000 words)
+### 6. Open Data Accessibility Audit (~1,500 words)
 - 6.1 Methodology
   - API availability testing
   - Documentation review
-  - FOI request outcomes
+  - Government audit reports
+  - Industry publications
 - 6.2 Western Australia assessment
-  - Main Roads WA data catalogue
-  - Real-time API status (broken since Aug 2023)
-  - Smart Freeway data accessibility
-- 6.3 Comparison jurisdictions
+  - Two APIs offline since August 2023 (Real-Time + Daily)
+  - Historic Traffic Dashboard permanently retired
+  - No restoration timeline provided
+- 6.3 Internal systems capability
+  - Real-Time Operating Platform (RTOP) - 30+ systems consolidated
+  - NetPReS data platform - 15-minute interval processing
+  - Road Network Operations Centre - 24/7 monitoring
+  - Smart Freeway sensors operational (1,400+ devices)
+- 6.4 WA Auditor General findings
+  - Security vulnerabilities in Traffic Management System
+  - Access control weaknesses
+  - 180+ unauthorised monitoring devices identified
+  - Remediation status unknown
+- 6.5 Comparison jurisdictions
   - Transport for NSW (best practice)
   - VicRoads
-  - International examples (Waze for Cities partners)
-- 6.4 The accessibility gap
+  - Waze for Cities (1,500+ government partners)
+- 6.6 The accessibility paradox
+  - Internal: Real-time data, sophisticated analytics
+  - Public: APIs offline 16+ months, annual averages only
+
+> **Source Document**: [Main Roads API Investigation](./mainroads-api-investigation.md)
 
 ### 7. Case Study: Perth Traffic Watch (~1,000 words)
 - 7.1 Deployment context
@@ -367,6 +382,14 @@ perth-traffic-watch/
 - Bluetooth MAC tracking privacy concerns
 - ANPR privacy regulations
 - Privacy-preserving traffic analytics
+
+### Government & Audit Sources (WA-Specific)
+
+- WA Auditor General: Traffic Management System Report - https://audit.wa.gov.au/reports-and-publications/reports/traffic-management-system/
+- Deloitte Tech Trends 2025: Main Roads WA RTOP - https://www.deloitte.com/us/en/insights/topics/technology-management/tech-trends/2025/australia-smart-traffic-management.html
+- NRI Case Study: NetPReS Platform - https://nri-anz.com/case-study/data-and-analytics/
+- Main Roads WA Annual Report 2024 - https://annualreports.mainroads.wa.gov.au/AR-2024/
+- Smart Freeway Mitchell Southbound documentation - https://www.mainroads.wa.gov.au/projects-initiatives/all-projects/metropolitan/smartfreeways/
 
 ---
 
