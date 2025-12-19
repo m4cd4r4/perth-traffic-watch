@@ -10,6 +10,19 @@ Monitor traffic flow in real-time using affordable IoT hardware and machine lear
 
 ---
 
+## The $143 vs $500 Million Question
+
+Main Roads Western Australia has invested over **$500 million** in Smart Freeway infrastructure with **1,400+ sensors** collecting real-time traffic data. Yet their public APIs have been **offline since August 2023** with no restoration timeline.
+
+Perth Traffic Watch demonstrates that **citizen-led monitoring can provide functional, open traffic data for ~$143 per site** — a 350:1 cost advantage.
+
+> **This project is both a technical proof-of-concept and an advocacy tool for open traffic data.**
+
+📊 See [docs/cost-effectiveness-analysis.md](docs/cost-effectiveness-analysis.md) for the full comparison.
+🔍 See [docs/mainroads-api-investigation.md](docs/mainroads-api-investigation.md) for our research into the API outage.
+
+---
+
 ## What is Perth Traffic Watch?
 
 Perth Traffic Watch is a DIY traffic monitoring system that:
@@ -22,8 +35,15 @@ Perth Traffic Watch is a DIY traffic monitoring system that:
 - **Costs ~$143 AUD** per monitoring site
 - **Runs 24/7** on mains or solar power
 
+**Aspirational Expansion** (Phase 5):
+- **Mitchell & Kwinana Freeways** — 5km north and south of Narrows Bridge
+- **30 virtual sensors** at all on/off ramps
+- **Unique Feature Detection (UFD)** — privacy-preserving speed measurement
+- **Traffic simulator** for development and advocacy
+
 Perfect for:
 - **Commuter intelligence**: "Should I drive now?" recommendations
+- **Open data advocacy**: Demonstrating value of accessible traffic data
 - Traffic analysis (peak hours, congestion patterns, journey times)
 - Research projects (urban planning, transport optimisation)
 - Hobbyists (IoT, ML, embedded systems)
@@ -204,12 +224,17 @@ perth-traffic-watch/
 │       └── README.md             # Frontend setup guide
 │
 ├── docs/
-│   ├── ml-development-guide.md   # Edge Impulse training guide
-│   ├── iot-sim-options.md        # M2M SIM comparison (Australia)
-│   ├── requirements-and-todos.md # Project roadmap
-│   ├── legal-considerations.md   # Privacy, permits, compliance
-│   ├── site-survey-checklist.md  # Field survey template
-│   └── contributing.md           # How to contribute
+│   ├── corridor-architecture.md      # 3-stretch system architecture
+│   ├── freeway-expansion-plan.md     # Phase 5: Mitchell & Kwinana Freeways
+│   ├── cost-effectiveness-analysis.md # $143 vs $500M comparison
+│   ├── mainroads-api-investigation.md # API outage research
+│   ├── academic-paper-plan.md        # Research publication roadmap
+│   ├── ml-development-guide.md       # Edge Impulse training guide
+│   ├── iot-sim-options.md            # M2M SIM comparison (Australia)
+│   ├── requirements-and-todos.md     # Project roadmap
+│   ├── legal-considerations.md       # Privacy, permits, compliance
+│   ├── site-survey-checklist.md      # Field survey template
+│   └── contributing.md               # How to contribute
 │
 └── README.md                     # This file
 ```
@@ -247,6 +272,40 @@ perth-traffic-watch/
 **Total**: 24 monitoring sites (11 locations × 2 directions each) across 3 stretches
 
 **See**: [docs/corridor-architecture.md](docs/corridor-architecture.md) for detailed technical architecture
+
+---
+
+## The Open Data Gap
+
+### What We Found
+
+Our investigation into Main Roads WA's public traffic data revealed:
+
+| Finding | Detail |
+|---------|--------|
+| **APIs Offline** | Real-Time + Daily Traffic APIs down since August 2023 |
+| **No Timeline** | "No estimated time of resolution" |
+| **Sensors Working** | 1,400+ Smart Freeway sensors actively collecting data |
+| **Internal Systems** | RTOP platform processes data every 15 minutes |
+| **Security Issues** | WA Auditor General found vulnerabilities in Traffic Management System |
+
+### The Paradox
+
+| Internal (Main Roads) | Public Access |
+|----------------------|---------------|
+| Real-time data from 1,400+ sensors | APIs offline 16+ months |
+| 15-minute processing intervals | Annual averages only |
+| Sophisticated RTOP dashboard | No functional APIs |
+| 24/7 Operations Centre | "Contact 138 138" |
+
+### What We're Advocating For
+
+1. **Restore the broken APIs** — they were previously public
+2. **Publish Smart Freeway sensor data** — taxpayers funded it
+3. **Follow NSW's example** — Transport for NSW provides excellent open data
+4. **Consider citizen-augmented monitoring** — we can help, not replace
+
+**See**: [docs/mainroads-api-investigation.md](docs/mainroads-api-investigation.md) for full research with citations.
 
 ---
 
@@ -328,6 +387,18 @@ Dashboard → Fetch API → Chart.js → User
 ---
 
 ## Cost Breakdown
+
+### Perth Traffic Watch vs Government Infrastructure
+
+| Metric | Perth Traffic Watch | Main Roads WA Smart Freeway |
+|--------|--------------------|-----------------------------|
+| **Per-site cost** | ~$143 | ~$50,000+ |
+| **30-site deployment** | ~$4,500 | ~$1.5M+ |
+| **Full corridor** | ~$4,500 | $500M+ |
+| **Data accessibility** | 100% open | APIs offline |
+| **Cost ratio** | 1 | **350x** |
+
+**See**: [docs/cost-effectiveness-analysis.md](docs/cost-effectiveness-analysis.md) for detailed analysis.
 
 ### Phase 1: Single Site (Proof of Concept)
 
@@ -549,22 +620,38 @@ Free to use, modify, and distribute. No warranty.
 
 **Built with love in Perth, Western Australia**
 
-*Open-source traffic monitoring for everyone.*
+*Open-source traffic monitoring for everyone. Open data advocacy for all.*
 
 ---
 
 ## Next Steps
 
-1. Star this repository
-2. Order hardware (see [hardware/shopping-lists.md](hardware/shopping-lists.md))
-3. Collect training images
-4. Train FOMO model (see [docs/ml-development-guide.md](docs/ml-development-guide.md))
-5. Deploy and share your results!
+1. ⭐ Star this repository
+2. 📖 Read [docs/cost-effectiveness-analysis.md](docs/cost-effectiveness-analysis.md) to understand the advocacy mission
+3. 🛒 Order hardware (see [hardware/shopping-lists.md](hardware/shopping-lists.md))
+4. 📸 Collect training images
+5. 🤖 Train FOMO model (see [docs/ml-development-guide.md](docs/ml-development-guide.md))
+6. 🚀 Deploy and share your results!
 
 **Questions?** Open an issue or discussion on GitHub.
 
 ---
 
+## Research & Publication
+
+This project is being developed with academic publication in mind. Key documents:
+
+- [docs/academic-paper-plan.md](docs/academic-paper-plan.md) — Full research roadmap
+- [docs/mainroads-api-investigation.md](docs/mainroads-api-investigation.md) — Objective research findings
+- [docs/cost-effectiveness-analysis.md](docs/cost-effectiveness-analysis.md) — Evidence-based cost comparison
+
+**Novel Contributions**:
+- **Unique Feature Detection (UFD)** — Privacy-preserving speed measurement
+- **350:1 Cost Framework** — Citizen vs government infrastructure
+- **Open Data Accessibility Audit** — WA vs NSW comparison
+
+---
+
 **Status**: Proof of Concept (Phase 1)
-**Version**: 0.1.0
-**Last Updated**: 2025-12-14
+**Version**: 0.2.0
+**Last Updated**: 2025-12-19
