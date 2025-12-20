@@ -368,15 +368,15 @@ function highlightRouteForSite(siteName) {
       if (isPartOfCorridor) {
         // Make highlighted dots larger and more prominent
         layer.setStyle({
-          radius: 2.5,  // Half the previous size
-          fillOpacity: 0.9,
-          weight: 1
+          radius: 4.5,  // Larger for selected route
+          fillOpacity: 1,
+          weight: 1.5
         });
       } else {
-        // Keep other dots small and subtle
+        // Keep other dots smaller and subtle
         layer.setStyle({
-          radius: 1.5,  // Half the previous size
-          fillOpacity: 0.6,
+          radius: 2,  // Smaller for non-selected routes
+          fillOpacity: 0.5,
           weight: 0.5
         });
       }
@@ -391,9 +391,9 @@ function resetRouteHighlighting() {
   trafficMap.eachLayer(layer => {
     if (layer instanceof L.CircleMarker && layer._corridorInfo) {
       layer.setStyle({
-        radius: 1.5,  // Half the previous size
-        fillOpacity: 0.6,
-        weight: 0.5
+        radius: 3,  // Default size
+        fillOpacity: 0.85,
+        weight: 1
       });
     }
   });
@@ -437,17 +437,17 @@ function animateRouteArrow(siteName) {
 
     // Pulse this dot larger temporarily
     currentDot.setStyle({
-      radius: 4,  // Larger pulse size
+      radius: 6,  // Larger pulse size
       fillOpacity: 1.0,
-      weight: 1.5
+      weight: 2
     });
 
     // Reset it after a short delay
     setTimeout(() => {
       currentDot.setStyle({
-        radius: 2.5,  // Back to highlighted size
-        fillOpacity: 0.9,
-        weight: 1
+        radius: 4.5,  // Back to highlighted size
+        fillOpacity: 1,
+        weight: 1.5
       });
     }, 150);
 
@@ -722,36 +722,67 @@ function updateMapMarkers(sites) {
         L.latLng(-32.030, 115.752)   // Between McCabe and Victoria
       ]
     },
-    // Freeways
+    // Freeways - EXACT coordinates from OpenStreetMap Overpass API
     {
       name: 'Mitchell Freeway',
       shortName: 'Mitchell Fwy',
       filter: 'Narrows Interchange|Malcolm Street|Loftus Street|Newcastle/Roe Street|Charles Street|Vincent Street|Powis Street|Hutton Street|Scarborough Beach Road',
-      start: L.latLng(-31.9580, 115.8450),  // Narrows Interchange
-      end: L.latLng(-31.9100, 115.8480),    // Scarborough Beach Rd
+      start: L.latLng(-31.9580, 115.8480),  // Narrows Interchange
+      end: L.latLng(-31.9250, 115.8285),    // Scarborough Beach Rd
       label: 'Narrows → Scarborough',
       waypoints: [
-        L.latLng(-31.9540, 115.8470),  // Malcolm St
-        L.latLng(-31.9500, 115.8480),  // Loftus St
-        L.latLng(-31.9450, 115.8510),  // Newcastle/Roe St
-        L.latLng(-31.9400, 115.8530),  // Charles St
-        L.latLng(-31.9350, 115.8540),  // Vincent St
-        L.latLng(-31.9300, 115.8520),  // Powis St
-        L.latLng(-31.9200, 115.8500)   // Hutton St
+        // EXACT coordinates from OpenStreetMap (sampled for performance)
+        L.latLng(-31.9573506, 115.8497789),  // Narrows area
+        L.latLng(-31.9556058, 115.8495505),
+        L.latLng(-31.9539937, 115.8487342),  // Malcolm St area
+        L.latLng(-31.9524495, 115.8483048),
+        L.latLng(-31.9509568, 115.8486819),  // Loftus St area
+        L.latLng(-31.9493834, 115.8494591),
+        L.latLng(-31.9479221, 115.8500769),
+        L.latLng(-31.9464164, 115.8499650),  // Newcastle/Roe area
+        L.latLng(-31.9449373, 115.8492911),
+        L.latLng(-31.9437963, 115.8492694),  // Charles St area
+        L.latLng(-31.9425963, 115.8461414),
+        L.latLng(-31.9414836, 115.8447043),
+        L.latLng(-31.9403966, 115.8416039),  // Vincent St area
+        L.latLng(-31.9391265, 115.8400295),
+        L.latLng(-31.9378535, 115.8395791),  // Powis St area
+        L.latLng(-31.9367668, 115.8382022),
+        L.latLng(-31.9351944, 115.8373083),
+        L.latLng(-31.9337517, 115.8364864),  // Hutton St area
+        L.latLng(-31.9324073, 115.8356097),
+        L.latLng(-31.9310173, 115.8346002),
+        L.latLng(-31.9297078, 115.8334698),  // Approaching Scarborough
+        L.latLng(-31.9287139, 115.8324998),
+        L.latLng(-31.9274456, 115.8311183),
+        L.latLng(-31.9261945, 115.8302721),
+        L.latLng(-31.9250347, 115.8284667)
       ]
     },
     {
       name: 'Kwinana Freeway',
       shortName: 'Kwinana Fwy',
       filter: 'Narrows South|Mill Point Road|South Terrace/Judd St|Canning Highway|Manning Road|Leach Highway',
-      start: L.latLng(-31.9620, 115.8460),  // Narrows South
-      end: L.latLng(-32.0220, 115.8560),    // Leach Highway
+      start: L.latLng(-31.9575, 115.8481),   // Narrows South
+      end: L.latLng(-32.0200, 115.8570),     // Leach Highway
       label: 'Narrows → Leach Hwy',
       waypoints: [
-        L.latLng(-31.9680, 115.8550),  // Mill Point Rd
-        L.latLng(-31.9780, 115.8620),  // South Terrace/Judd St
-        L.latLng(-31.9950, 115.8600),  // Canning Hwy
-        L.latLng(-32.0100, 115.8580)   // Manning Rd
+        // EXACT coordinates from OpenStreetMap (sampled for performance)
+        L.latLng(-31.9591213, 115.8474722),  // Just south of Narrows
+        L.latLng(-31.9607735, 115.8470893),
+        L.latLng(-31.9642766, 115.8465777),  // Mill Point area
+        L.latLng(-31.9672592, 115.8464225),
+        L.latLng(-31.9704080, 115.8469790),
+        L.latLng(-31.9726410, 115.8501090),  // South Perth area
+        L.latLng(-31.9756178, 115.8482605),
+        L.latLng(-31.9833550, 115.8507379),  // South Terrace/Judd St area
+        L.latLng(-31.9866336, 115.8527271),
+        L.latLng(-32.0029107, 115.8536257),  // Canning Highway area
+        L.latLng(-32.0053462, 115.8540456),
+        L.latLng(-32.0082023, 115.8557408),  // Manning Road area
+        L.latLng(-32.0108893, 115.8571130),
+        L.latLng(-32.0149507, 115.8578715),
+        L.latLng(-32.0192466, 115.8572778)   // Leach Highway area
       ]
     }
   ];
@@ -767,7 +798,12 @@ function updateMapMarkers(sites) {
         filterRegex.test(s.name) && s.name.includes(direction)
       );
 
-      if (corridorSites.length === 0) return; // Skip if no sites
+      if (corridorSites.length === 0) {
+        console.log(`Skipping ${corridor.name} (${direction}) - no matching sites`);
+        return; // Skip if no sites
+      }
+
+      console.log(`Processing ${corridor.name} (${direction}) with ${corridorSites.length} sites:`, corridorSites.map(s => s.name));
 
       // Calculate average traffic across all sites in this corridor + direction
       const totalTraffic = corridorSites.reduce((sum, site) => sum + (site.current_hourly || 0), 0);
@@ -791,15 +827,18 @@ function updateMapMarkers(sites) {
       // Interpolate dots every 100 meters along the route
       const dotPositions = interpolateDotsAlongRoute(allWaypoints, 100);
 
+      // Debug logging
+      console.log(`${corridor.name} (${direction}): ${allWaypoints.length} waypoints → ${dotPositions.length} dots`);
+
       // Create circle markers for each dot position
       dotPositions.forEach((dotPos, index) => {
         const dot = L.circleMarker([dotPos.lat, dotPos.lng], {
-          radius: 1.5,  // Half the previous size
+          radius: 3,  // Increased for better visibility
           fillColor: color,
-          color: color,
-          weight: 0.5,
-          opacity: 0.8,
-          fillOpacity: 0.7
+          color: '#ffffff',  // White border for contrast
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.85
         }).addTo(trafficMap);
 
         // Store metadata for highlighting
@@ -1179,10 +1218,15 @@ function updateDetectionsTable(detections) {
 // ============================================================================
 
 async function loadAllSitesData() {
-  // Fetch stats for all sites
-  const sites = await fetchSites();
+  // Fetch stats for all sites (both arterial and freeway)
+  const arterialSites = await fetchSites();
+  const freewaySites = await fetchFreewaySites();
+  const allSites = [...arterialSites, ...freewaySites];
+
+  console.log(`Loaded ${arterialSites.length} arterial sites + ${freewaySites.length} freeway sites = ${allSites.length} total`);
+
   const sitesWithStats = await Promise.all(
-    sites.map(async (site) => {
+    allSites.map(async (site) => {
       const stats = await fetchStats(site.name, '1h');
       return {
         ...site,
