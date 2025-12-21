@@ -23,14 +23,11 @@
           <h1>Perth Traffic Watch</h1>
           <p class="subtitle">Real-time vehicle detection using Edge AI</p>
         </div>
-        <div class="theme-controls">
-          <label for="theme-select">Theme:</label>
-          <select id="theme-select">
-            <option value="cottesloe-light">Cottesloe Beach</option>
-            <option value="cottesloe-dark">Cottesloe Night</option>
-            <option value="indigenous-light">Indigenous Earth</option>
-            <option value="indigenous-dark">Indigenous Night</option>
-          </select>
+        <div class="theme-toggle">
+          <button type="button" id="theme-toggle-btn" class="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <span class="icon-sun">☀️</span>
+            <span class="icon-moon">🌙</span>
+          </button>
         </div>
       </div>
       <!-- Simulated Data Notice -->
@@ -54,6 +51,61 @@
         </div>
       </div>
     </header>
+
+    <!-- Network Selector (Arterial vs Freeway vs Live Feed) -->
+    <div class="network-selector">
+      <div class="network-tabs">
+        <button type="button" class="network-tab active" data-network="arterial">
+          <span class="tab-icon">🚗</span>
+          <span class="tab-label">Arterial Roads</span>
+          <span class="tab-count" id="arterial-count">22</span>
+        </button>
+        <button type="button" class="network-tab" data-network="freeway">
+          <span class="tab-icon">🛣️</span>
+          <span class="tab-label">Freeways</span>
+          <span class="tab-count" id="freeway-count">30</span>
+        </button>
+        <button type="button" class="network-tab" data-network="all">
+          <span class="tab-icon">🗺️</span>
+          <span class="tab-label">All Perth</span>
+          <span class="tab-count" id="all-count">52</span>
+        </button>
+        <button type="button" class="network-tab" data-network="terminal">
+          <span class="tab-icon">💻</span>
+          <span class="tab-label">Live Feed</span>
+          <span class="tab-count live-indicator">●</span>
+        </button>
+      </div>
+      <div class="network-info" id="network-info">
+        <p>Monitoring arterial roads: Mounts Bay Road & Stirling Highway</p>
+      </div>
+    </div>
+
+    <!-- Live Terminal Feed (hidden by default) -->
+    <div class="terminal-container" id="terminal-container" style="display: none;">
+      <div class="terminal-header">
+        <div class="terminal-title">
+          <span class="terminal-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </span>
+          <span>Perth Traffic Watch - Live Simulator Feed</span>
+        </div>
+        <div class="terminal-controls">
+          <button type="button" id="terminal-pause" class="terminal-btn">⏸️ Pause</button>
+          <button type="button" id="terminal-clear" class="terminal-btn">🗑️ Clear</button>
+        </div>
+      </div>
+      <div class="terminal-body" id="terminal-output">
+        <div class="terminal-line system">[SYSTEM] Connecting to Perth Traffic Watch simulator...</div>
+      </div>
+      <div class="terminal-stats">
+        <span>Lines: <strong id="terminal-lines">1</strong></span>
+        <span>Updates/sec: <strong id="terminal-rate">0</strong></span>
+        <span>Status: <strong id="terminal-status" class="status-active">● LIVE</strong></span>
+      </div>
+    </div>
 
     <!-- Site Selector -->
     <div class="controls" role="toolbar" aria-label="Dashboard controls">
@@ -87,7 +139,16 @@
     <div class="map-stats-row">
       <!-- Live Map -->
       <div class="map-container">
-        <h2>Live Traffic Map</h2>
+        <div class="map-header">
+          <h2>Live Traffic Map</h2>
+          <div class="map-view-selector">
+            <button type="button" class="map-view-btn" data-view="street">Street</button>
+            <button type="button" class="map-view-btn active" data-view="satellite">Satellite</button>
+            <button type="button" class="map-view-btn" data-view="satellite-labels">Satellite + Labels</button>
+            <button type="button" class="map-view-btn" data-view="terrain">Terrain</button>
+            <button type="button" class="map-view-btn" data-view="dark">Dark</button>
+          </div>
+        </div>
         <div
           id="traffic-map"
           role="img"
@@ -258,35 +319,16 @@
     </footer>
   </div>
 
-  <!-- Floating Theme Button (Mobile Only) -->
+  <!-- Mobile Theme Toggle (replaces FAB + menu) -->
   <button
     type="button"
     id="theme-fab"
-    class="theme-fab"
-    aria-label="Change theme"
-    title="Change theme">
-    🎨
+    class="theme-fab theme-btn"
+    aria-label="Toggle dark mode"
+    title="Toggle dark mode">
+    <span class="icon-sun">☀️</span>
+    <span class="icon-moon">🌙</span>
   </button>
-
-  <!-- Mobile Theme Menu -->
-  <div id="theme-menu" class="theme-menu" role="menu" aria-label="Theme selection">
-    <button type="button" class="theme-option" data-theme="cottesloe-light" role="menuitem">
-      <span class="theme-preview cottesloe-light"></span>
-      <span class="theme-name">Cottesloe Beach</span>
-    </button>
-    <button type="button" class="theme-option" data-theme="cottesloe-dark" role="menuitem">
-      <span class="theme-preview cottesloe-dark"></span>
-      <span class="theme-name">Cottesloe Night</span>
-    </button>
-    <button type="button" class="theme-option" data-theme="indigenous-light" role="menuitem">
-      <span class="theme-preview indigenous-light"></span>
-      <span class="theme-name">Indigenous Earth</span>
-    </button>
-    <button type="button" class="theme-option" data-theme="indigenous-dark" role="menuitem">
-      <span class="theme-preview indigenous-dark"></span>
-      <span class="theme-name">Indigenous Night</span>
-    </button>
-  </div>
 
   <!-- Libraries -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

@@ -1,15 +1,15 @@
 /**
  * Perth Traffic Watch - Dashboard Styles
- * WA-themed with Cottesloe Beach blues and Indigenous earth tones
+ * Modern light/dark theme system
  */
 
 /* ============================================================================
-   COTTESLOE BEACH THEME (Light) - Default
-   Ocean blues, sand beige, sunset orange
+   LIGHT THEME (Default)
+   Clean, professional light mode with ocean blues
    ============================================================================ */
 :root,
-[data-theme="cottesloe-light"] {
-  /* Primary colors - Cottesloe ocean blues */
+[data-theme="light"] {
+  /* Primary colors */
   --primary: #2D8B94;
   --primary-rgb: 45, 139, 148;
   --primary-dark: #236A72;
@@ -22,7 +22,7 @@
   --warning: #E89B5F;
   --danger: #CC5544;
 
-  /* Background colors - Beach sand tones */
+  /* Background colors */
   --bg: #F5F2EB;
   --bg-secondary: #E8DCC4;
   --card-bg: #FFFFFF;
@@ -42,11 +42,11 @@
 }
 
 /* ============================================================================
-   COTTESLOE BEACH THEME (Dark) - Night beach
-   Deep ocean blues, dark sand, moonlight
+   DARK THEME
+   Modern dark mode with subtle ocean blues
    ============================================================================ */
-[data-theme="cottesloe-dark"] {
-  /* Primary colors - Night ocean */
+[data-theme="dark"] {
+  /* Primary colors */
   --primary: #4A9DA5;
   --primary-rgb: 74, 157, 165;
   --primary-dark: #5CB3BB;
@@ -59,7 +59,7 @@
   --warning: #E89B5F;
   --danger: #EF4444;
 
-  /* Background colors - Night beach */
+  /* Background colors */
   --bg: #0F1419;
   --bg-secondary: #1A2027;
   --card-bg: #1E2A35;
@@ -76,80 +76,6 @@
   /* Chart colors */
   --chart-primary: #4A9DA5;
   --chart-fill: rgba(74, 157, 165, 0.15);
-}
-
-/* ============================================================================
-   INDIGENOUS EARTH THEME (Light) - Red ochre & desert tones
-   Warm earth colors, ochre, red earth
-   ============================================================================ */
-[data-theme="indigenous-light"] {
-  /* Primary colors - Ochre and red earth */
-  --primary: #A65E4A;
-  --primary-rgb: 166, 94, 74;
-  --primary-dark: #8B4E3A;
-  --primary-light: #C67B5C;
-  --accent: #D4A574;
-  --accent-dark: #C09560;
-
-  /* Status colors */
-  --success: #7C9D3A;
-  --warning: #D4A574;
-  --danger: #A63A2A;
-
-  /* Background colors - Warm earth */
-  --bg: #F7F3E8;
-  --bg-secondary: #EDE5D8;
-  --card-bg: #FFFFFF;
-
-  /* Text colors */
-  --text: #3A2A1A;
-  --text-muted: #6B5B4B;
-  --text-inverse: #FFFFFF;
-
-  /* Border and shadow */
-  --border: #D4C4A8;
-  --shadow: rgba(166, 94, 74, 0.15);
-
-  /* Chart colors */
-  --chart-primary: #A65E4A;
-  --chart-fill: rgba(166, 94, 74, 0.1);
-}
-
-/* ============================================================================
-   INDIGENOUS EARTH THEME (Dark) - Night desert
-   Deep earth tones, charcoal, burnt ochre
-   ============================================================================ */
-[data-theme="indigenous-dark"] {
-  /* Primary colors - Burnt earth at night */
-  --primary: #C67B5C;
-  --primary-rgb: 198, 123, 92;
-  --primary-dark: #D89070;
-  --primary-light: #E5A58D;
-  --accent: #D4A574;
-  --accent-dark: #E5B985;
-
-  /* Status colors */
-  --success: #8FAD4A;
-  --warning: #D4A574;
-  --danger: #CC5544;
-
-  /* Background colors - Night desert */
-  --bg: #1A1410;
-  --bg-secondary: #2A1F18;
-  --card-bg: #352820;
-
-  /* Text colors */
-  --text: #F0E8D8;
-  --text-muted: #B8A890;
-  --text-inverse: #1A1410;
-
-  /* Border and shadow */
-  --border: #4A3828;
-  --shadow: rgba(198, 123, 92, 0.2);
-
-  /* Chart colors */
-  --chart-primary: #C67B5C;
-  --chart-fill: rgba(198, 123, 92, 0.15);
 }
 
 * {
@@ -198,39 +124,47 @@ header h1 {
   font-size: 1.1rem;
 }
 
-/* Theme Controls */
-.theme-controls {
+/* Theme Toggle Button */
+.theme-toggle {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
+}
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
   background: var(--card-bg);
-  border-radius: 8px;
-  box-shadow: 0 1px 3px var(--shadow);
-  border: 1px solid var(--border);
-}
-
-.theme-controls label {
-  font-weight: 600;
-  color: var(--text);
-  font-size: 0.9rem;
-}
-
-.theme-controls select {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.95rem;
-  background: var(--bg);
-  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 50px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 4px var(--shadow);
 }
 
-.theme-controls select:focus {
+.theme-btn:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 8px var(--shadow);
+  transform: translateY(-1px);
+}
+
+.theme-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px var(--shadow);
+}
+
+.theme-btn:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--chart-fill);
+}
+
+/* Show/hide icons based on theme */
+[data-theme="light"] .icon-moon,
+[data-theme="dark"] .icon-sun {
+  display: none;
 }
 
 /* POC Notice Banner */
@@ -461,6 +395,106 @@ header h1 {
   }
 }
 
+/* Network Selector - Arterial vs Freeway */
+.network-selector {
+  margin: 2rem 0;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.network-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.network-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  color: var(--text-muted);
+  position: relative;
+}
+
+.network-tab:hover {
+  background: var(--bg-secondary);
+  border-bottom-color: var(--primary-light);
+}
+
+.network-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  background: rgba(var(--primary-rgb), 0.05);
+}
+
+.network-tab .tab-icon {
+  font-size: 1.5rem;
+}
+
+.network-tab .tab-label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.network-tab .tab-count {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: var(--primary);
+  color: var(--text-inverse);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.network-tab.active .tab-count {
+  background: var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.network-info {
+  padding: 1rem;
+  background: var(--card-bg);
+  border-radius: 8px;
+  border-left: 4px solid var(--primary);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.network-info p {
+  margin: 0;
+}
+
+/* Responsive Network Tabs */
+@media (max-width: 768px) {
+  .network-tabs {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .network-tab {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .network-tab .tab-label {
+    flex: 1;
+    text-align: left;
+  }
+}
+
 /* Controls */
 .controls {
   display: flex;
@@ -511,15 +545,15 @@ header h1 {
 /* Map and Stats Row */
 .map-stats-row {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 2rem;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 /* Live Map */
 .map-container {
   background: var(--card-bg);
-  padding: 1.5rem;
+  padding: 0.75rem;
   border-radius: 8px;
   box-shadow: 0 1px 3px var(--shadow);
 }
@@ -531,7 +565,7 @@ header h1 {
 }
 
 #traffic-map {
-  height: 400px;
+  height: 600px;
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -883,23 +917,121 @@ footer {
 }
 
 /* ============================================================================
+   Map Highlight Pulse Marker
+   ============================================================================ */
+
+.pulse-marker {
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+
+.pulse-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid white;
+  box-shadow: 0 0 8px rgba(var(--primary-rgb), 0.8);
+  z-index: 2;
+}
+
+.pulse-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(var(--primary-rgb), 0.3);
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* ============================================================================
+   Map View Selector
+   ============================================================================ */
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.map-view-selector {
+  display: flex;
+  gap: 0;
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.map-view-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.map-view-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.map-view-btn.active {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 2px 4px rgba(20, 184, 166, 0.3);
+}
+
+.map-view-btn:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
    Mobile Floating Theme Button
    ============================================================================ */
 
-/* Hide FAB on desktop, show desktop theme controls */
-.theme-fab,
-.theme-menu {
+/* Hide FAB on desktop */
+.theme-fab {
   display: none;
 }
 
-/* Mobile FAB and Theme Menu (shown only on mobile) */
+/* Mobile FAB (shown only on mobile) */
 @media (max-width: 768px) {
-  /* Hide desktop theme controls on mobile */
-  .theme-controls {
-    display: none !important;
+  /* Hide desktop theme toggle on mobile */
+  .theme-toggle {
+    display: none;
   }
 
-  /* Show floating action button */
+  /* Show floating action button with same toggle behavior */
   .theme-fab {
     display: flex;
     align-items: center;
@@ -910,10 +1042,10 @@ footer {
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: var(--text-inverse);
+    background: var(--card-bg);
+    color: var(--text);
     font-size: 24px;
-    border: none;
+    border: 2px solid var(--border);
     box-shadow: 0 4px 12px var(--shadow), 0 2px 4px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     z-index: 1000;
@@ -926,87 +1058,9 @@ footer {
   }
 
   .theme-fab:hover {
+    border-color: var(--primary);
     box-shadow: 0 6px 16px var(--shadow), 0 4px 8px rgba(0, 0, 0, 0.3);
     transform: translateY(-2px);
-  }
-
-  /* Theme menu */
-  .theme-menu {
-    position: fixed;
-    bottom: 92px;
-    right: 20px;
-    background: var(--card-bg);
-    border-radius: 12px;
-    box-shadow: 0 8px 24px var(--shadow);
-    padding: 0.5rem;
-    z-index: 999;
-    opacity: 0;
-    transform: translateY(20px) scale(0.9);
-    pointer-events: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .theme-menu.open {
-    display: block;
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: auto;
-  }
-
-  .theme-option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 12px 16px;
-    border: none;
-    background: transparent;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.2s;
-    -webkit-tap-highlight-color: transparent;
-    min-height: 48px; /* Touch target minimum */
-  }
-
-  .theme-option:hover,
-  .theme-option:focus {
-    background: rgba(var(--primary-rgb), 0.1);
-    outline: none;
-  }
-
-  .theme-option:active {
-    background: rgba(var(--primary-rgb), 0.2);
-  }
-
-  .theme-preview {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    flex-shrink: 0;
-  }
-
-  .theme-preview.cottesloe-light {
-    background: linear-gradient(135deg, #2D8B94, #E89B5F);
-  }
-
-  .theme-preview.cottesloe-dark {
-    background: linear-gradient(135deg, #4A9DA5, #E89B5F);
-  }
-
-  .theme-preview.indigenous-light {
-    background: linear-gradient(135deg, #A65E4A, #D4A574);
-  }
-
-  .theme-preview.indigenous-dark {
-    background: linear-gradient(135deg, #C67B5C, #D4A574);
-  }
-
-  .theme-name {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--text);
-    text-align: left;
   }
 }
 
@@ -1023,14 +1077,6 @@ footer {
 
   header h1 {
     font-size: 2rem;
-  }
-
-  .theme-controls {
-    width: 100%;
-  }
-
-  .theme-controls select {
-    flex: 1;
   }
 
   .controls {
@@ -1058,8 +1104,16 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  /* Full-width map on mobile */
+  .map-container {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding: 0.5rem;
+    border-radius: 0;
+  }
+
   #traffic-map {
-    height: 300px;
+    height: 400px;
   }
 
   .stats-grid {
@@ -1097,5 +1151,240 @@ footer {
 
   th, td {
     padding: 0.5rem;
+  }
+}
+
+/* ============================================================================
+   LIVE TERMINAL FEED
+   Terminal-style display for showing live simulation data
+   ============================================================================ */
+
+.terminal-container {
+  background: #1a1a2e;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  margin-bottom: 2rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+.terminal-header {
+  background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #2a2a4a;
+}
+
+.terminal-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #a0a0c0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.terminal-dots .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminal-dots .dot.red { background: #ff5f56; }
+.terminal-dots .dot.yellow { background: #ffbd2e; }
+.terminal-dots .dot.green { background: #27c93f; }
+
+.terminal-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.terminal-btn {
+  background: #2a2a4a;
+  border: 1px solid #3a3a5a;
+  color: #a0a0c0;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.terminal-btn:hover {
+  background: #3a3a5a;
+  color: #ffffff;
+}
+
+.terminal-btn.paused {
+  background: #4a3a2a;
+  border-color: #e89b5f;
+  color: #e89b5f;
+}
+
+.terminal-body {
+  height: 400px;
+  overflow-y: auto;
+  padding: 1rem;
+  background: #0d0d1a;
+  scroll-behavior: smooth;
+}
+
+.terminal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.terminal-body::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+  background: #3a3a5a;
+  border-radius: 4px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb:hover {
+  background: #4a4a6a;
+}
+
+.terminal-line {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0;
+  padding: 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Terminal line types with different colors */
+.terminal-line.system {
+  color: #6b7280;
+}
+
+.terminal-line.arterial {
+  color: #60a5fa;
+}
+
+.terminal-line.freeway {
+  color: #a78bfa;
+}
+
+.terminal-line.detection {
+  color: #34d399;
+}
+
+.terminal-line.warning {
+  color: #fbbf24;
+}
+
+.terminal-line.error {
+  color: #f87171;
+}
+
+.terminal-line .timestamp {
+  color: #6b7280;
+  margin-right: 0.5rem;
+}
+
+.terminal-line .site-name {
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+.terminal-line .freeway-name {
+  color: #a78bfa;
+  font-weight: 600;
+}
+
+.terminal-line .count {
+  color: #34d399;
+  font-weight: 700;
+}
+
+.terminal-line .speed {
+  color: #fbbf24;
+}
+
+.terminal-line .status-normal {
+  color: #34d399;
+}
+
+.terminal-line .status-moderate {
+  color: #fbbf24;
+}
+
+.terminal-line .status-heavy {
+  color: #fb923c;
+}
+
+.terminal-line .status-gridlock {
+  color: #f87171;
+}
+
+.terminal-stats {
+  background: #16213e;
+  padding: 0.5rem 1rem;
+  display: flex;
+  gap: 2rem;
+  font-size: 0.8rem;
+  color: #6b7280;
+  border-top: 1px solid #2a2a4a;
+}
+
+.terminal-stats strong {
+  color: #a0a0c0;
+}
+
+.terminal-stats .status-active {
+  color: #34d399;
+}
+
+.terminal-stats .status-paused {
+  color: #fbbf24;
+}
+
+/* Live indicator pulse animation */
+.live-indicator {
+  color: #34d399 !important;
+  animation: pulse 1.5s ease-in-out infinite;
+  font-size: 1rem !important;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .terminal-header {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .terminal-title {
+    font-size: 0.8rem;
+  }
+
+  .terminal-body {
+    height: 300px;
+    font-size: 0.75rem;
+  }
+
+  .terminal-line {
+    font-size: 0.75rem;
+  }
+
+  .terminal-stats {
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 }
