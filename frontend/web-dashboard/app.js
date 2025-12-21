@@ -11,6 +11,19 @@ const REFRESH_INTERVAL = 60000;  // 60 seconds
 let map;
 let markers = {};
 let chart;
+let currentSensors = [];
+
+// Zoom-based marker sizing
+function getMarkerSize(zoom) {
+    const minZoom = 10, maxZoom = 18, minSize = 8, maxSize = 28;
+    const clampedZoom = Math.max(minZoom, Math.min(maxZoom, zoom));
+    return Math.round(minSize + (maxSize - minSize) * (clampedZoom - minZoom) / (maxZoom - minZoom));
+}
+
+function getBorderWidth(zoom) {
+    return Math.max(1, Math.round(getMarkerSize(zoom) / 8));
+}
+
 
 // =============================================================================
 // Initialization
@@ -38,25 +51,47 @@ function initMap() {
         subdomains: 'abcd',
         maxZoom: 19
     }).addTo(map);
+
+    map.on('zoomend', () => {
+        if (currentSensors.length > 0) updateMarkerSizes();
+    });
+}
+
+
+
+function updateMarkerSizes() {
+    const zoom = map.getZoom();
+    const size = getMarkerSize(zoom);
+    const borderWidth = getBorderWidth(zoom);
+    const anchor = Math.round(size / 2);
+    currentSensors.forEach(sensor => {
+        if (markers[sensor.id]) {
+            const color = getDensityColor(sensor.density);
+            const icon = L.divIcon({
+                className: 'custom-marker',
+                html: '<div style="background:' + color + ';width:' + size + 'px;height:' + size + 'px;border-radius:50%;border:' + borderWidth + 'px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.3);transition:all 0.15s ease-out"></div>',
+                iconSize: [size, size],
+                iconAnchor: [anchor, anchor]
+            });
+            markers[sensor.id].setIcon(icon);
+        }
+    });
 }
 
 function updateMapMarkers(sensors) {
+    currentSensors = sensors;
     sensors.forEach(sensor => {
         const color = getDensityColor(sensor.density);
 
-        // Create custom icon
+        const zoom = map.getZoom();
+        const size = getMarkerSize(zoom);
+        const borderWidth = getBorderWidth(zoom);
+        const anchor = Math.round(size / 2);
         const icon = L.divIcon({
             className: 'custom-marker',
-            html: `<div style="
-                background: ${color};
-                width: 24px;
-                height: 24px;
-                border-radius: 50%;
-                border: 3px solid white;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            "></div>`,
-            iconSize: [24, 24],
-            iconAnchor: [12, 12]
+            html: '<div style="background:' + color + ';width:' + size + 'px;height:' + size + 'px;border-radius:50%;border:' + borderWidth + 'px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.3);transition:all 0.15s ease-out"></div>',
+            iconSize: [size, size],
+            iconAnchor: [anchor, anchor]
         });
 
         if (markers[sensor.id]) {
