@@ -1158,7 +1158,8 @@ function updateDetectionsTable(detections) {
   }
 
   tbody.innerHTML = detections.map(d => {
-    const date = new Date(d.created_at);
+    // Server returns UTC time without timezone indicator, so append 'Z' to parse as UTC
+    const date = new Date(d.created_at.replace(' ', 'T') + 'Z');
     const timeStr = date.toLocaleString('en-US', {
       month: 'short',
       day: 'numeric',
