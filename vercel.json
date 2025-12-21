@@ -5,13 +5,24 @@
     {
       "src": "frontend/web-dashboard/**",
       "use": "@vercel/static"
+    },
+    {
+      "src": "frontend/landing/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
+      "src": "/landing",
+      "dest": "/frontend/landing/index.html"
+    },
+    {
+      "src": "/landing/(.*)",
+      "dest": "/frontend/landing/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/frontend/web-dashboard/$1"
     }
-  ],
-  "outputDirectory": "frontend/web-dashboard"
+  ]
 }
