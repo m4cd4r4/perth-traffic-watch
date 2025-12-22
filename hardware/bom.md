@@ -1,111 +1,58 @@
-# Bill of Materials (BOM)
+# Bill of Materials
 
-## Per Sensor Unit (~$50 AUD)
+## Perth Traffic Watch - FOMO Vehicle Detection System
 
-### Core Components
+### ESP32-CAM Components (Per Unit)
 
-| Component | Description | Source | Est. Cost |
-|-----------|-------------|--------|-----------|
-| ESP32-CAM | AI-Thinker ESP32-CAM with OV2640 + PSRAM | AliExpress/eBay | $8 |
-| SIM7000A | LTE Cat-M1/NB-IoT + GPS module | AliExpress | $15 |
-| 18650 Battery | 3.7V 3000mAh Li-ion cell | Local electronics | $5 |
-| BMS Board | 1S 3A protection + charging | AliExpress | $2 |
-| TP4056 | USB charging module (optional) | AliExpress | $1 |
-| Solar Panel | 5W 6V monocrystalline | AliExpress/eBay | $10 |
+| Component | Quantity | Purpose | Estimated Cost (AUD) |
+|-----------|----------|---------|---------------------|
+| ESP32-CAM (OV2640) | 1 | Main MCU + Camera | $8-12 |
+| SIM7000A LTE Module | 1 | 4G connectivity | $15-20 |
+| External antenna (SIM7000A) | 1 | LTE signal | $3-5 |
+| MicroSD card (8-16GB) | 1 | Local image buffering | $5-8 |
+| 5V 2A power adapter | 1 | Power supply | $5-8 |
+| IP65 junction box | 1 | Weatherproof housing | $10-15 |
+| Cable glands | 2-3 | Weatherproof cable entry | $5-10 |
+| USB-to-TTL programmer | 1 | Initial flashing | $3-5 |
 
-### Enclosure & Mounting (Updated: Using Bunnings IP65 Junction Boxes)
+**Per Unit Total**: ~$54-83 AUD
 
-| Component | Description | Source | Est. Cost |
-|-----------|-------------|--------|-----------|
-| IP65 Junction Box | HPM 190x140x70mm or similar | Bunnings | $10-15 |
-| Cable Gland x2 | IP68 PG7/PG9 for solar + antenna | Bunnings/AliExpress | $3 |
-| Clear Acrylic/Polycarbonate | Camera window (optional, can drill hole) | Bunnings | $2-5 |
-| Mounting Bracket | L-bracket or pole mount, stainless | Bunnings | $5 |
-| Silicone Sealant | Clear RTV for weatherproofing | Bunnings | $8 (shared) |
-| Step Drill Bit | For clean camera hole | Bunnings | $15 (one-time tool) |
+### Phase 1: Mounts Bay Road (Single Unit)
 
-**Bunnings Product Suggestions:**
-- HPM Junction Box 190x140x70mm (SKU: 4430042) - ~$12
-- Alternatively: Legrand IP66 boxes, Clipsal enclosures
+- 1x complete unit + programmer
+- M2M SIM card (4G/LTE data-only)
+- Mounting bracket/pole clamp
+- Power extension cable (outdoor rated)
 
-### Connectivity
+### Phase 2: Site Survey Expansion
 
-| Component | Description | Source | Est. Cost |
-|-----------|-------------|--------|-----------|
-| SIM Card | IoT data SIM (prepaid or M2M) | Telstra/Optus/Vodafone | $5-10/month |
-| LTE Antenna | 4G/LTE external antenna, SMA | AliExpress | $2 |
-| Pigtail Cable | U.FL to SMA adapter | AliExpress | $1 |
+- Additional units based on site survey results
+- Bulk order discount anticipated
 
-### Cables & Misc
+### Optional/Future Components
 
-| Component | Description | Source | Est. Cost |
-|-----------|-------------|--------|-----------|
-| Dupont Wires | Female-female jumper cables | AliExpress | $1 |
-| USB Cable | Micro USB for programming | Existing | $0 |
-| Heat Shrink | Assorted sizes | AliExpress | $1 |
-| Standoffs | M2.5 nylon standoffs | AliExpress | $1 |
+- Solar panel + battery (off-grid deployment)
+- External USB camera (higher resolution testing)
+- PoE adapter (if wired network available)
 
-## Total Per Unit: ~$50-55 AUD
+## Suppliers
 
-## For 10-Unit Pilot
+### AliExpress (2-4 week shipping)
+- ESP32-CAM modules
+- SIM7000A modules
+- Antennas
+- USB-to-TTL programmers
 
-| Item | Qty | Unit Cost | Total |
-|------|-----|-----------|-------|
-| ESP32-CAM | 12 | $8 | $96 |
-| SIM7000A | 12 | $15 | $180 |
-| 18650 + BMS | 12 | $7 | $84 |
-| Solar Panels | 12 | $10 | $120 |
-| Enclosures (filament) | 12 | $4 | $48 |
-| Hardware/misc | 12 | $5 | $60 |
-| SIM Cards (first month) | 10 | $10 | $100 |
-| **Total** | | | **~$690** |
+### Bunnings (Local - Same Day)
+- Junction boxes (IP65 rated)
+- Cable glands
+- Mounting brackets
+- Power cables (outdoor rated)
 
-*Note: 12 units built (10 deployed + 2 spare)*
+### Local Electronics
+- MicroSD cards (JB Hi-Fi, Officeworks)
+- Power adapters
 
-## Recommended Suppliers (Australia)
-
-### Local
-- **Core Electronics** (coreelectronics.com.au) - ESP32, sensors, fast shipping
-- **Altronics** (altronics.com.au) - Components, enclosures
-- **Jaycar** (jaycar.com.au) - Batteries, cables, tools
-
-### International (Budget)
-- **AliExpress** - ESP32-CAM, SIM modules, bulk components (2-4 week shipping)
-- **eBay** - Solar panels, batteries
-
-## SIM Card Options (Australia)
-
-| Provider | Plan | Data | Monthly |
-|----------|------|------|---------|
-| Telstra M2M | IoT Starter | 5MB | ~$5 |
-| Optus IoT | Pay As You Go | Per MB | ~$3-10 |
-| Vodafone IoT | M2M Basic | 10MB | ~$7 |
-| Hologram | Global IoT | Pay per MB | ~$5 |
-
-*Note: Each sensor transmits ~1-5MB/month at 1 data point per minute*
-
-## Tools Required
-
-- Soldering iron + solder
-- 3D printer (PETG/ASA filament recommended)
-- Multimeter
-- Wire strippers
-- Heat gun (for heat shrink)
-- Drill (for mounting holes)
-
-## Alternative Components
-
-### Higher Power Option
-If solar insufficient:
-- 2x 18650 in parallel (6000mAh)
-- 10W solar panel
-- Adds ~$15 per unit
-
-### Cheaper LTE Option
-- SIM800L (2G only) - $5-8
-- Note: 2G being phased out in Australia
-
-### Premium ESP32 Option
-- ESP32-S3 with external camera
-- Better ML performance
-- Adds ~$10 per unit
+### IoT SIM Card
+- m2msim.com.au (recommended)
+- See `docs/iot-sim-options.md` for alternatives

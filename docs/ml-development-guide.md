@@ -1,252 +1,222 @@
-# ML Development Guide: Vehicle Detection on ESP32-CAM
+# Edge Impulse FOMO Training Guide
 
-## Goal: "See Only Rectangles"
+Complete guide for training your vehicle detection model using Edge Impulse FOMO (Faster Objects, More Objects).
 
-The ESP32 should detect vehicles as **centroids or bounding boxes** - not "understand" what it's seeing like human vision. This is computationally simpler and privacy-preserving.
+## What is FOMO?
 
----
+FOMO is Edge Impulse's fast object detection algorithm optimized for microcontrollers. Unlike traditional object detection (YOLO, SSD), FOMO:
 
-## Recommended Approach: Edge Impulse FOMO
+- Runs on constrained devices (ESP32-CAM)
+- Uses minimal RAM (<100KB)
+- Provides fast inference (~100-200ms)
+- Detects object center points (not full bounding boxes)
 
-### Why FOMO (Faster Objects, More Objects)?
+Perfect for counting vehicles crossing a line!
 
-| Feature | FOMO | Traditional Object Detection |
-|---------|------|------------------------------|
-| Model size | < 100KB | 1-10MB |
-| Inference time | ~100ms | 4-5 seconds |
-| RAM usage | ~200KB | 1-4MB |
-| ESP32 compatible | Yes | Barely/No |
-| Output | Centroids | Bounding boxes |
-| Accuracy | Good for counting | Better for identification |
+## Step 1: Create Edge Impulse Account
 
-**FOMO outputs centroids (x, y coordinates), not bounding boxes.** This is perfect for counting - you don't need the box size, just the location.
+1. Go to [https://studio.edgeimpulse.com](https://studio.edgeimpulse.com)
+2. Sign up (free tier is sufficient)
+3. Create a new project: "Perth Traffic Watch - Vehicle Detection"
 
-### How FOMO Works
+## Step 2: Data Collection
 
-1. Divides image into grid cells (e.g., 6x6 on 96x96 image)
-2. Each cell predicts: "Is there a vehicle here? Yes/No"
-3. Returns list of (x, y) centroids where vehicles detected
-4. You count centroids crossing a virtual line
+### Option A: Use ESP32-CAM for Collection
 
----
+Collect images directly from your deployment location:
 
-## Development Workflow
+1. Flash the ESP32-CAM with data collection firmware (see `firmware/data-collection/`)
+2. Walk Mounts Bay Road and capture 200-500 images at different times:
+   - Morning rush (7-9am)
+   - Midday (12-2pm)
+   - Evening rush (4-6pm)
+   - Low traffic (10pm-6am)
+3. Vary conditions:
+   - Sunny, cloudy, rainy
+   - Day and night
+   - Different vehicle types (cars, trucks, motorcycles, buses)
 
-### Phase 1: Data Collection (1-2 days)
+### Option B: Use Your Phone
 
-**Option A: Record from test location**
-```
-1. Mount ESP32-CAM temporarily at Mounts Bay Rd
-2. Capture 500-1000 frames over 2-3 hours
-3. Capture varied conditions: sun angles, shadows, rain
-4. Download via SD card or WiFi
-```
+1. Download Edge Impulse mobile app (iOS/Android)
+2. Connect to your project
+3. Take photos at the site
+4. Upload to Edge Impulse
 
-**Option B: Use existing datasets + augmentation**
-```
-- COCO dataset (filter for car, truck, bus, motorcycle)
-- UA-DETRAC (traffic surveillance dataset)
-- Augment with Perth-specific lighting/angles
-```
+### Data Quality Tips
 
-**Minimum requirements:**
-- 100+ images with vehicles labeled
-- 20-30 background images (empty road)
-- Varied lighting conditions
+- **Quantity**: Aim for 300-500 images minimum
+- **Diversity**: Different weather, times, traffic densities
+- **Angle**: Match your final camera mounting angle
+- **Resolution**: QVGA (320x240) to match ESP32-CAM
+- **Background**: Include "empty road" images (20-30%)
 
-### Phase 2: Labeling (2-4 hours)
+## Step 3: Labeling
 
-Use Edge Impulse's built-in labeling tool:
-1. Upload images to Edge Impulse Studio
-2. Draw bounding boxes around each vehicle
-3. Label as single class: `vehicle` (don't distinguish car/truck/bus)
-4. Include partial vehicles at frame edges
+1. In Edge Impulse Studio, go to "Data acquisition"
+2. For each image, draw bounding boxes around vehicles
+3. Label all as "vehicle" (single class)
+4. Tips:
+   - Label partially visible vehicles
+   - Don't label very distant vehicles (too small)
+   - Be consistent with what counts as a "vehicle"
 
-### Phase 3: Training (30 minutes - 2 hours)
+Expected time: 15-30 seconds per image
 
-**Edge Impulse Settings:**
+## Step 4: Create Impulse
 
-```
-Image size: 96x96 (smallest, fastest)
-Color depth: Grayscale (reduces data, sufficient for shapes)
-Model: FOMO MobileNetV2 0.1 (smallest variant)
-Training cycles: 30-50
-Learning rate: 0.001
-```
+1. Go to "Create impulse"
+2. Add processing block: **Image**
+   - Image width: 96px (FOMO requires smaller input)
+   - Image height: 96px
+   - Resize mode: Fit shortest axis
+3. Add learning block: **Object Detection (FOMO)**
+4. Save impulse
 
-**Expected results:**
-- Model size: 50-100KB
-- Inference: ~100ms per frame
-- Accuracy: 85-95% (depends on training data quality)
+## Step 5: Generate Features
 
-### Phase 4: Export & Deploy
+1. Go to "Image" (processing block)
+2. Set color depth: **Grayscale** (saves memory)
+3. Click "Save parameters"
+4. Go to "Generate features" tab
+5. Click "Generate features"
 
-1. **Export from Edge Impulse:**
-   - Deployment → Arduino Library
-   - Target: ESP32
-   - Quantization: INT8
-   - Enable EON Compiler (optimizes for microcontrollers)
+Wait 2-5 minutes while Edge Impulse processes your images.
 
-2. **Integrate with firmware:**
+Check the feature explorer - you should see vehicles clustered together.
+
+## Step 6: Train FOMO Model
+
+1. Go to "Object detection" (learning block)
+2. Configure training:
+   - **Number of training cycles**: 50 (increase to 100 for better accuracy)
+   - **Learning rate**: 0.001
+   - **Validation set size**: 20%
+3. Click "Start training"
+
+Wait 5-15 minutes for training to complete.
+
+## Step 7: Evaluate Model
+
+After training, check:
+
+- **Precision**: >60% is acceptable, >80% is excellent
+- **Recall**: >50% is acceptable, >70% is excellent
+- **F1 Score**: Balanced metric
+
+If accuracy is low (<50%):
+- Collect more diverse images
+- Improve labeling consistency
+- Increase training cycles
+
+## Step 8: Test Model
+
+1. Go to "Model testing"
+2. Click "Classify all"
+3. Review false positives/negatives
+4. If needed, relabel and retrain
+
+## Step 9: Deploy to ESP32-CAM
+
+### Export as Arduino Library
+
+1. Go to "Deployment"
+2. Select "Arduino library"
+3. Search for "ESP32"
+4. Select "ESP-EYE"
+5. Click "Build"
+
+Download the ZIP file.
+
+### Integrate with Firmware
+
+1. Extract ZIP to `firmware/esp32-cam-counter/lib/`
+2. In `platformio.ini`, add:
+   ```ini
+   lib_deps =
+       ; ... existing deps ...
+       ; Edge Impulse library (local)
+   ```
+3. In `vehicle_counter.cpp`, uncomment Edge Impulse code
+4. Include the header:
    ```cpp
-   #include <vehicle_detection_inferencing.h>
+   #include <perth-traffic-watch_inferencing.h>
+   ```
+5. Update inference code (see comments in `vehicle_counter.cpp`)
 
-   // Capture frame
-   camera_fb_t* fb = esp_camera_fb_get();
+### Upload to ESP32
 
-   // Run inference
-   ei_impulse_result_t result;
-   run_classifier(&signal, &result, false);
+```bash
+cd firmware/esp32-cam-counter
+pio run -t upload
+pio device monitor
+```
 
-   // Count detections crossing line
-   for (int i = 0; i < result.bounding_boxes_count; i++) {
-       if (result.bounding_boxes[i].y > DETECTION_LINE_Y) {
-           vehicle_count++;
-       }
-   }
+## Step 10: Field Testing
+
+1. Deploy ESP32-CAM at Mounts Bay Road
+2. Monitor serial output for detection accuracy
+3. Compare against manual count for 10-15 minutes
+4. Calculate accuracy:
+   ```
+   Accuracy = (True Detections / Actual Vehicles) * 100%
    ```
 
-### Phase 5: Counting Logic
+Target: >70% accuracy in real-world conditions
 
-**Simple line-crossing algorithm:**
+## Troubleshooting
 
+### Low Accuracy (<50%)
+
+- **Collect more data**: Especially for conditions where model fails
+- **Improve lighting**: Add ambient light for night detection
+- **Adjust camera angle**: Ensure clear view of vehicles
+- **Increase model size**: Use 160x160 instead of 96x96 (requires more RAM)
+
+### Memory Errors
+
+- **Reduce image size**: Try 80x80 or 64x64
+- **Use grayscale**: Disables color processing
+- **Disable PSRAM**: Some ESP32-CAM boards have faulty PSRAM
+
+### Slow Inference (>500ms)
+
+- **Reduce image size**: Smaller input = faster inference
+- **Optimize model**: Use "int8" quantization in Edge Impulse
+- **Overclock ESP32**: Increase CPU frequency (not recommended long-term)
+
+### False Positives
+
+- **Collect negative examples**: Images of empty roads, shadows, rain
+- **Adjust confidence threshold**: Increase `DETECTION_CONFIDENCE_THRESHOLD` in `config.h`
+- **Filter by size**: Ignore very small detections
+
+## Advanced: Versioning Models
+
+As you improve your model:
+
+1. Create new Edge Impulse project: "Perth Traffic Watch v2"
+2. Copy dataset from v1
+3. Add new training data
+4. Retrain and compare accuracy
+5. Deploy best model
+
+Track model versions in firmware:
 ```cpp
-#define DETECTION_LINE_Y 0.5  // Middle of frame
-
-// Track centroids between frames
-struct TrackedObject {
-    float last_y;
-    bool counted;
-};
-
-void processDetections(ei_impulse_result_t* result) {
-    for (int i = 0; i < result->bounding_boxes_count; i++) {
-        float y = result->bounding_boxes[i].y;
-
-        // If centroid crossed line from top to bottom
-        if (last_positions[i].last_y < DETECTION_LINE_Y &&
-            y >= DETECTION_LINE_Y &&
-            !last_positions[i].counted) {
-
-            vehicle_count++;
-            last_positions[i].counted = true;
-        }
-
-        last_positions[i].last_y = y;
-    }
-}
+#define MODEL_VERSION "v1.0"
+#define MODEL_DATE "2025-01-15"
 ```
-
-**Advanced: Hungarian algorithm for object tracking**
-- Matches detections between frames
-- Handles occlusion and overlapping vehicles
-- Libraries: `dlib`, custom implementation
-
----
-
-## Alternative Approaches
-
-### 1. Motion Detection + Blob Counting (Simpler)
-
-No ML required - pure image processing:
-
-```cpp
-// Frame differencing
-cv::absdiff(prev_frame, curr_frame, diff);
-cv::threshold(diff, binary, 25, 255, cv::THRESH_BINARY);
-cv::findContours(binary, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
-
-// Count large contours (vehicles)
-for (auto& contour : contours) {
-    if (cv::contourArea(contour) > MIN_VEHICLE_AREA) {
-        vehicle_count++;
-    }
-}
-```
-
-**Pros:** No training needed, faster
-**Cons:** Sensitive to shadows, lighting changes; less accurate
-
-### 2. Background Subtraction
-
-```cpp
-// Learn background over time
-cv::Ptr<cv::BackgroundSubtractor> bg_sub =
-    cv::createBackgroundSubtractorMOG2();
-
-// Apply to each frame
-bg_sub->apply(frame, fg_mask);
-
-// Count foreground blobs
-```
-
-**Pros:** Adapts to lighting changes
-**Cons:** Struggles with stopped traffic
-
-### 3. Hybrid: Motion Detection + FOMO Verification
-
-1. Motion detection triggers capture
-2. FOMO confirms if motion is a vehicle
-3. Reduces inference calls, saves power
-
----
-
-## Hardware Considerations
-
-### ESP32-CAM Limitations
-
-| Resource | Available | FOMO Usage |
-|----------|-----------|------------|
-| Flash | 4MB | ~200KB (model + code) |
-| PSRAM | 4MB (if equipped) | ~300KB (frame buffer) |
-| RAM | 520KB | ~200KB |
-| CPU | 240MHz dual-core | One core for inference |
-
-**Critical:** Use AI-Thinker ESP32-CAM with PSRAM. Without PSRAM, you cannot run FOMO.
-
-### Camera Settings for Detection
-
-```cpp
-config.frame_size = FRAMESIZE_96X96;   // Matches FOMO input
-config.pixel_format = PIXFORMAT_GRAYSCALE;  // Faster, sufficient
-config.fb_count = 2;  // Double buffer
-config.grab_mode = CAMERA_GRAB_LATEST;  // Always newest frame
-```
-
-### Power Optimization
-
-```cpp
-// Reduce capture rate when no motion
-if (no_motion_detected) {
-    delay(1000);  // 1 FPS
-} else {
-    delay(200);   // 5 FPS
-}
-
-// Deep sleep at night (no traffic to count)
-if (hour >= 23 || hour < 5) {
-    esp_deep_sleep(3600000000);  // 1 hour
-}
-```
-
----
-
-## Expected Performance
-
-| Metric | Target | Notes |
-|--------|--------|-------|
-| Frame rate | 5-10 FPS | Sufficient for 60 km/h traffic |
-| Detection accuracy | 85-95% | Depends on training data |
-| False positives | < 5% | Shadows, pedestrians |
-| False negatives | < 10% | Occluded vehicles |
-| Power consumption | ~200mA active | With solar, sustainable |
-
----
 
 ## Resources
 
-- [Edge Impulse FOMO Tutorial](https://docs.edgeimpulse.com/docs/tutorials/end-to-end-tutorials/computer-vision/object-detection/detect-objects-using-fomo)
-- [Edge Impulse Object Counting](https://docs.edgeimpulse.com/docs/tutorials/advanced-inferencing/object-counting-using-fomo)
-- [EloquentArduino ESP32-CAM FOMO](https://eloquentarduino.com/posts/esp32-cam-object-detection)
-- [GitHub: FOMO Training Guide](https://github.com/San279/train-object-detect-FOMO-esp32)
-- [DroneBot Workshop ESP32 Object Detection](https://dronebotworkshop.com/esp32-object-detect/)
+- Edge Impulse FOMO docs: https://docs.edgeimpulse.com/docs/edge-impulse-studio/learning-blocks/object-detection/fomo-object-detection-for-constrained-devices
+- Edge Impulse ESP32-CAM guide: https://docs.edgeimpulse.com/docs/development-platforms/officially-supported-mcu-targets/espressif-esp-eye
+- FOMO paper: https://arxiv.org/abs/2106.10446
+
+## Next Steps
+
+After successful deployment:
+- Monitor accuracy over weeks (traffic patterns change)
+- Retrain quarterly with new data
+- Consider multi-class model (cars, trucks, motorcycles)
+- Experiment with higher resolutions on ESP32-S3 (more RAM)

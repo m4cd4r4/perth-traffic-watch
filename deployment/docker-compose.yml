@@ -1,0 +1,59 @@
+# Perth Traffic Watch - Vultr Deployment
+# Server: 45.77.233.102 (Sydney)
+#
+# Deploy with:
+#   cd /opt/perth-traffic-watch
+#   docker compose up -d
+#
+# View logs:
+#   docker compose logs -f
+#
+# Restart:
+#   docker compose restart
+
+version: '3.8'
+
+services:
+  # Express.js API + SQLite + Traffic Simulator
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: perth-traffic-api
+    restart: unless-stopped
+    ports:
+      - "3001:3000"  # External 3001, internal 3000
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - API_KEY=${API_KEY:-perth_traffic_prod_key}
+      - SIMULATE_FREEWAY=true  # Run 24/7 simulator
+    volumes:
+      - traffic_data:/app/data  # Persist SQLite database
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: perth-traffic-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  traffic_data:
+    driver: local

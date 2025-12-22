@@ -1,346 +1,307 @@
-# Requirements & To-Do List
+# Requirements and TODOs
 
-## Project Scope: 4 Prototype Units
+Project requirements, development roadmap, and task tracking for Perth Traffic Watch.
 
-**Location:** Mounts Bay Road, Perth (UWA to Narrows Bridge)
-**Timeline:** MVP prototype phase
-**Budget:** ~$300 hardware + ~$20/month connectivity
+## Project Goals
+
+**Primary**: Deploy Edge AI vehicle detection system at Mounts Bay Road, Perth
+
+**Secondary**: Create open-source platform for DIY traffic monitoring
+
+## Phase 1: Proof of Concept (Current)
+
+### Hardware Requirements
+
+- [x] Bill of materials documented
+- [x] Shopping list created (AliExpress + Bunnings)
+- [ ] Order hardware components (AliExpress: 2-4 weeks)
+- [ ] Order M2M SIM card (m2msim.com.au)
+- [ ] Purchase Bunnings items (junction box, brackets, cables)
+- [ ] Create Edge Impulse account
+
+### Firmware Development
+
+- [x] PlatformIO project structure
+- [x] ESP32-CAM camera initialization
+- [x] SD card support
+- [x] SIM7000A LTE modem integration (TinyGSM)
+- [x] Vehicle counter framework (placeholder for FOMO)
+- [ ] Edge Impulse model integration (after training)
+- [ ] Power management (sleep modes)
+- [ ] OTA update support
+- [ ] Watchdog timer implementation
+
+### ML Model Training
+
+- [ ] Collect 300-500 training images at Mounts Bay Road
+- [ ] Label images in Edge Impulse
+- [ ] Train FOMO model
+- [ ] Achieve >70% detection accuracy
+- [ ] Export Arduino library
+- [ ] Integrate with firmware
+- [ ] Field test and iterate
+
+### Backend Development
+
+- [x] Express API server
+- [x] SQLite database schema
+- [x] Detection data endpoints
+- [x] Statistics aggregation
+- [ ] Image upload support (multipart/form-data)
+- [ ] API authentication (API key)
+- [ ] Rate limiting
+- [ ] HTTPS/SSL setup
+- [ ] Deploy to VPS/cloud
+
+### Frontend Development
+
+- [x] Dashboard HTML/CSS structure
+- [x] Chart.js integration
+- [x] API client (fetch)
+- [x] Real-time data display
+- [ ] Dark mode toggle
+- [ ] Export data to CSV
+- [ ] Mobile optimization
+- [ ] PWA support (offline mode)
+
+### Site Preparation
+
+- [ ] Walk Mounts Bay Road with site survey checklist
+- [ ] Identify optimal camera mounting location
+- [ ] Check power source availability (or plan solar)
+- [ ] Measure mounting height and angle
+- [ ] Test 4G signal strength at site
+- [ ] Plan cable routing and weatherproofing
+- [ ] Check legal/permit requirements
+
+### Documentation
+
+- [x] README (project overview)
+- [x] Hardware BOM and shopping lists
+- [x] ML development guide (Edge Impulse)
+- [x] IoT SIM options comparison
+- [x] Requirements and TODOs (this file)
+- [x] Legal considerations
+- [x] Site survey checklist
+- [x] Contributing guidelines
+- [ ] Installation manual (step-by-step)
+- [ ] Troubleshooting guide
+- [ ] Video tutorial (YouTube)
+
+## Phase 2: Single Site Deployment (2-4 Weeks)
+
+### Installation
+
+- [ ] Install junction box and mounting bracket
+- [ ] Mount ESP32-CAM and SIM7000A
+- [ ] Connect power (mains or solar)
+- [ ] Run cables and seal with cable glands
+- [ ] Test camera view and adjust angle
+- [ ] Power on and verify LTE connection
+- [ ] Monitor for 24 hours
+
+### Validation
+
+- [ ] Manual count vs. automated count comparison (1 hour sample)
+- [ ] Measure detection accuracy (target: >70%)
+- [ ] Monitor data usage (verify within SIM plan)
+- [ ] Check power consumption
+- [ ] Test in different weather conditions (rain, sun, night)
+- [ ] Verify dashboard updates every 60 seconds
+
+### Optimization
+
+- [ ] Tune detection confidence threshold
+- [ ] Adjust camera exposure settings
+- [ ] Optimize upload frequency (balance accuracy vs. data usage)
+- [ ] Implement image compression
+- [ ] Add local buffering (SD card backup)
+
+## Phase 3: Multi-Site Expansion (1-3 Months)
+
+### Site Survey
+
+- [ ] Complete site survey checklist for 5-10 candidate sites
+- [ ] Prioritize sites by traffic density and strategic value
+- [ ] Map coverage area (Google Maps)
+- [ ] Estimate total hardware budget
+- [ ] Plan staged rollout (1 site per week)
+
+### Scaling Backend
+
+- [ ] Migrate from SQLite to PostgreSQL (for multi-device)
+- [ ] Implement WebSocket for real-time updates
+- [ ] Add user authentication (login/logout)
+- [ ] Create admin panel (device management)
+- [ ] Set up monitoring (Uptime Kuma, Grafana)
+
+### Scaling Firmware
+
+- [ ] Implement device ID and registration
+- [ ] Add remote configuration (via API)
+- [ ] Implement OTA updates (push firmware to all devices)
+- [ ] Add health monitoring (reboot on failure)
+- [ ] Implement data pooling (share SIM data across devices)
+
+### Data Analysis
+
+- [ ] Export historical data to CSV
+- [ ] Create weekly/monthly reports
+- [ ] Identify peak traffic hours
+- [ ] Detect traffic trends (increasing/decreasing)
+- [ ] Compare sites (busiest roads)
+- [ ] Visualize on map (heatmap)
+
+## Phase 4: Advanced Features (3-6 Months)
+
+> **See Also**: [Freeway Expansion Plan](./freeway-expansion-plan.md) for the aspirational Phase 5+ covering Mitchell & Kwinana Freeway simulation and monitoring.
+
+### Multi-Class Detection
+
+- [ ] Train model to detect vehicle types:
+  - Cars
+  - Trucks
+  - Motorcycles
+  - Buses
+  - Bicycles
+- [ ] Update dashboard to show breakdown by type
+
+### Direction Detection
+
+- [ ] Implement tracking algorithm (vehicle trajectory)
+- [ ] Count northbound vs. southbound traffic
+- [ ] Measure average speed (optional)
+
+### Alerts and Notifications
+
+- [ ] Email alerts when traffic exceeds threshold
+- [ ] SMS alerts for system failures
+- [ ] Slack/Discord integration
+- [ ] Push notifications (mobile app)
+
+### Integration with Unif-eye
+
+- [ ] Report stats to Unif-eye Brain API
+- [ ] Cross-project insights (Perth traffic + other Macdara projects)
+- [ ] Link to Donnacha voice assistant ("Hey Donnacha, what's traffic like on Mounts Bay Road?")
+
+### Solar Power
+
+- [ ] Design solar panel + battery system
+- [ ] Calculate power budget (ESP32 + SIM7000A ~500mA @ 5V)
+- [ ] Test off-grid deployment
+- [ ] Add battery monitoring to firmware
+
+### Mobile App
+
+- [ ] React Native or Flutter app
+- [ ] Live traffic view
+- [ ] Site map
+- [ ] Historical charts
+- [ ] Push notifications
+
+## Known Issues and Blockers
+
+### Hardware
+- **ESP32-CAM PSRAM issues**: Some boards have faulty PSRAM → Test before deployment
+- **SIM7000A antenna**: Default antenna is weak → Buy external antenna
+
+### Firmware
+- **Edge Impulse library size**: May exceed flash memory → Use quantized int8 model
+- **LTE connection stability**: SIM7000A can be flaky → Implement robust reconnection logic
+
+### ML Model
+- **Night detection**: Low light reduces accuracy → Add IR illumination or ambient light
+- **Rain/fog**: Obscures camera → Test performance in all weather conditions
+
+### Legal/Permits
+- **Public space installation**: May require council permit → Check with City of Perth
+
+### Budget
+- **Cost per device**: ~$150 AUD (Phase 1) → Look for bulk discounts in Phase 3
+
+## Success Metrics
+
+### Phase 1 (Proof of Concept)
+- [ ] Device successfully deployed and running 24/7
+- [ ] Detection accuracy >70%
+- [ ] Dashboard accessible from anywhere
+- [ ] Data usage <500MB/month
+
+### Phase 2 (Single Site)
+- [ ] 99% uptime over 1 month
+- [ ] Detection accuracy >80%
+- [ ] Manual validation within 10% of automated count
+
+### Phase 3 (Multi-Site)
+- [ ] 5-10 sites deployed
+- [ ] Central dashboard showing all sites
+- [ ] Historical data for trend analysis
+- [ ] Total cost <$1000 AUD
+
+### Phase 4 (Advanced)
+- [ ] Multi-class detection working
+- [ ] Alerts functional
+- [ ] Integration with Unif-eye complete
+- [ ] Open-source community contributions
+
+## Phase 5: Freeway Expansion (Aspirational)
+
+> **Full Documentation**: [Freeway Expansion Plan](./freeway-expansion-plan.md)
+
+### Vision
+
+Expand Perth Traffic Watch from arterial road monitoring to high-speed freeway corridors, covering Mitchell Freeway (north) and Kwinana Freeway (south) within 5km of the Narrows Bridge.
+
+### Key Components
+
+- [ ] **Traffic Simulator**: Model realistic freeway patterns for development/testing
+- [ ] **30 Virtual Sensors**: Cover all on/off ramps within monitoring zone
+- [ ] **Recalibrated Speed Algorithm**: Adapted for 100 km/h freeway conditions
+- [ ] **Unique Feature Detection (UFD)**: Privacy-preserving ground-truth speed sampling
+- [ ] **Unified Dashboard**: Combined arterial + freeway view with navigation
+- [ ] **GPS Integration**: "My Location" to destination journey planning
+
+### Advocacy Goals
+
+- [ ] Demonstrate citizen engineering can approximate government sensors
+- [ ] Advocate for open access to Main Roads WA sensor data
+- [ ] Propose novel algorithms (like UFD) for existing infrastructure
+- [ ] Highlight cost-effectiveness ($143/site vs. $50,000+ government sensors)
+
+### Public Data Integration
+
+- [ ] Integrate available Main Roads WA open data
+- [ ] Submit FOI requests for real-time sensor data
+- [ ] Document the "data gap" between what exists and what's public
 
 ---
 
-## Hardware Requirements
+## Resources and Links
 
-### Per Unit Components
-- [ ] ESP32-CAM (AI-Thinker) with PSRAM - **Critical: Must have PSRAM for FOMO**
-- [ ] SIM7000A LTE-M module
-- [ ] 18650 battery (3000mAh+) with BMS
-- [ ] 5W 6V solar panel
-- [ ] IP65 junction box (Bunnings)
-- [ ] Cable glands (PG7/PG9) x2
-- [ ] LTE antenna (SMA)
-- [ ] Mounting hardware
+- **Edge Impulse**: https://studio.edgeimpulse.com
+- **PlatformIO**: https://platformio.org
+- **TinyGSM**: https://github.com/vshymanskyy/TinyGSM
+- **m2msim**: https://m2msim.com.au
+- **Unif-eye Dashboard**: https://unif-eye.vercel.app
+- **Project GitHub**: (create after initial commit)
 
-### Tools Required
-- [ ] Soldering iron + solder
-- [ ] Step drill bit (for camera hole)
-- [ ] Multimeter
-- [ ] Wire strippers
-- [ ] Silicone sealant
+## Next Immediate Actions (Priority Order)
 
-### Quantity: 4 Units + Spares
-| Item | Qty | Unit Cost | Total |
-|------|-----|-----------|-------|
-| ESP32-CAM | 5 | $8 | $40 |
-| SIM7000A | 5 | $15 | $75 |
-| 18650 + BMS | 5 | $7 | $35 |
-| Solar panel | 5 | $10 | $50 |
-| Junction box | 5 | $12 | $60 |
-| Hardware/misc | - | - | $40 |
-| **Total** | | | **~$300** |
+1. **Order hardware today** (AliExpress: 2-4 week lead time)
+2. **Order M2M SIM** (m2msim.com.au: 1-2 day shipping)
+3. **Buy Bunnings items** (this week)
+4. **Create Edge Impulse account** (today)
+5. **Walk Mounts Bay Road** (this week, use site survey checklist)
+6. **Collect training images** (while hardware ships)
+7. **Train FOMO model** (1-2 days)
+8. **Test firmware on breadboard** (when hardware arrives)
+9. **Deploy to Mounts Bay Road** (when model is trained and tested)
+
+**Estimated Timeline**: 3-4 weeks from hardware order to first deployment
 
 ---
 
-## Software Requirements
-
-### ML Model (Edge Impulse FOMO)
-
-**Training Data:**
-- [ ] 100+ images of vehicles (various angles, lighting)
-- [ ] 20-30 background images (empty road)
-- [ ] Labeled with bounding boxes (single class: "vehicle")
-
-**Model Specifications:**
-| Parameter | Value |
-|-----------|-------|
-| Input size | 96x96 grayscale |
-| Model | FOMO MobileNetV2 0.1 |
-| Quantization | INT8 |
-| Target size | < 100KB |
-| Inference time | < 200ms |
-
-**Output:** Centroids (x, y) of detected vehicles - not bounding boxes
-
-### Firmware (ESP32)
-
-**Core Features:**
-- [ ] Camera initialization (96x96 grayscale)
-- [ ] FOMO model inference
-- [ ] Line-crossing detection algorithm
-- [ ] Vehicle counting logic
-- [ ] SIM7000A LTE-M communication
-- [ ] JSON payload transmission
-- [ ] Battery voltage monitoring
-- [ ] Deep sleep / power management
-
-**Data Payload:**
-```json
-{
-  "sensor_id": "PTW-001",
-  "timestamp": 1702500000,
-  "count": 42,
-  "interval_sec": 60,
-  "battery_v": 3.85,
-  "rssi": -75
-}
-```
-
-### Backend API
-
-**Endpoints:**
-- [ ] `POST /api/data` - Receive sensor data
-- [ ] `GET /api/sensors` - List all sensors
-- [ ] `GET /api/traffic/{sensor_id}` - Get traffic data
-- [ ] `GET /api/traffic/realtime` - WebSocket for live updates
-
-**Storage:**
-- Time-series database (InfluxDB, TimescaleDB, or simple SQLite for MVP)
-- 30-day retention minimum
-
-### Frontend Dashboard
-
-**Features:**
-- [ ] Map view with sensor locations
-- [ ] Real-time traffic density indicators (color-coded)
-- [ ] Historical charts (hourly, daily, weekly)
-- [ ] "Should I drive?" simple answer
-
----
-
-## Connectivity Requirements
-
-### IoT SIM (Recommended: M2MSIM.com.au)
-- [ ] Order 4x SIMs from M2MSIM or Cmobile
-- [ ] Activate on portal
-- [ ] Note APN settings
-- [ ] Test connectivity before deployment
-
-**Data Budget:**
-- ~25 MB/month per sensor
-- ~100 MB/month total for 4 sensors
-- Estimated cost: $16-40/month
-
----
-
-## Deployment Requirements
-
-### Site Survey (Mounts Bay Road)
-- [ ] Walk the route: UWA to Narrows Bridge (~3km)
-- [ ] Identify 4 mounting locations with:
-  - Private property access (fence, building, pole)
-  - Clear view of both lanes
-  - Sun exposure for solar
-  - Height: 2-4m for optimal angle
-- [ ] Document each location (photos, GPS coords)
-- [ ] Contact property owners for permission
-
-### Mounting Considerations
-| Factor | Requirement |
-|--------|-------------|
-| Height | 2-4m above ground |
-| Angle | ~30-45° downward |
-| Field of view | Both lanes visible |
-| Solar exposure | South-facing preferred (southern hemisphere) |
-| Security | Not easily accessible |
-
----
-
-## To-Do List (Ordered)
-
-### Phase 1: Hardware Acquisition (Week 1)
-
-- [ ] **Order components from AliExpress/eBay**
-  - 5x ESP32-CAM (AI-Thinker with PSRAM)
-  - 5x SIM7000A modules
-  - 5x 18650 batteries + BMS boards
-  - 5x 5W solar panels
-  - LTE antennas, cables, connectors
-
-- [ ] **Buy from Bunnings**
-  - 5x IP65 junction boxes
-  - Cable glands
-  - Mounting brackets
-  - Silicone sealant
-  - Step drill bit
-
-- [ ] **Order IoT SIMs**
-  - Register at m2msim.com.au or cmobile.com.au
-  - Order 4x SIMs
-  - Activate accounts
-
-### Phase 2: ML Model Development (Week 1-2)
-
-- [ ] **Create Edge Impulse account**
-  - Sign up at edgeimpulse.com (free tier)
-
-- [ ] **Collect training data**
-  - Option A: Record video at Mounts Bay Rd, extract frames
-  - Option B: Use COCO/UA-DETRAC datasets
-
-- [ ] **Label images**
-  - Upload to Edge Impulse
-  - Draw bounding boxes on vehicles
-  - Single class: "vehicle"
-
-- [ ] **Train FOMO model**
-  - 96x96 grayscale
-  - FOMO MobileNetV2 0.1
-  - 30-50 training cycles
-  - Learning rate 0.001
-
-- [ ] **Export model**
-  - Arduino library format
-  - INT8 quantization
-  - EON Compiler enabled
-
-- [ ] **Test on single ESP32-CAM**
-  - Verify inference works
-  - Measure inference time
-  - Check accuracy
-
-### Phase 3: Firmware Development (Week 2-3)
-
-- [ ] **Set up development environment**
-  - Install PlatformIO
-  - Configure ESP32-CAM board
-
-- [ ] **Implement core firmware**
-  - Camera capture loop
-  - FOMO inference integration
-  - Line-crossing counter
-  - Battery monitoring
-
-- [ ] **Implement LTE communication**
-  - SIM7000A initialization
-  - APN configuration
-  - HTTP POST to backend
-
-- [ ] **Implement power management**
-  - Deep sleep between transmissions
-  - Night mode (reduced operation)
-  - Solar charging logic
-
-- [ ] **Bench test complete system**
-  - Run for 24+ hours
-  - Verify data transmission
-  - Check power consumption
-
-### Phase 4: Enclosure Assembly (Week 3)
-
-- [ ] **Prepare junction boxes**
-  - Drill camera hole (step drill)
-  - Install cable glands
-  - Mount ESP32-CAM internally
-  - Wire battery + BMS
-  - Connect solar panel
-  - Seal with silicone
-
-- [ ] **Test weatherproofing**
-  - Water spray test
-  - Heat test (direct sun)
-
-- [ ] **Assemble 4 complete units**
-
-### Phase 5: Backend & Frontend (Week 2-3, parallel)
-
-- [ ] **Set up backend**
-  - Node.js/Python API
-  - Database (SQLite for MVP)
-  - Data ingestion endpoint
-  - Basic authentication
-
-- [ ] **Deploy backend**
-  - Railway, Fly.io, or Vercel (free tier)
-
-- [ ] **Build frontend dashboard**
-  - Map with sensor markers
-  - Real-time data display
-  - Simple traffic indicator
-
-- [ ] **Deploy frontend**
-  - Vercel (free tier)
-
-### Phase 6: Site Survey & Permissions (Week 3-4)
-
-- [ ] **Walk Mounts Bay Road**
-  - Identify 4+ potential sites
-  - Take photos
-  - Record GPS coordinates
-
-- [ ] **Contact property owners**
-  - Explain project
-  - Request permission
-  - Get written consent
-
-- [ ] **Prepare consent forms**
-  - Print copies
-  - Collect signatures
-
-### Phase 7: Field Deployment (Week 4-5)
-
-- [ ] **Install sensors**
-  - Mount at approved locations
-  - Orient for optimal view
-  - Secure solar panels
-
-- [ ] **Verify connectivity**
-  - Check LTE signal
-  - Confirm data reaching backend
-
-- [ ] **Monitor initial operation**
-  - 48-hour observation period
-  - Adjust positions if needed
-  - Fix any issues
-
-### Phase 8: Validation & Iteration (Week 5+)
-
-- [ ] **Validate accuracy**
-  - Manual count vs sensor count
-  - Calculate error rate
-  - Identify failure modes
-
-- [ ] **Iterate on model**
-  - Collect more training data from deployed sensors
-  - Retrain if accuracy < 85%
-
-- [ ] **Public launch**
-  - Announce on GitHub
-  - Share dashboard URL
-  - Invite community feedback
-
----
-
-## Success Criteria
-
-| Metric | Target |
-|--------|--------|
-| Detection accuracy | > 85% |
-| Uptime | > 95% |
-| Data latency | < 2 minutes |
-| Battery life (cloudy) | > 3 days |
-| Unit cost | < $60 |
-| Monthly running cost | < $50 total |
-
----
-
-## Risks & Mitigations
-
-| Risk | Mitigation |
-|------|------------|
-| Poor LTE signal | Test before mounting; use external antenna |
-| Solar insufficient | Use larger panel (10W) or dual battery |
-| ML accuracy too low | Collect more local training data |
-| Vandalism/theft | Mount high; use security screws |
-| Permission denied | Have backup locations identified |
-| Weather damage | IP65 rating; silicone sealing |
-
----
-
-## Future Enhancements (Post-MVP)
-
-- [ ] Additional sensors on other routes
-- [ ] Direction detection (inbound vs outbound)
-- [ ] Vehicle classification (car/truck/bus)
-- [ ] Speed estimation
-- [ ] Mobile app
-- [ ] API for third-party integration
-- [ ] Main Roads WA partnership
+**Document Version**: 1.1
+**Last Updated**: 2025-12-19
+**Owner**: Macdara

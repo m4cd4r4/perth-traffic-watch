@@ -1,102 +1,93 @@
 /**
  * Perth Traffic Watch - Vehicle Counter
  *
- * Handles vehicle detection and line-crossing counting logic.
- * Uses Edge Impulse FOMO model for detection.
+ * Handles FOMO inference, vehicle counting, and statistics
  */
 
 #ifndef VEHICLE_COUNTER_H
 #define VEHICLE_COUNTER_H
 
 #include <Arduino.h>
+#include "esp_camera.h"
+#include "FS.h"
+#include "SD_MMC.h"
 #include "config.h"
 
-// Maximum objects to track simultaneously
-#define MAX_TRACKED_OBJECTS 10
-
-// Structure to hold detection result
+// ============================================================================
+// Data Structures
+// ============================================================================
 struct Detection {
-    float x;        // Centroid X (0.0 - 1.0)
-    float y;        // Centroid Y (0.0 - 1.0)
-    float confidence;
+  float x;           // Bounding box center X (normalized 0-1)
+  float y;           // Bounding box center Y (normalized 0-1)
+  float width;       // Bounding box width (normalized 0-1)
+  float height;      // Bounding box height (normalized 0-1)
+  float confidence;  // Detection confidence (0-1)
+  uint32_t timestamp; // Detection timestamp (millis)
 };
 
-// Structure to track objects across frames
-struct TrackedObject {
-    float lastY;
-    uint8_t framesTracked;
-    bool counted;
-    bool active;
+struct CounterStats {
+  uint32_t totalCount;      // Total vehicles counted since boot
+  uint32_t lastHourCount;   // Vehicles in last hour
+  uint32_t lastMinuteCount; // Vehicles in last minute
+  float avgConfidence;      // Average detection confidence
+  uint32_t uptime;          // System uptime (seconds)
+  char siteName[64];        // Site name
+  float latitude;           // Site latitude
+  float longitude;          // Site longitude
 };
 
+// ============================================================================
+// Vehicle Counter Class
+// ============================================================================
 class VehicleCounter {
 public:
-    VehicleCounter();
+  VehicleCounter();
 
-    /**
-     * Initialize the FOMO model
-     * @return true if model loaded successfully
-     */
-    bool begin();
+  // Initialization
+  void begin();
 
-    /**
-     * Process a camera frame and detect vehicles
-     * @param frameBuffer Pointer to grayscale image data
-     * @param width Image width
-     * @param height Image height
-     * @return Number of new vehicles counted (crossed line since last call)
-     */
-    int processFrame(uint8_t* frameBuffer, int width, int height);
+  // Main detection function
+  // Returns number of vehicles detected in this frame
+  int detectVehicles(const uint8_t* imageBuffer, size_t imageSize);
 
-    /**
-     * Get total vehicles counted since last reset
-     */
-    uint32_t getCount();
+  // Get current statistics
+  CounterStats getStats();
 
-    /**
-     * Reset the vehicle count to zero
-     */
-    void resetCount();
+  // Reset hourly counters
+  void resetHourlyStats();
 
-    /**
-     * Get detection count from last frame (for debugging)
-     */
-    int getLastDetectionCount();
+  // Save detection image to SD card
+  bool saveImageToSD(camera_fb_t* fb, fs::FS &fs);
 
 private:
-    uint32_t _totalCount;
-    int _lastDetectionCount;
-    TrackedObject _tracked[MAX_TRACKED_OBJECTS];
+  // Detection state
+  Detection detections[MAX_DETECTIONS_PER_FRAME];
+  int detectionCount;
 
-    /**
-     * Run FOMO inference on frame
-     * @param frameBuffer Image data
-     * @param width Image width
-     * @param height Image height
-     * @param detections Output array of detections
-     * @param maxDetections Maximum detections to return
-     * @return Number of detections found
-     */
-    int runInference(uint8_t* frameBuffer, int width, int height,
-                     Detection* detections, int maxDetections);
+  // Counting state
+  uint32_t totalCount;
+  uint32_t hourlyCount;
+  uint32_t minuteCount;
+  uint32_t lastHourReset;
+  uint32_t lastMinuteReset;
 
-    /**
-     * Match current detections to tracked objects
-     * Uses simple nearest-neighbor matching
-     */
-    void updateTracking(Detection* detections, int detectionCount);
+  // Statistics
+  float totalConfidence;
+  uint32_t totalDetections;
 
-    /**
-     * Check if any tracked object crossed the detection line
-     * @return Number of line crossings
-     */
-    int checkLineCrossings();
+  // Tracking (for counting line crossings)
+  struct TrackedVehicle {
+    float lastY;
+    bool counted;
+    uint32_t lastSeen;
+  };
+  TrackedVehicle tracked[MAX_DETECTIONS_PER_FRAME];
 
-    /**
-     * Find closest tracked object to a detection
-     * @return Index of tracked object, or -1 if no match
-     */
-    int findClosestTracked(float x, float y);
+  // Helper functions
+  bool hasCrossedLine(float currentY, float previousY);
+  void updateTracking();
+  void pruneOldTracks();
+  int findClosestTrack(float x, float y);
 };
 
 #endif // VEHICLE_COUNTER_H

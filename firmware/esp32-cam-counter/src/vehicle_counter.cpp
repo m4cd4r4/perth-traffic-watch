@@ -4,174 +4,260 @@
 
 #include "vehicle_counter.h"
 
-// TODO: Include Edge Impulse model when trained
-// #include "vehicle_detection_inferencing.h"
+// TODO: Include Edge Impulse SDK after model export
+// #include <your-project-name_inferencing.h>
 
-VehicleCounter::VehicleCounter() : _totalCount(0), _lastDetectionCount(0) {
-    // Initialize tracking array
-    for (int i = 0; i < MAX_TRACKED_OBJECTS; i++) {
-        _tracked[i].active = false;
-        _tracked[i].counted = false;
-        _tracked[i].framesTracked = 0;
-        _tracked[i].lastY = 0;
-    }
+// ============================================================================
+// Constructor
+// ============================================================================
+VehicleCounter::VehicleCounter() {
+  detectionCount = 0;
+  totalCount = 0;
+  hourlyCount = 0;
+  minuteCount = 0;
+  lastHourReset = 0;
+  lastMinuteReset = 0;
+  totalConfidence = 0;
+  totalDetections = 0;
+
+  // Initialize tracking
+  for (int i = 0; i < MAX_DETECTIONS_PER_FRAME; i++) {
+    tracked[i].lastY = 0;
+    tracked[i].counted = false;
+    tracked[i].lastSeen = 0;
+  }
 }
 
-bool VehicleCounter::begin() {
-    Serial.println("[Counter] Initializing vehicle detection model...");
+// ============================================================================
+// Initialization
+// ============================================================================
+void VehicleCounter::begin() {
+  lastHourReset = millis();
+  lastMinuteReset = millis();
 
-    // TODO: Initialize Edge Impulse model
-    // This will be filled in when model is trained and exported
-    //
-    // if (ei_impulse_init() != EI_IMPULSE_OK) {
-    //     Serial.println("[Counter] Failed to initialize model");
-    //     return false;
-    // }
-
-    Serial.println("[Counter] Model initialized (placeholder)");
-    return true;
+  Serial.println("Vehicle counter initialized");
+  Serial.printf("Detection threshold: %.2f\n", DETECTION_CONFIDENCE_THRESHOLD);
+  Serial.printf("Counting line Y: %d pixels\n", COUNTING_LINE_Y);
 }
 
-int VehicleCounter::processFrame(uint8_t* frameBuffer, int width, int height) {
-    Detection detections[MAX_TRACKED_OBJECTS];
+// ============================================================================
+// Main Detection Function
+// ============================================================================
+int VehicleCounter::detectVehicles(const uint8_t* imageBuffer, size_t imageSize) {
+  // TODO: This is a placeholder until Edge Impulse model is integrated
+  //
+  // After training your FOMO model in Edge Impulse:
+  // 1. Export as Arduino library
+  // 2. Add to lib_deps in platformio.ini
+  // 3. Include the header: #include <your-project-name_inferencing.h>
+  // 4. Replace this placeholder with actual inference
 
-    // Run inference
-    int detectionCount = runInference(frameBuffer, width, height,
-                                       detections, MAX_TRACKED_OBJECTS);
-    _lastDetectionCount = detectionCount;
+  /*
+  // EXAMPLE Edge Impulse FOMO inference (uncomment after model export):
 
-    if (detectionCount > 0) {
-        // Update tracking with new detections
-        updateTracking(detections, detectionCount);
-    }
+  // Convert JPEG to raw RGB (Edge Impulse expects raw format)
+  ei::signal_t signal;
+  signal.total_length = EI_CLASSIFIER_INPUT_WIDTH * EI_CLASSIFIER_INPUT_HEIGHT;
+  signal.get_data = &get_signal_data;
 
-    // Check for line crossings
-    int newCrossings = checkLineCrossings();
-    _totalCount += newCrossings;
+  // Run inference
+  ei_impulse_result_t result = { 0 };
+  EI_IMPULSE_ERROR res = run_classifier(&signal, &result, false);
 
-    return newCrossings;
-}
-
-int VehicleCounter::runInference(uint8_t* frameBuffer, int width, int height,
-                                  Detection* detections, int maxDetections) {
-    // TODO: Replace with actual Edge Impulse inference
-    //
-    // Example structure when model is integrated:
-    //
-    // // Prepare signal from frame buffer
-    // signal_t signal;
-    // signal.total_length = width * height;
-    // signal.get_data = &get_signal_data;  // Callback to provide data
-    //
-    // // Run inference
-    // ei_impulse_result_t result;
-    // EI_IMPULSE_ERROR err = run_classifier(&signal, &result, false);
-    //
-    // if (err != EI_IMPULSE_OK) {
-    //     return 0;
-    // }
-    //
-    // // Extract detections
-    // int count = 0;
-    // for (size_t i = 0; i < result.bounding_boxes_count && count < maxDetections; i++) {
-    //     ei_impulse_result_bounding_box_t bb = result.bounding_boxes[i];
-    //     if (bb.value >= DETECTION_THRESHOLD) {
-    //         detections[count].x = (bb.x + bb.width / 2.0f) / width;
-    //         detections[count].y = (bb.y + bb.height / 2.0f) / height;
-    //         detections[count].confidence = bb.value;
-    //         count++;
-    //     }
-    // }
-    //
-    // return count;
-
-    // Placeholder: return 0 detections until model is integrated
+  if (res != EI_IMPULSE_OK) {
+    Serial.printf("ERR: Failed to run classifier (%d)\n", res);
     return 0;
-}
+  }
 
-void VehicleCounter::updateTracking(Detection* detections, int detectionCount) {
-    // Mark all tracked objects as potentially inactive
-    for (int i = 0; i < MAX_TRACKED_OBJECTS; i++) {
-        if (_tracked[i].active) {
-            _tracked[i].framesTracked++;
-            // Remove stale tracks (not seen for too long)
-            if (_tracked[i].framesTracked > 10) {
-                _tracked[i].active = false;
-            }
-        }
+  // Process FOMO detections
+  detectionCount = 0;
+  int newVehicles = 0;
+
+  for (size_t ix = 0; ix < EI_CLASSIFIER_OBJECT_DETECTION_COUNT; ix++) {
+    auto bb = result.bounding_boxes[ix];
+
+    if (bb.value < DETECTION_CONFIDENCE_THRESHOLD) continue;
+    if (detectionCount >= MAX_DETECTIONS_PER_FRAME) break;
+
+    // Store detection
+    detections[detectionCount].x = bb.x / (float)EI_CLASSIFIER_INPUT_WIDTH;
+    detections[detectionCount].y = bb.y / (float)EI_CLASSIFIER_INPUT_HEIGHT;
+    detections[detectionCount].width = bb.width / (float)EI_CLASSIFIER_INPUT_WIDTH;
+    detections[detectionCount].height = bb.height / (float)EI_CLASSIFIER_INPUT_HEIGHT;
+    detections[detectionCount].confidence = bb.value;
+    detections[detectionCount].timestamp = millis();
+
+    // Update statistics
+    totalConfidence += bb.value;
+    totalDetections++;
+
+    // Track vehicle (check if it crosses counting line)
+    int trackIdx = findClosestTrack(detections[detectionCount].x, detections[detectionCount].y);
+
+    if (trackIdx >= 0) {
+      float currentY = detections[detectionCount].y * 240;  // QVGA height
+      float previousY = tracked[trackIdx].lastY;
+
+      if (!tracked[trackIdx].counted && hasCrossedLine(currentY, previousY)) {
+        // Vehicle crossed the line!
+        totalCount++;
+        hourlyCount++;
+        minuteCount++;
+        newVehicles++;
+        tracked[trackIdx].counted = true;
+
+        Serial.printf("VEHICLE #%d (confidence: %.2f)\n", totalCount, bb.value);
+      }
+
+      tracked[trackIdx].lastY = currentY;
+      tracked[trackIdx].lastSeen = millis();
     }
 
-    // Match detections to existing tracks
-    for (int d = 0; d < detectionCount; d++) {
-        int matchIdx = findClosestTracked(detections[d].x, detections[d].y);
+    detectionCount++;
+  }
 
-        if (matchIdx >= 0) {
-            // Update existing track
-            _tracked[matchIdx].lastY = detections[d].y;
-            _tracked[matchIdx].framesTracked = 0;
-        } else {
-            // Create new track
-            for (int i = 0; i < MAX_TRACKED_OBJECTS; i++) {
-                if (!_tracked[i].active) {
-                    _tracked[i].active = true;
-                    _tracked[i].lastY = detections[d].y;
-                    _tracked[i].framesTracked = 0;
-                    _tracked[i].counted = false;
-                    break;
-                }
-            }
-        }
+  // Prune old tracks
+  pruneOldTracks();
+
+  return newVehicles;
+  */
+
+  // PLACEHOLDER: Random detection for testing (REMOVE AFTER MODEL INTEGRATION)
+  Serial.println("WARNING: Using placeholder detection (integrate Edge Impulse model)");
+  if (random(100) < 5) {  // 5% chance of "detection"
+    totalCount++;
+    hourlyCount++;
+    minuteCount++;
+    return 1;
+  }
+
+  return 0;
+}
+
+// ============================================================================
+// Statistics
+// ============================================================================
+CounterStats VehicleCounter::getStats() {
+  CounterStats stats;
+
+  // Update minute/hour counters
+  unsigned long now = millis();
+  if (now - lastMinuteReset >= 60000) {
+    minuteCount = 0;
+    lastMinuteReset = now;
+  }
+  if (now - lastHourReset >= 3600000) {
+    hourlyCount = 0;
+    lastHourReset = now;
+  }
+
+  // Fill stats
+  stats.totalCount = totalCount;
+  stats.lastHourCount = hourlyCount;
+  stats.lastMinuteCount = minuteCount;
+  stats.avgConfidence = totalDetections > 0 ? totalConfidence / totalDetections : 0;
+  stats.uptime = now / 1000;
+  strncpy(stats.siteName, SITE_NAME, sizeof(stats.siteName) - 1);
+  stats.latitude = SITE_LAT;
+  stats.longitude = SITE_LON;
+
+  return stats;
+}
+
+void VehicleCounter::resetHourlyStats() {
+  hourlyCount = 0;
+  lastHourReset = millis();
+}
+
+// ============================================================================
+// Tracking Helpers
+// ============================================================================
+bool VehicleCounter::hasCrossedLine(float currentY, float previousY) {
+  // Check if vehicle crossed the counting line
+  float lineY = COUNTING_LINE_Y;
+  float margin = COUNTING_ZONE_MARGIN;
+
+  // Crossed from above to below
+  if (previousY < lineY - margin && currentY > lineY + margin) {
+    return true;
+  }
+
+  // Optionally: count reverse direction too
+  // if (previousY > lineY + margin && currentY < lineY - margin) {
+  //   return true;
+  // }
+
+  return false;
+}
+
+int VehicleCounter::findClosestTrack(float x, float y) {
+  // Find existing track near this detection, or create new one
+  const float MAX_DISTANCE = 0.1;  // Max distance to match (normalized)
+  int closestIdx = -1;
+  float closestDist = MAX_DISTANCE;
+
+  for (int i = 0; i < MAX_DETECTIONS_PER_FRAME; i++) {
+    if (tracked[i].lastSeen == 0) continue;  // Unused slot
+
+    // Simple distance check (could use more sophisticated tracking)
+    float dist = abs(y * 240 - tracked[i].lastY);
+    if (dist < closestDist * 240) {
+      closestDist = dist / 240;
+      closestIdx = i;
     }
-}
+  }
 
-int VehicleCounter::findClosestTracked(float x, float y) {
-    float minDist = 0.2f;  // Maximum distance to match
-    int bestMatch = -1;
-
-    for (int i = 0; i < MAX_TRACKED_OBJECTS; i++) {
-        if (_tracked[i].active) {
-            // Simple Y-distance for now (vehicles move mostly vertically in frame)
-            float dist = abs(y - _tracked[i].lastY);
-            if (dist < minDist) {
-                minDist = dist;
-                bestMatch = i;
-            }
-        }
+  // If no close match, create new track
+  if (closestIdx == -1) {
+    for (int i = 0; i < MAX_DETECTIONS_PER_FRAME; i++) {
+      if (tracked[i].lastSeen == 0) {
+        tracked[i].lastY = y * 240;
+        tracked[i].counted = false;
+        tracked[i].lastSeen = millis();
+        return i;
+      }
     }
+  }
 
-    return bestMatch;
+  return closestIdx;
 }
 
-int VehicleCounter::checkLineCrossings() {
-    int crossings = 0;
-
-    for (int i = 0; i < MAX_TRACKED_OBJECTS; i++) {
-        if (_tracked[i].active && !_tracked[i].counted) {
-            // Check if crossed the detection line (moving downward)
-            // We check if current Y is past the line
-            if (_tracked[i].lastY >= DETECTION_LINE_Y) {
-                // Ensure minimum frames tracked to avoid noise
-                if (_tracked[i].framesTracked >= MIN_FRAMES_BETWEEN_COUNT) {
-                    _tracked[i].counted = true;
-                    crossings++;
-                    Serial.printf("[Counter] Vehicle crossed line! Total: %d\n",
-                                  _totalCount + crossings);
-                }
-            }
-        }
+void VehicleCounter::pruneOldTracks() {
+  // Remove tracks not seen in 2 seconds
+  unsigned long now = millis();
+  for (int i = 0; i < MAX_DETECTIONS_PER_FRAME; i++) {
+    if (tracked[i].lastSeen > 0 && now - tracked[i].lastSeen > 2000) {
+      tracked[i].lastSeen = 0;
+      tracked[i].counted = false;
     }
-
-    return crossings;
+  }
 }
 
-uint32_t VehicleCounter::getCount() {
-    return _totalCount;
-}
+// ============================================================================
+// SD Card Storage
+// ============================================================================
+bool VehicleCounter::saveImageToSD(camera_fb_t* fb, fs::FS &fs) {
+  // Generate filename with timestamp
+  char filename[64];
+  snprintf(filename, sizeof(filename), "/detections/%lu.jpg", millis());
 
-void VehicleCounter::resetCount() {
-    _totalCount = 0;
-}
+  // Ensure directory exists
+  if (!fs.exists("/detections")) {
+    fs.mkdir("/detections");
+  }
 
-int VehicleCounter::getLastDetectionCount() {
-    return _lastDetectionCount;
+  // Write file
+  File file = fs.open(filename, FILE_WRITE);
+  if (!file) {
+    Serial.println("Failed to open file for writing");
+    return false;
+  }
+
+  file.write(fb->buf, fb->len);
+  file.close();
+
+  DEBUG_PRINT("Saved image: ");
+  DEBUG_PRINTLN(filename);
+
+  return true;
 }

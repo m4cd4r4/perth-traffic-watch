@@ -3,220 +3,276 @@
  */
 
 #include "lte_modem.h"
+#include <ArduinoJson.h>
 
-// Use Serial2 for SIM7000A communication
-#define MODEM_SERIAL Serial2
+// Serial connection to modem
+HardwareSerial ModemSerial(1);  // Use Serial1
 
-LTEModem::LTEModem() : _initialized(false) {
-    _serial = &MODEM_SERIAL;
+// ============================================================================
+// Constructor
+// ============================================================================
+LTEModem::LTEModem() {
+  modem = nullptr;
+  client = nullptr;
+  modemInitialized = false;
+  gprsConnected = false;
+  lastConnectAttempt = 0;
 }
 
+// ============================================================================
+// Initialization
+// ============================================================================
 bool LTEModem::begin() {
-    Serial.println("[LTE] Initializing modem...");
+  Serial.println("Initializing SIM7000A modem...");
 
-    // Configure power pin
-    pinMode(SIM_PWR_PIN, OUTPUT);
-    digitalWrite(SIM_PWR_PIN, HIGH);
+  // Initialize serial connection to modem
+  ModemSerial.begin(MODEM_BAUD, SERIAL_8N1, MODEM_RX, MODEM_TX);
+  delay(3000);
 
-    // Initialize serial
-    _serial->begin(115200, SERIAL_8N1, SIM_RX_PIN, SIM_TX_PIN);
-    delay(3000);  // Wait for modem to boot
+  // Create modem instance
+  modem = new TinyGsm(ModemSerial);
+  client = new TinyGsmClient(*modem);
 
-    // Test AT communication
-    if (!sendATCommand("AT", "OK", 2000)) {
-        Serial.println("[LTE] Modem not responding");
-        return false;
-    }
-
-    // Disable echo
-    sendATCommand("ATE0", "OK", 1000);
-
-    // Check SIM card
-    if (!sendATCommand("AT+CPIN?", "READY", 5000)) {
-        Serial.println("[LTE] SIM card not ready");
-        return false;
-    }
-
-    // Configure network
-    if (!configureNetwork()) {
-        Serial.println("[LTE] Network configuration failed");
-        return false;
-    }
-
-    // Connect to data network
-    if (!connectData()) {
-        Serial.println("[LTE] Data connection failed");
-        return false;
-    }
-
-    _initialized = true;
-    Serial.println("[LTE] Modem initialized successfully");
-    return true;
-}
-
-bool LTEModem::configureNetwork() {
-    // Set to LTE Cat-M1 mode
-    if (!sendATCommand("AT+CNMP=38", "OK", 2000)) {
-        // Fallback to auto mode
-        sendATCommand("AT+CNMP=2", "OK", 2000);
-    }
-
-    // Set Cat-M1 preference
-    sendATCommand("AT+CMNB=1", "OK", 2000);
-
-    // Wait for network registration
-    Serial.println("[LTE] Waiting for network...");
-    int attempts = 0;
-    while (attempts < 60) {  // Wait up to 60 seconds
-        if (sendATCommand("AT+CREG?", "+CREG: 0,1", 1000) ||
-            sendATCommand("AT+CREG?", "+CREG: 0,5", 1000)) {
-            Serial.println("[LTE] Registered on network");
-            return true;
-        }
-        delay(1000);
-        attempts++;
-    }
-
+  // Initialize modem
+  if (!initModem()) {
+    Serial.println("Modem initialization failed");
     return false;
+  }
+
+  modemInitialized = true;
+
+  // Connect to GPRS
+  if (!connectGPRS()) {
+    Serial.println("GPRS connection failed (will retry later)");
+    return false;
+  }
+
+  gprsConnected = true;
+  Serial.println("Modem ready");
+
+  return true;
 }
 
-bool LTEModem::connectData() {
-    // Set APN
-    char apnCmd[64];
-    snprintf(apnCmd, sizeof(apnCmd), "AT+CGDCONT=1,\"IP\",\"%s\"", APN);
-    if (!sendATCommand(apnCmd, "OK", 2000)) {
-        return false;
-    }
+// ============================================================================
+// Modem Initialization
+// ============================================================================
+bool LTEModem::initModem() {
+  Serial.print("Waiting for modem response...");
 
-    // Activate PDP context
-    if (!sendATCommand("AT+CGACT=1,1", "OK", 10000)) {
-        return false;
-    }
+  // Restart modem
+  if (!modem->restart()) {
+    Serial.println(" FAILED");
+    return false;
+  }
+  Serial.println(" OK");
 
-    // Initialize HTTP service
-    sendATCommand("AT+HTTPINIT", "OK", 2000);
+  // Print modem info
+  printModemInfo();
 
-    Serial.println("[LTE] Data connection established");
-    return true;
+  // Set LTE bands for Australia
+  Serial.print("Setting LTE bands...");
+  modem->sendAT("+CBANDCFG=\"CAT-M\"," LTE_BANDS);
+  modem->waitResponse();
+  Serial.println(" OK");
+
+  // Set network mode to LTE only
+  Serial.print("Setting network mode...");
+  modem->sendAT("+CNMP=38");  // 38 = LTE only
+  modem->waitResponse();
+  Serial.println(" OK");
+
+  // Wait for network
+  Serial.print("Waiting for network...");
+  if (!modem->waitForNetwork(60000)) {
+    Serial.println(" FAILED");
+    return false;
+  }
+  Serial.println(" OK");
+
+  return true;
 }
 
+// ============================================================================
+// GPRS Connection
+// ============================================================================
+bool LTEModem::connectGPRS() {
+  Serial.printf("Connecting to APN: %s\n", GPRS_APN);
+
+  if (!modem->gprsConnect(GPRS_APN, GPRS_USER, GPRS_PASS)) {
+    Serial.println("GPRS connection failed");
+    return false;
+  }
+
+  if (!modem->isNetworkConnected()) {
+    Serial.println("Network not connected");
+    return false;
+  }
+
+  Serial.println("GPRS connected");
+  return true;
+}
+
+// ============================================================================
+// Connection Management
+// ============================================================================
 bool LTEModem::isConnected() {
-    return sendATCommand("AT+CGACT?", "+CGACT: 1,1", 2000);
+  if (!modemInitialized) return false;
+  return modem->isNetworkConnected() && modem->isGprsConnected();
 }
 
-int LTEModem::getSignalStrength() {
-    char response[64];
+bool LTEModem::connect() {
+  if (isConnected()) return true;
 
-    _serial->println("AT+CSQ");
-    int len = readResponse(response, sizeof(response), 2000);
+  if (!modemInitialized) {
+    return begin();
+  }
 
-    if (len > 0) {
-        // Parse +CSQ: XX,YY
-        char* csq = strstr(response, "+CSQ:");
-        if (csq) {
-            int rssi = atoi(csq + 6);
-            // Convert to dBm (0-31 scale, 99 = unknown)
-            if (rssi >= 0 && rssi <= 31) {
-                return -113 + (rssi * 2);  // -113 to -51 dBm
-            }
-        }
-    }
-
-    return 0;
+  return connectGPRS();
 }
 
-int LTEModem::httpPost(const char* url, const char* json) {
-    char cmd[256];
-    char response[512];
+bool LTEModem::disconnect() {
+  if (!modemInitialized) return true;
 
-    // Set HTTP parameters
-    sendATCommand("AT+HTTPPARA=\"CID\",1", "OK", 2000);
+  modem->gprsDisconnect();
+  gprsConnected = false;
+  Serial.println("Disconnected from GPRS");
 
-    snprintf(cmd, sizeof(cmd), "AT+HTTPPARA=\"URL\",\"%s\"", url);
-    if (!sendATCommand(cmd, "OK", 2000)) {
-        return -1;
-    }
-
-    sendATCommand("AT+HTTPPARA=\"CONTENT\",\"application/json\"", "OK", 2000);
-
-    // Set data length and timeout
-    int dataLen = strlen(json);
-    snprintf(cmd, sizeof(cmd), "AT+HTTPDATA=%d,10000", dataLen);
-    if (!sendATCommand(cmd, "DOWNLOAD", 5000)) {
-        return -1;
-    }
-
-    // Send JSON data
-    _serial->print(json);
-    delay(1000);
-
-    // Execute POST
-    if (!sendATCommand("AT+HTTPACTION=1", "OK", 2000)) {
-        return -1;
-    }
-
-    // Wait for response (up to 30 seconds)
-    delay(5000);
-
-    // Read response status
-    _serial->println("AT+HTTPREAD");
-    int len = readResponse(response, sizeof(response), 10000);
-
-    // Parse HTTP status from +HTTPACTION: 1,XXX,YYY
-    char* action = strstr(response, "+HTTPACTION:");
-    if (action) {
-        int method, status, dataLen;
-        if (sscanf(action, "+HTTPACTION: %d,%d,%d", &method, &status, &dataLen) >= 2) {
-            Serial.printf("[LTE] HTTP status: %d\n", status);
-            return status;
-        }
-    }
-
-    return -1;
+  return true;
 }
 
-void LTEModem::powerDown() {
-    sendATCommand("AT+CPOWD=1", "POWER DOWN", 5000);
-    digitalWrite(SIM_PWR_PIN, LOW);
+void LTEModem::reconnect() {
+  unsigned long now = millis();
+
+  // Rate limit reconnection attempts
+  if (now - lastConnectAttempt < MODEM_RETRY_DELAY_MS) {
+    return;
+  }
+
+  lastConnectAttempt = now;
+
+  Serial.println("Attempting to reconnect...");
+  disconnect();
+  delay(1000);
+  connect();
 }
 
-void LTEModem::powerUp() {
-    digitalWrite(SIM_PWR_PIN, HIGH);
-    delay(3000);
-}
-
-bool LTEModem::sendATCommand(const char* cmd, const char* expected, unsigned long timeout) {
-    char response[256];
-
-    // Clear input buffer
-    while (_serial->available()) {
-        _serial->read();
-    }
-
-    // Send command
-    _serial->println(cmd);
-
-    // Read response
-    int len = readResponse(response, sizeof(response), timeout);
-
-    if (len > 0 && strstr(response, expected)) {
-        return true;
-    }
-
+// ============================================================================
+// Data Upload
+// ============================================================================
+bool LTEModem::uploadStats(const CounterStats& stats) {
+  if (!isConnected()) {
+    Serial.println("Not connected to network");
     return false;
+  }
+
+  // Build JSON payload
+  String json = buildStatsJSON(stats);
+
+  DEBUG_PRINTLN("Uploading stats:");
+  DEBUG_PRINTLN(json);
+
+  // HTTP POST
+  bool success = httpPOST(SERVER_URL, "application/json", json);
+
+  return success;
 }
 
-int LTEModem::readResponse(char* buffer, int bufferSize, unsigned long timeout) {
-    unsigned long start = millis();
-    int index = 0;
+bool LTEModem::uploadImage(const uint8_t* imageData, size_t imageSize) {
+  // TODO: Implement image upload
+  // This will use multipart/form-data or base64 encoding
+  Serial.println("Image upload not yet implemented");
+  return false;
+}
 
-    while (millis() - start < timeout && index < bufferSize - 1) {
-        if (_serial->available()) {
-            char c = _serial->read();
-            buffer[index++] = c;
-        }
+// ============================================================================
+// JSON Builder
+// ============================================================================
+String LTEModem::buildStatsJSON(const CounterStats& stats) {
+  StaticJsonDocument<512> doc;
+
+  doc["site"] = stats.siteName;
+  doc["lat"] = stats.latitude;
+  doc["lon"] = stats.longitude;
+  doc["timestamp"] = millis();
+  doc["uptime"] = stats.uptime;
+  doc["total_count"] = stats.totalCount;
+  doc["hour_count"] = stats.lastHourCount;
+  doc["minute_count"] = stats.lastMinuteCount;
+  doc["avg_confidence"] = stats.avgConfidence;
+
+  String output;
+  serializeJson(doc, output);
+
+  return output;
+}
+
+// ============================================================================
+// HTTP POST
+// ============================================================================
+bool LTEModem::httpPOST(const String& url, const String& contentType, const String& body) {
+  // Parse URL
+  // Expected format: https://domain.com/path
+  int hostStart = url.indexOf("://") + 3;
+  int pathStart = url.indexOf("/", hostStart);
+
+  String host = url.substring(hostStart, pathStart);
+  String path = url.substring(pathStart);
+  int port = 443;  // HTTPS
+
+  Serial.printf("POST %s%s\n", host.c_str(), path.c_str());
+
+  // Connect to server
+  if (!client->connect(host.c_str(), port)) {
+    Serial.println("Connection to server failed");
+    return false;
+  }
+
+  // Send HTTP request
+  client->print(String("POST ") + path + " HTTP/1.1\r\n");
+  client->print(String("Host: ") + host + "\r\n");
+  client->print(String("Content-Type: ") + contentType + "\r\n");
+  client->print(String("Content-Length: ") + body.length() + "\r\n");
+  client->print(String("Authorization: Bearer ") + API_KEY + "\r\n");
+  client->print("Connection: close\r\n\r\n");
+  client->print(body);
+
+  // Wait for response
+  unsigned long timeout = millis();
+  while (client->connected() && millis() - timeout < 10000) {
+    if (client->available()) {
+      String line = client->readStringUntil('\n');
+      DEBUG_PRINTLN(line);
+
+      // Check for HTTP 200 OK
+      if (line.indexOf("200") >= 0 || line.indexOf("201") >= 0) {
+        client->stop();
+        return true;
+      }
     }
+  }
 
-    buffer[index] = '\0';
-    return index;
+  client->stop();
+  Serial.println("Request timeout or non-200 response");
+  return false;
+}
+
+// ============================================================================
+// Diagnostics
+// ============================================================================
+void LTEModem::printModemInfo() {
+  String modemName = modem->getModemName();
+  String modemInfo = modem->getModemInfo();
+
+  Serial.println("--- Modem Info ---");
+  Serial.printf("Name: %s\n", modemName.c_str());
+  Serial.printf("Info: %s\n", modemInfo.c_str());
+
+  int signal = getSignalQuality();
+  Serial.printf("Signal: %d\n", signal);
+  Serial.println("------------------");
+}
+
+int LTEModem::getSignalQuality() {
+  if (!modemInitialized) return 0;
+  return modem->getSignalQuality();
 }
