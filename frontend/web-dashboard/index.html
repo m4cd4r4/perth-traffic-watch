@@ -1,67 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perth Traffic Watch</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perth Traffic Watch - Real-time Vehicle Monitoring</title>
+
+  <!-- Google Fonts - Distinctive Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="container">
+    <!-- Header -->
     <header>
-        <h1>Perth Traffic Watch</h1>
-        <p class="subtitle">Real-time traffic density on Mounts Bay Road</p>
+      <div class="header-content">
+        <div>
+          <h1>Perth Traffic Watch</h1>
+          <p class="subtitle">Real-time vehicle detection using Edge AI</p>
+        </div>
+        <div class="theme-toggle">
+          <button type="button" id="theme-toggle-btn" class="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <span class="icon-sun">☀️</span>
+            <span class="icon-moon">🌙</span>
+          </button>
+        </div>
+      </div>
+      <!-- Simulated Data Notice -->
+      <div class="poc-notice">
+        <span class="notice-icon">⚠️</span>
+        <div class="notice-content">
+          <strong>PROOF OF CONCEPT - SIMULATED DATA</strong>
+          <p>This dashboard displays simulated traffic data for demonstration purposes. Hardware deployment at Mounts Bay Road in development.</p>
+        </div>
+        <span class="notice-badge">PoC v0.1</span>
+      </div>
+
+      <!-- Hero Status Card - "Should I Drive Now?" -->
+      <div class="hero-status-card">
+        <div class="hero-label">Perth CBD → Fremantle Corridor</div>
+        <div class="hero-metric" id="corridor-status">Loading...</div>
+        <div class="hero-speed">Average Speed: <span id="avg-speed-hero">--</span> km/h</div>
+        <div class="hero-recommendation" id="drive-recommendation">
+          <span class="rec-icon">⏱️</span>
+          <span class="rec-text">Calculating...</span>
+        </div>
+      </div>
     </header>
 
-    <main>
-        <!-- Quick Answer Section -->
-        <section id="should-i-drive" class="card">
-            <h2>Should I Drive?</h2>
-            <div id="recommendation" class="recommendation loading">
-                <div class="answer">Loading...</div>
-                <p class="message"></p>
+    <!-- Network Selector (Arterial vs Freeway vs Live Feed) -->
+    <div class="network-selector">
+      <div class="network-tabs">
+        <button type="button" class="network-tab active" data-network="arterial">
+          <span class="tab-icon">🚗</span>
+          <span class="tab-label">Arterial Roads</span>
+          <span class="tab-count" id="arterial-count">22</span>
+        </button>
+        <button type="button" class="network-tab" data-network="freeway">
+          <span class="tab-icon">🛣️</span>
+          <span class="tab-label">Freeways</span>
+          <span class="tab-count" id="freeway-count">30</span>
+        </button>
+        <button type="button" class="network-tab" data-network="all">
+          <span class="tab-icon">🗺️</span>
+          <span class="tab-label">All Perth</span>
+          <span class="tab-count" id="all-count">52</span>
+        </button>
+        <button type="button" class="network-tab" data-network="terminal">
+          <span class="tab-icon">💻</span>
+          <span class="tab-label">Live Feed</span>
+          <span class="tab-count live-indicator">●</span>
+        </button>
+      </div>
+      <div class="network-info" id="network-info">
+        <p>Monitoring arterial roads: Mounts Bay Road & Stirling Highway</p>
+      </div>
+    </div>
+
+    <!-- Live Terminal Feed (hidden by default) -->
+    <div class="terminal-container" id="terminal-container" style="display: none;">
+      <div class="terminal-header">
+        <div class="terminal-title">
+          <span class="terminal-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </span>
+          <span>Perth Traffic Watch - Live Simulator Feed</span>
+        </div>
+        <div class="terminal-controls">
+          <button type="button" id="terminal-pause" class="terminal-btn">⏸️ Pause</button>
+          <button type="button" id="terminal-clear" class="terminal-btn">🗑️ Clear</button>
+        </div>
+      </div>
+      <div class="terminal-body" id="terminal-output">
+        <div class="terminal-line system">[SYSTEM] Connecting to Perth Traffic Watch simulator...</div>
+      </div>
+      <div class="terminal-stats">
+        <span>Lines: <strong id="terminal-lines">1</strong></span>
+        <span>Updates/sec: <strong id="terminal-rate">0</strong></span>
+        <span>Status: <strong id="terminal-status" class="status-active">● LIVE</strong></span>
+      </div>
+    </div>
+
+    <!-- Site Selector -->
+    <div class="controls" role="toolbar" aria-label="Dashboard controls">
+      <label for="site-select">Select Site:</label>
+      <select
+        id="site-select"
+        aria-label="Select monitoring site">
+        <option value="">Loading sites...</option>
+      </select>
+
+      <label for="period-select">Period:</label>
+      <select
+        id="period-select"
+        aria-label="Select time period">
+        <option value="1h">Last Hour</option>
+        <option value="6h">Last 6 Hours</option>
+        <option value="24h" selected>Last 24 Hours</option>
+        <option value="7d">Last 7 Days</option>
+        <option value="30d">Last 30 Days</option>
+      </select>
+
+      <button
+        type="button"
+        id="refresh-btn"
+        aria-label="Refresh dashboard data">
+        Refresh
+      </button>
+    </div>
+
+    <!-- Map and Stats Row -->
+    <div class="map-stats-row">
+      <!-- Live Map -->
+      <div class="map-container">
+        <div class="map-header">
+          <h2>Live Traffic Map</h2>
+          <div class="map-view-selector">
+            <button type="button" class="map-view-btn" data-view="street">Street</button>
+            <button type="button" class="map-view-btn active" data-view="satellite">Satellite</button>
+            <button type="button" class="map-view-btn" data-view="satellite-labels">Satellite + Labels</button>
+            <button type="button" class="map-view-btn" data-view="terrain">Terrain</button>
+            <button type="button" class="map-view-btn" data-view="dark">Dark</button>
+          </div>
+        </div>
+        <div
+          id="traffic-map"
+          role="img"
+          aria-label="Live traffic map showing corridor routes with color-coded congestion levels"></div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid" role="region" aria-label="Traffic statistics">
+        <div class="stat-card" role="group" aria-labelledby="stat-total-label">
+          <h3 id="stat-total-label">Total Vehicles</h3>
+          <div class="stat-value" id="total-count" aria-live="polite">-</div>
+          <div class="stat-label">Since deployment</div>
+        </div>
+
+        <div class="stat-card" role="group" aria-labelledby="stat-hourly-label">
+          <h3 id="stat-hourly-label">Average Hourly</h3>
+          <div class="stat-value" id="avg-hourly" aria-live="polite">-</div>
+          <div class="stat-label">Vehicles per hour</div>
+        </div>
+
+        <div class="stat-card" role="group" aria-labelledby="stat-confidence-label">
+          <h3 id="stat-confidence-label">Detection Confidence</h3>
+          <div class="stat-value" id="avg-confidence" aria-live="polite">-</div>
+          <div class="stat-label">Average accuracy</div>
+        </div>
+
+        <div class="stat-card" role="group" aria-labelledby="stat-update-label">
+          <h3 id="stat-update-label">Last Update</h3>
+          <div class="stat-value" id="last-update" aria-live="polite">-</div>
+          <div class="stat-label">Time since last data</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Traffic Flow Corridor -->
+    <div class="flow-container">
+      <h2>Mounts Bay Road Traffic Flow</h2>
+      <div class="flow-corridor">
+        <div class="flow-site" id="flow-site-1">
+          <div class="site-name">Kings Park</div>
+          <div class="flow-arrows">
+            <div class="flow-direction northbound">
+              <span class="arrow">↑</span>
+              <span class="label">NB</span>
+              <span class="count" id="flow-nb-1">-</span>
+              <span class="speed" id="speed-nb-1">-</span>
             </div>
-            <button id="refresh-btn" onclick="refreshData()">Refresh</button>
-        </section>
-
-        <!-- Map Section -->
-        <section id="map-section" class="card">
-            <h2>Sensor Map</h2>
-            <div id="map"></div>
-            <div class="legend">
-                <span class="legend-item"><span class="dot light"></span> Light</span>
-                <span class="legend-item"><span class="dot moderate"></span> Moderate</span>
-                <span class="legend-item"><span class="dot heavy"></span> Heavy</span>
-                <span class="legend-item"><span class="dot congested"></span> Congested</span>
-                <span class="legend-item"><span class="dot offline"></span> Offline</span>
+            <div class="flow-direction southbound">
+              <span class="arrow">↓</span>
+              <span class="label">SB</span>
+              <span class="count" id="flow-sb-1">-</span>
+              <span class="speed" id="speed-sb-1">-</span>
             </div>
-        </section>
+          </div>
+        </div>
 
-        <!-- Sensors Grid -->
-        <section id="sensors-section" class="card">
-            <h2>Sensor Status</h2>
-            <div id="sensors-grid" class="sensors-grid">
-                <!-- Populated by JavaScript -->
+        <div class="flow-connector">
+          <div class="connector-line northbound" id="connector-nb-1"></div>
+          <div class="connector-line southbound" id="connector-sb-1"></div>
+        </div>
+
+        <div class="flow-site" id="flow-site-2">
+          <div class="site-name">Mill Point</div>
+          <div class="flow-arrows">
+            <div class="flow-direction northbound">
+              <span class="arrow">↑</span>
+              <span class="label">NB</span>
+              <span class="count" id="flow-nb-2">-</span>
+              <span class="speed" id="speed-nb-2">-</span>
             </div>
-        </section>
+            <div class="flow-direction southbound">
+              <span class="arrow">↓</span>
+              <span class="label">SB</span>
+              <span class="count" id="flow-sb-2">-</span>
+              <span class="speed" id="speed-sb-2">-</span>
+            </div>
+          </div>
+        </div>
 
-        <!-- Traffic Chart -->
-        <section id="chart-section" class="card">
-            <h2>Traffic Over Time (Last 24h)</h2>
-            <canvas id="traffic-chart"></canvas>
-        </section>
-    </main>
+        <div class="flow-connector">
+          <div class="connector-line northbound" id="connector-nb-2"></div>
+          <div class="connector-line southbound" id="connector-sb-2"></div>
+        </div>
 
+        <div class="flow-site" id="flow-site-3">
+          <div class="site-name">Fraser Ave</div>
+          <div class="flow-arrows">
+            <div class="flow-direction northbound">
+              <span class="arrow">↑</span>
+              <span class="label">NB</span>
+              <span class="count" id="flow-nb-3">-</span>
+              <span class="speed" id="speed-nb-3">-</span>
+            </div>
+            <div class="flow-direction southbound">
+              <span class="arrow">↓</span>
+              <span class="label">SB</span>
+              <span class="count" id="flow-sb-3">-</span>
+              <span class="speed" id="speed-sb-3">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-connector">
+          <div class="connector-line northbound" id="connector-nb-3"></div>
+          <div class="connector-line southbound" id="connector-sb-3"></div>
+        </div>
+
+        <div class="flow-site" id="flow-site-4">
+          <div class="site-name">Malcolm St</div>
+          <div class="flow-arrows">
+            <div class="flow-direction northbound">
+              <span class="arrow">↑</span>
+              <span class="label">NB</span>
+              <span class="count" id="flow-nb-4">-</span>
+              <span class="speed" id="speed-nb-4">-</span>
+            </div>
+            <div class="flow-direction southbound">
+              <span class="arrow">↓</span>
+              <span class="label">SB</span>
+              <span class="count" id="flow-sb-4">-</span>
+              <span class="speed" id="speed-sb-4">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-legend">
+        <span class="legend-item"><span class="legend-color low"></span> Flowing: 55-65 km/h (at speed limit)</span>
+        <span class="legend-item"><span class="legend-color medium"></span> Moderate: 30-50 km/h (slowdown)</span>
+        <span class="legend-item"><span class="legend-color high"></span> Heavy: 15-35 km/h (congestion)</span>
+        <span class="legend-item"><span class="legend-color gridlock"></span> Gridlock: 5-20 km/h (crawling)</span>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-container">
+      <h2>Hourly Traffic Flow</h2>
+      <canvas id="traffic-chart"></canvas>
+    </div>
+
+    <!-- Recent Detections Table -->
+    <div class="table-container">
+      <h2>Recent Detections</h2>
+      <table id="detections-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Total Count</th>
+            <th>Hourly Count</th>
+            <th>Confidence</th>
+            <th>Uptime</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="5" class="loading">Loading data...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
     <footer>
-        <p>
-            Open source project:
-            <a href="https://github.com/your-username/perth-traffic-watch">GitHub</a>
-            | Data updates every 60 seconds
-        </p>
+      <p>Powered by Edge Impulse FOMO + ESP32-CAM | Data refreshes every 60 seconds</p>
+      <p class="status" id="connection-status">
+        <span class="status-indicator"></span>
+        <span class="status-text">Connecting...</span>
+      </p>
     </footer>
+  </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="app.js"></script>
+  <!-- Mobile Theme Toggle (replaces FAB + menu) -->
+  <button
+    type="button"
+    id="theme-fab"
+    class="theme-fab theme-btn"
+    aria-label="Toggle dark mode"
+    title="Toggle dark mode">
+    <span class="icon-sun">☀️</span>
+    <span class="icon-moon">🌙</span>
+  </button>
+
+  <!-- Libraries -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

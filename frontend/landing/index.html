@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perth Traffic Watch - Real-time Edge AI Traffic Monitoring</title>
+  <meta name="description" content="Open-source traffic monitoring using Edge AI and ESP32-CAM. Know exactly when to leave with real-time data from 52 monitoring sites across Perth.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Perth Traffic Watch">
+  <meta property="og:description" content="Real-time traffic monitoring using Edge AI. $143 per site vs $500M government infrastructure.">
+  <meta property="og:image" content="https://perth-traffic-watch.vercel.app/screenshot-cottesloe-dark.png">
+  <meta property="og:url" content="https://perth-traffic-watch.vercel.app">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Perth Traffic Watch">
+  <meta name="twitter:description" content="Open-source Edge AI traffic monitoring for Perth commuters">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="lp-hero">
+    <div class="hero-bg"></div>
+    <div class="lp-container">
+      <div class="lp-hero-badge">
+        <span class="badge-icon">📡</span>
+        <span class="badge-text">Real-time Traffic Monitoring</span>
+      </div>
+      <h1 class="lp-hero-title">Know Before You Go</h1>
+      <p class="lp-hero-subtitle">Perth commuters waste hours in unpredictable traffic. Get real-time insights from 52 monitoring sites using Edge AI — for a fraction of traditional infrastructure costs.</p>
+      <div class="lp-hero-cta">
+        <a href="#demo" class="lp-btn lp-btn-primary">
+          <span>View Live Demo</span>
+          <span class="arrow">↓</span>
+        </a>
+        <a href="https://github.com/m4cd4r4/perth-traffic-watch" target="_blank" class="lp-btn lp-btn-secondary">
+          <span>View on GitHub</span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+      <div class="lp-hero-stats">
+        <div class="stat">
+          <span class="stat-value">52</span>
+          <span class="stat-label">Monitoring Sites</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">$143</span>
+          <span class="stat-label">Per Site Cost</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">24/7</span>
+          <span class="stat-label">Real-time Data</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">MIT</span>
+          <span class="stat-label">Open Source</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem/Solution Section -->
+  <section class="lp-problem-solution">
+    <div class="lp-container">
+      <div class="lp-grid-2">
+        <!-- Problem -->
+        <div class="lp-card lp-card-problem">
+          <div class="card-header">
+            <span class="card-icon problem">!</span>
+            <h3>The Problem</h3>
+          </div>
+          <ul class="problem-list">
+            <li>Main Roads WA invested <strong>$500M+</strong> in Smart Freeway infrastructure</li>
+            <li>Public APIs have been <strong>offline since August 2023</strong></li>
+            <li>No real-time visibility for commuters</li>
+            <li>Morning commutes remain unpredictable</li>
+          </ul>
+        </div>
+
+        <!-- Solution -->
+        <div class="lp-card lp-card-solution">
+          <div class="card-header">
+            <span class="card-icon solution">✓</span>
+            <h3>The Solution</h3>
+          </div>
+          <ul class="solution-list">
+            <li>Edge AI detection at <strong>52 monitoring sites</strong></li>
+            <li>Cost: <strong>~$143 per site</strong> (350:1 cost advantage)</li>
+            <li>Live dashboard with flow visualization</li>
+            <li>Smart "Should I drive now?" recommendations</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Demo Section -->
+  <section class="lp-demo" id="demo">
+    <div class="lp-container">
+      <div class="lp-section-header">
+        <h2>See It In Action</h2>
+        <p>Explore the live traffic dashboard below</p>
+      </div>
+
+      <div class="lp-demo-frame">
+        <div class="frame-header">
+          <div class="frame-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <span class="frame-url">perth-traffic-watch.vercel.app</span>
+          <a href="https://perth-traffic-watch.vercel.app" target="_blank" class="frame-external">Open in new tab ↗</a>
+        </div>
+        <iframe
+          src="https://perth-traffic-watch.vercel.app"
+          title="Perth Traffic Watch Live Demo"
+          loading="lazy"
+          allow="fullscreen"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="lp-features" id="features">
+    <div class="lp-container">
+      <div class="lp-section-header">
+        <h2>Key Features</h2>
+        <p>What makes Perth Traffic Watch powerful</p>
+      </div>
+
+      <div class="lp-grid-3">
+        <div class="lp-feature-card">
+          <div class="feature-icon">📡</div>
+          <h3>Real-time Monitoring</h3>
+          <p>Live traffic data from 52 sites across Perth's arterial roads and freeways, updated every 60 seconds.</p>
+        </div>
+        <div class="lp-feature-card">
+          <div class="feature-icon">🧠</div>
+          <h3>Edge AI Detection</h3>
+          <p>Edge Impulse FOMO running on ESP32-CAM for on-device ML inference — no cloud dependency.</p>
+        </div>
+        <div class="lp-feature-card">
+          <div class="feature-icon">🗺️</div>
+          <h3>Interactive Map</h3>
+          <p>Leaflet map with OSM routing and color-coded congestion from green (flowing) to red (gridlock).</p>
+        </div>
+        <div class="lp-feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Traffic Flow Visualization</h3>
+          <p>Bidirectional flow diagrams showing northbound/southbound traffic with speed estimates.</p>
+        </div>
+        <div class="lp-feature-card">
+          <div class="feature-icon">💰</div>
+          <h3>Ultra Low Cost</h3>
+          <p>Complete monitoring node for ~$143 AUD using off-the-shelf components.</p>
+        </div>
+        <div class="lp-feature-card">
+          <div class="feature-icon">🔓</div>
+          <h3>Open Source</h3>
+          <p>MIT licensed. Full firmware, backend, and frontend code available on GitHub.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Knowledge Section -->
+  <section class="lp-knowledge" id="knowledge">
+    <div class="lp-container">
+      <div class="lp-section-header">
+        <h2>Under the Hood</h2>
+        <p>The technology powering real-time traffic detection</p>
+      </div>
+
+      <div class="lp-knowledge-grid">
+        <!-- Hardware Specs -->
+        <div class="lp-knowledge-card">
+          <div class="knowledge-header">
+            <span class="knowledge-icon">🔧</span>
+            <h3>Hardware</h3>
+          </div>
+          <div class="knowledge-content">
+            <div class="spec-group">
+              <h4>Edge Device</h4>
+              <ul class="spec-list">
+                <li><strong>MCU:</strong> ESP32-CAM (Dual-core Xtensa @ 240MHz)</li>
+                <li><strong>Camera:</strong> OV2640 2MP sensor</li>
+                <li><strong>Resolution:</strong> QVGA 320×240 (FOMO optimized)</li>
+                <li><strong>Capture Rate:</strong> 1 fps detection interval</li>
+                <li><strong>Power:</strong> 5V 2A (~500mW typical)</li>
+                <li><strong>Connectivity:</strong> SIM7000A 4G LTE</li>
+              </ul>
+            </div>
+            <div class="spec-group">
+              <h4>Enclosure</h4>
+              <ul class="spec-list">
+                <li><strong>Housing:</strong> IP65 junction box</li>
+                <li><strong>Mounting:</strong> Pole/wall bracket</li>
+                <li><strong>Weather Rating:</strong> IP65 (weatherproof)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ML Model Specs -->
+        <div class="lp-knowledge-card">
+          <div class="knowledge-header">
+            <span class="knowledge-icon">🧠</span>
+            <h3>Machine Learning</h3>
+          </div>
+          <div class="knowledge-content">
+            <div class="spec-group">
+              <h4>Model Architecture</h4>
+              <ul class="spec-list">
+                <li><strong>Framework:</strong> Edge Impulse FOMO</li>
+                <li><strong>Backend:</strong> TensorFlow Lite Micro (int8)</li>
+                <li><strong>Input:</strong> 96×96 grayscale</li>
+                <li><strong>Inference:</strong> 100-200 ms on ESP32</li>
+                <li><strong>Footprint:</strong> <100 KB RAM</li>
+              </ul>
+            </div>
+            <div class="spec-group">
+              <h4>Training</h4>
+              <ul class="spec-list">
+                <li><strong>Dataset:</strong> 300-500 labeled images</li>
+                <li><strong>Classes:</strong> Vehicle, Background</li>
+                <li><strong>Accuracy:</strong> >70% real-world</li>
+                <li><strong>F1 Score:</strong> 0.65-0.85</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Software Stack -->
+        <div class="lp-knowledge-card">
+          <div class="knowledge-header">
+            <span class="knowledge-icon">💻</span>
+            <h3>Software Stack</h3>
+          </div>
+          <div class="knowledge-content">
+            <div class="spec-group">
+              <h4>Firmware</h4>
+              <ul class="spec-list">
+                <li><strong>Platform:</strong> PlatformIO (Arduino)</li>
+                <li><strong>Language:</strong> C++ with TinyGSM</li>
+                <li><strong>Updates:</strong> SD card flashing</li>
+              </ul>
+            </div>
+            <div class="spec-group">
+              <h4>Backend</h4>
+              <ul class="spec-list">
+                <li><strong>Runtime:</strong> Node.js 18+</li>
+                <li><strong>Framework:</strong> Express.js</li>
+                <li><strong>Database:</strong> SQLite</li>
+              </ul>
+            </div>
+            <div class="spec-group">
+              <h4>Frontend</h4>
+              <ul class="spec-list">
+                <li><strong>Mapping:</strong> Leaflet 1.9.4 + OSRM</li>
+                <li><strong>Charts:</strong> Chart.js 4.4.0</li>
+                <li><strong>Hosting:</strong> Vercel</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Open Source Section -->
+  <section class="lp-opensource" id="opensource">
+    <div class="lp-container">
+      <div class="lp-opensource-card">
+        <div class="opensource-content">
+          <div class="github-callout">
+            <div class="github-icon">
+              <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+            </div>
+            <div class="github-text">
+              <h3>Open Source</h3>
+              <p>This project is fully open source under MIT license. Star the repo, fork it, or contribute!</p>
+              <a href="https://github.com/m4cd4r4/perth-traffic-watch" target="_blank" class="lp-btn lp-btn-github">
+                <span>View on GitHub</span>
+                <span class="arrow">→</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="research-callout">
+            <div class="research-icon">📄</div>
+            <div class="research-text">
+              <h3>Cost Analysis</h3>
+              <p>Detailed comparison of citizen-led IoT monitoring ($143/site) vs Main Roads WA's $500M Smart Freeway infrastructure.</p>
+              <a href="https://github.com/m4cd4r4/perth-traffic-watch/blob/master/docs/cost-effectiveness-analysis.md" target="_blank" class="lp-btn lp-btn-secondary">
+                Read the Analysis →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="lp-cta">
+    <div class="lp-container">
+      <div class="lp-cta-card">
+        <h2>Ready to avoid Perth traffic?</h2>
+        <p>Check live conditions or learn how to deploy your own monitoring network</p>
+        <div class="cta-buttons">
+          <a href="https://perth-traffic-watch.vercel.app" class="lp-btn lp-btn-primary lp-btn-lg">
+            View Live Dashboard
+          </a>
+          <a href="https://github.com/m4cd4r4/perth-traffic-watch" target="_blank" class="lp-btn lp-btn-outline">
+            Get the Code on GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="lp-footer">
+    <div class="lp-container">
+      <p>Built with Edge AI by <a href="https://github.com/m4cd4r4" target="_blank">Macdara</a> | Perth, Western Australia</p>
+      <p class="footer-note">This is a proof-of-concept demonstrating open traffic data advocacy.</p>
+    </div>
+  </footer>
+</body>
+</html>
