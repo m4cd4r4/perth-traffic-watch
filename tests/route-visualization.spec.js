@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test');
 
 /**
- * Perth Traffic Watch - Route Visualization E2E Tests
+ * SwanFlow - Route Visualization E2E Tests
  * Tests that all corridors (Stirling Highway, Mitchell Freeway, Kwinana Freeway)
  * display proper dotted line visualizations on the map
  */

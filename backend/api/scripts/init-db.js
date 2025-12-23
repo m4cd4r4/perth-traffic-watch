@@ -39,7 +39,7 @@ const sites = [
 ];
 
 console.log('==================================');
-console.log('Initializing Perth Traffic Watch Database');
+console.log('Initializing SwanFlow Database');
 console.log('==================================\n');
 
 try {

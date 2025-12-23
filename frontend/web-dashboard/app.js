@@ -1,11 +1,11 @@
 /**
- * Perth Traffic Watch - Dashboard JavaScript
+ * SwanFlow - Dashboard JavaScript
  */
 
 // Configuration
 const API_BASE_URL = window.location.hostname === 'localhost'
   ? 'http://localhost:3000'  // Local dev: separate frontend server
-  : 'https://perth-traffic-watch.onrender.com';  // Production: Render backend API
+  : 'https://swanflow.onrender.com';  // Production: Render backend API
 
 const REFRESH_INTERVAL = 60000; // 60 seconds
 
@@ -145,7 +145,7 @@ async function fetchRecentDetections(site, limit = 20) {
 // ============================================================================
 
 function loadTheme() {
-  const savedTheme = localStorage.getItem('perth-traffic-theme');
+  const savedTheme = localStorage.getItem('swanflow-theme');
   // Migrate old themes to new system
   if (savedTheme) {
     if (savedTheme.includes('dark')) {
@@ -160,7 +160,7 @@ function loadTheme() {
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   currentTheme = theme;
-  localStorage.setItem('perth-traffic-theme', theme);
+  localStorage.setItem('swanflow-theme', theme);
 
   // Update chart colors if chart exists
   if (trafficChart) {
@@ -473,7 +473,7 @@ function animateRouteArrow(siteName) {
 // ============================================================================
 
 function initMap() {
-  // Center on Perth traffic corridor
+  // Center on SwanFlow traffic corridor
   const center = [-31.995, 115.785];
 
   trafficMap = L.map('traffic-map', {
@@ -1330,7 +1330,7 @@ async function switchNetwork(network) {
       } else if (network === 'freeway') {
         infoText.textContent = 'Monitoring freeways: Mitchell Freeway (18 sites) & Kwinana Freeway (12 sites)';
       } else {
-        infoText.textContent = 'Unified Perth traffic view: All arterial roads and freeways (52 monitoring sites)';
+        infoText.textContent = 'Unified SwanFlow traffic view: All arterial roads and freeways (52 monitoring sites)';
       }
     }
   }
@@ -1498,7 +1498,7 @@ function startTerminal() {
   const output = document.getElementById('terminal-output');
   if (output) {
     // Add startup messages
-    addTerminalLine('<div class="terminal-line system">[SYSTEM] Connected to Perth Traffic Watch simulator</div>');
+    addTerminalLine('<div class="terminal-line system">[SYSTEM] Connected to SwanFlow simulator</div>');
     addTerminalLine('<div class="terminal-line system">[SYSTEM] Monitoring 22 arterial sites + 30 freeway sites</div>');
     addTerminalLine('<div class="terminal-line system">[SYSTEM] Starting live data feed...</div>');
     addTerminalLine('<div class="terminal-line detection">[SIMULATOR] Data generation active</div>');
@@ -1569,7 +1569,7 @@ function clearTerminal() {
 // ============================================================================
 
 async function init() {
-  console.log('Initializing Perth Traffic Watch Dashboard...');
+  console.log('Initializing SwanFlow Dashboard...');
 
   // Initialize DOM elements
   siteSelect = document.getElementById('site-select');
