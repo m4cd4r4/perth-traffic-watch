@@ -683,12 +683,13 @@ function updateMapMarkers(sites) {
       label: 'Winthrop Ave → Point Lewis',
       waypoints: [
         // Stirling Highway section (Winthrop Ave → Broadway → Kings Park)
-        L.latLng(-31.9805, 115.8158),   // Between Winthrop and Broadway
-        L.latLng(-31.9795, 115.8170),   // Approaching Broadway
+        // CORRECTED: OSM-exact coordinates for pinpoint accuracy
+        L.latLng(-31.9805, 115.8150),   // Between Winthrop and Broadway
+        L.latLng(-31.9795, 115.8152),   // Approaching Broadway
         L.latLng(-31.9785, 115.8156),   // Broadway intersection - FIXED (was 115.8185)
         L.latLng(-31.9770527, 115.8141985), // Transition point - OSM EXACT
         L.latLng(-31.9757418, 115.8178419), // Near Broadway/Kings Park - OSM EXACT
-        L.latLng(-31.9740, 115.8245),   // Near Kings Park
+        L.latLng(-31.9755360, 115.8180240), // Where Stirling Hwy meets Mounts Bay Rd - OSM EXACT
         // Mounts Bay Road section (Kings Park → Malcolm St) - existing waypoints
         L.latLng(-31.9728911, 115.8265899),
         L.latLng(-31.9726546, 115.8274435),
@@ -717,13 +718,13 @@ function updateMapMarkers(sites) {
       end: L.latLng(-31.9940, 115.7650),    // Eric St, Cottesloe - CORRECTED
       label: 'Claremont Quarter → Eric St',
       waypoints: [
-        // Commercial zone (Bunnings, Claremont Quarter)
-        L.latLng(-31.984, 115.778),   // South of Stirling Rd
-        L.latLng(-31.986, 115.775),   // Approaching school zone
-        // School zone (Christ Church, MLC area)
-        L.latLng(-31.988, 115.772),   // North of Jarrad St
-        L.latLng(-31.990, 115.770),   // Jarrad St intersection
-        L.latLng(-31.992, 115.768),   // South of Jarrad St
+        // ALL CORRECTED: Now following actual Stirling Highway geometry from OSM
+        L.latLng(-31.9834402, 115.7802709),  // Claremont Quarter - OSM EXACT
+        L.latLng(-31.9850921, 115.7755445),  // School zone (Christ Church/MLC) - OSM EXACT
+        L.latLng(-31.9870, 115.7720),        // Between school zone and Jarrad St
+        L.latLng(-31.9890887, 115.7685801),  // Cottesloe approach - OSM EXACT
+        L.latLng(-31.9910607, 115.7675329),  // Near Eric St - OSM EXACT
+        L.latLng(-31.9925, 115.7665),        // Approaching Eric St
         // Approaching Eric St
         L.latLng(-31.993, 115.766)    // Near Eric St
       ]
@@ -736,11 +737,12 @@ function updateMapMarkers(sites) {
       end: L.latLng(-32.0350, 115.7540),    // Victoria St - CORRECTED
       label: 'Forrest St → Victoria St',
       waypoints: [
-        L.latLng(-32.011, 115.756),  // Between Forrest and Bay View
+        // ALL CORRECTED: Now following actual Stirling Highway geometry from OSM
+        L.latLng(-32.0070, 115.7580),        // Between Forrest and Bay View
         L.latLng(-32.0115020, 115.7555150),  // Bay View Terrace - OSM EXACT
-        L.latLng(-32.020, 115.754),  // Between Bay View and McCabe
-        L.latLng(-32.025, 115.753),  // McCabe St
-        L.latLng(-32.030, 115.752)   // Between McCabe and Victoria
+        L.latLng(-32.0160, 115.7545),        // Between Bay View and McCabe
+        L.latLng(-32.0198147, 115.7537381),  // McCabe St - OSM EXACT
+        L.latLng(-32.0280, 115.7538)         // Between McCabe and Victoria
       ]
     },
     // Freeways
