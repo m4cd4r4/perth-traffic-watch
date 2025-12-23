@@ -13,7 +13,11 @@ const db = new Database('./traffic-watch.db');
 
 // Site definitions
 const sites = [
-  // Mounts Bay Road (Crawley → Point Lewis) - PoC
+  // Stirling Highway / Mounts Bay Road (Winthrop Ave → Point Lewis) - PoC Phase 1
+  { name: 'Stirling Hwy @ Winthrop Ave (Northbound)', multiplier: 1.3, direction: 'NB' },  // High traffic - SCGH/UWA
+  { name: 'Stirling Hwy @ Winthrop Ave (Southbound)', multiplier: 1.25, direction: 'SB' },
+  { name: 'Stirling Hwy @ Broadway (Northbound)', multiplier: 1.15, direction: 'NB' },
+  { name: 'Stirling Hwy @ Broadway (Southbound)', multiplier: 1.2, direction: 'SB' },
   { name: 'Mounts Bay Rd @ Kings Park (Northbound)', multiplier: 1.2, direction: 'NB' },
   { name: 'Mounts Bay Rd @ Kings Park (Southbound)', multiplier: 1.1, direction: 'SB' },
   { name: 'Mounts Bay Rd @ Mill Point (Northbound)', multiplier: 1.0, direction: 'NB' },

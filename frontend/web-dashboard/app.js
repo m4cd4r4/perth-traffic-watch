@@ -199,6 +199,12 @@ function getThemeColors() {
 
 // Site coordinates mapping (approximate locations based on street intersections)
 const siteCoordinates = {
+  // Stirling Highway - Nedlands (Winthrop Ave extension)
+  'Stirling Hwy @ Winthrop Ave (Northbound)': [-31.9812, 115.8148],
+  'Stirling Hwy @ Winthrop Ave (Southbound)': [-31.9812, 115.8148],
+  'Stirling Hwy @ Broadway (Northbound)': [-31.9785, 115.8185],
+  'Stirling Hwy @ Broadway (Southbound)': [-31.9785, 115.8185],
+
   // Mounts Bay Road sites
   'Mounts Bay Rd @ Kings Park (Northbound)': [-31.97339, 115.82564],
   'Mounts Bay Rd @ Kings Park (Southbound)': [-31.97339, 115.82564],
@@ -658,14 +664,21 @@ function updateMapMarkers(sites) {
   const corridors = [
     // Arterial Roads
     {
-      name: 'Mounts Bay Road',
-      shortName: 'Mounts Bay Rd',
-      filter: 'Mounts Bay Rd',
-      start: L.latLng(-31.97339, 115.82564),  // Crawley (Kings Park)
-      end: L.latLng(-31.963231, 115.842311),  // Point Lewis (Malcolm St)
-      label: 'Crawley → Point Lewis',
+      name: 'Stirling Hwy / Mounts Bay Rd',
+      shortName: 'Nedlands-City',
+      filter: 'Stirling Hwy @ Winthrop|Stirling Hwy @ Broadway|Mounts Bay Rd',
+      start: L.latLng(-31.9812, 115.8148),     // Winthrop Ave, Nedlands (near SCGH/UWA)
+      end: L.latLng(-31.963231, 115.842311),   // Point Lewis (Malcolm St)
+      label: 'Winthrop Ave → Point Lewis',
       waypoints: [
-        // EXACT coordinates from OpenStreetMap (sampled for performance)
+        // Stirling Highway section (Winthrop Ave → Broadway → Kings Park)
+        L.latLng(-31.9805, 115.8158),   // Between Winthrop and Broadway
+        L.latLng(-31.9795, 115.8170),   // Approaching Broadway
+        L.latLng(-31.9785, 115.8185),   // Broadway intersection
+        L.latLng(-31.9770, 115.8205),   // Between Broadway and Kings Park
+        L.latLng(-31.9755, 115.8225),   // Approaching Kings Park
+        L.latLng(-31.9740, 115.8245),   // Near Kings Park
+        // Mounts Bay Road section (Kings Park → Malcolm St) - existing waypoints
         L.latLng(-31.9728911, 115.8265899),
         L.latLng(-31.9726546, 115.8274435),
         L.latLng(-31.9724305, 115.8289419),
@@ -1349,6 +1362,10 @@ async function loadSitesForNetwork(network) {
 // Simulated site data for terminal output
 const terminalSites = {
   arterial: [
+    { name: 'Stirling Hwy @ Winthrop Ave', direction: 'NB', baseFlow: 480 },  // High traffic - SCGH/UWA
+    { name: 'Stirling Hwy @ Winthrop Ave', direction: 'SB', baseFlow: 460 },
+    { name: 'Stirling Hwy @ Broadway', direction: 'NB', baseFlow: 440 },
+    { name: 'Stirling Hwy @ Broadway', direction: 'SB', baseFlow: 450 },
     { name: 'Mounts Bay Rd @ Kings Park', direction: 'NB', baseFlow: 450 },
     { name: 'Mounts Bay Rd @ Kings Park', direction: 'SB', baseFlow: 420 },
     { name: 'Mounts Bay Rd @ Mill Point', direction: 'NB', baseFlow: 380 },

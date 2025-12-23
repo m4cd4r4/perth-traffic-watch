@@ -11,7 +11,11 @@ const db = new Database(dbPath);
 
 // Site definitions (matching live-simulator.js)
 const sites = [
-  // Mounts Bay Road (Crawley → Point Lewis) - PoC
+  // Stirling Highway / Mounts Bay Road (Winthrop Ave → Point Lewis) - PoC Phase 1
+  { name: 'Stirling Hwy @ Winthrop Ave (Northbound)', description: 'Stirling Highway at Winthrop Avenue, Nedlands (near SCGH/UWA)' },
+  { name: 'Stirling Hwy @ Winthrop Ave (Southbound)', description: 'Stirling Highway at Winthrop Avenue, Nedlands (near SCGH/UWA)' },
+  { name: 'Stirling Hwy @ Broadway (Northbound)', description: 'Stirling Highway at Broadway, Nedlands' },
+  { name: 'Stirling Hwy @ Broadway (Southbound)', description: 'Stirling Highway at Broadway, Nedlands' },
   { name: 'Mounts Bay Rd @ Kings Park (Northbound)', description: 'Mounts Bay Road near Kings Park' },
   { name: 'Mounts Bay Rd @ Kings Park (Southbound)', description: 'Mounts Bay Road near Kings Park' },
   { name: 'Mounts Bay Rd @ Mill Point (Northbound)', description: 'Mounts Bay Road at Mill Point' },

@@ -180,8 +180,8 @@ test.describe('Route Visualization', () => {
 
     console.log('Corridor names on map:', corridorNames);
 
-    // Should have all 4 corridor types (Swanbourne removed - not on actual Stirling Hwy)
-    expect(corridorNames).toContain('Mounts Bay Road');
+    // Should have all 4 corridor types
+    expect(corridorNames).toContain('Stirling Hwy / Mounts Bay Rd');  // Extended to Winthrop Ave
     expect(corridorNames).toContain('Stirling Highway - Mosman Park');
     expect(corridorNames).toContain('Mitchell Freeway');
     expect(corridorNames).toContain('Kwinana Freeway');
