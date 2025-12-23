@@ -202,6 +202,12 @@ function getThemeColors() {
 
 // Site coordinates mapping (approximate locations based on street intersections)
 const siteCoordinates = {
+  // Stirling Highway - Nedlands (Winthrop Ave extension)
+  'Stirling Hwy @ Winthrop Ave (Northbound)': [-31.9812, 115.8148],
+  'Stirling Hwy @ Winthrop Ave (Southbound)': [-31.9812, 115.8148],
+  'Stirling Hwy @ Broadway (Northbound)': [-31.9785, 115.8185],
+  'Stirling Hwy @ Broadway (Southbound)': [-31.9785, 115.8185],
+
   // Mounts Bay Road sites
   'Mounts Bay Rd @ Kings Park (Northbound)': [-31.97339, 115.82564],
   'Mounts Bay Rd @ Kings Park (Southbound)': [-31.97339, 115.82564],
@@ -211,6 +217,14 @@ const siteCoordinates = {
   'Mounts Bay Rd @ Fraser Ave (Southbound)': [-31.965, 115.838],
   'Mounts Bay Rd @ Malcolm St (Northbound)': [-31.963231, 115.842311],
   'Mounts Bay Rd @ Malcolm St (Southbound)': [-31.963231, 115.842311],
+
+  // Stirling Highway - Claremont to Cottesloe (Phase 2)
+  'Stirling Hwy @ Stirling Rd (Northbound)': [-31.982, 115.780],   // Bunnings/Claremont Quarter
+  'Stirling Hwy @ Stirling Rd (Southbound)': [-31.982, 115.780],
+  'Stirling Hwy @ Jarrad St (Northbound)': [-31.990, 115.770],     // School zone
+  'Stirling Hwy @ Jarrad St (Southbound)': [-31.990, 115.770],
+  'Stirling Hwy @ Eric St (Northbound)': [-31.994, 115.765],       // Cottesloe
+  'Stirling Hwy @ Eric St (Southbound)': [-31.994, 115.765],
 
   // Stirling Highway - Mosman Park
   'Stirling Hwy @ Forrest St (Northbound)': [-32.008, 115.757],
@@ -661,14 +675,21 @@ function updateMapMarkers(sites) {
   const corridors = [
     // Arterial Roads
     {
-      name: 'Mounts Bay Road',
-      shortName: 'Mounts Bay Rd',
-      filter: 'Mounts Bay Rd',
-      start: L.latLng(-31.97339, 115.82564),  // Crawley (Kings Park)
-      end: L.latLng(-31.963231, 115.842311),  // Point Lewis (Malcolm St)
-      label: 'Crawley → Point Lewis',
+      name: 'Stirling Hwy / Mounts Bay Rd',
+      shortName: 'Nedlands-City',
+      filter: 'Stirling Hwy @ Winthrop|Stirling Hwy @ Broadway|Mounts Bay Rd',
+      start: L.latLng(-31.9812, 115.8148),     // Winthrop Ave, Nedlands (near SCGH/UWA)
+      end: L.latLng(-31.963231, 115.842311),   // Point Lewis (Malcolm St)
+      label: 'Winthrop Ave → Point Lewis',
       waypoints: [
-        // EXACT coordinates from OpenStreetMap (sampled for performance)
+        // Stirling Highway section (Winthrop Ave → Broadway → Kings Park)
+        L.latLng(-31.9805, 115.8158),   // Between Winthrop and Broadway
+        L.latLng(-31.9795, 115.8170),   // Approaching Broadway
+        L.latLng(-31.9785, 115.8185),   // Broadway intersection
+        L.latLng(-31.9770, 115.8205),   // Between Broadway and Kings Park
+        L.latLng(-31.9755, 115.8225),   // Approaching Kings Park
+        L.latLng(-31.9740, 115.8245),   // Near Kings Park
+        // Mounts Bay Road section (Kings Park → Malcolm St) - existing waypoints
         L.latLng(-31.9728911, 115.8265899),
         L.latLng(-31.9726546, 115.8274435),
         L.latLng(-31.9724305, 115.8289419),
@@ -686,6 +707,25 @@ function updateMapMarkers(sites) {
         L.latLng(-31.9668462, 115.8390952),
         L.latLng(-31.9662305, 115.8395033),
         L.latLng(-31.9653717, 115.8398791)
+      ]
+    },
+    {
+      name: 'Stirling Highway - Claremont/Cottesloe',
+      shortName: 'Claremont',
+      filter: 'Stirling Hwy @ Stirling Rd|Stirling Hwy @ Jarrad St|Stirling Hwy @ Eric St',
+      start: L.latLng(-31.982, 115.780),   // Stirling Rd (Bunnings/Claremont Quarter)
+      end: L.latLng(-31.994, 115.765),     // Eric St, Cottesloe
+      label: 'Claremont Quarter → Eric St',
+      waypoints: [
+        // Commercial zone (Bunnings, Claremont Quarter)
+        L.latLng(-31.984, 115.778),   // South of Stirling Rd
+        L.latLng(-31.986, 115.775),   // Approaching school zone
+        // School zone (Christ Church, MLC area)
+        L.latLng(-31.988, 115.772),   // North of Jarrad St
+        L.latLng(-31.990, 115.770),   // Jarrad St intersection
+        L.latLng(-31.992, 115.768),   // South of Jarrad St
+        // Approaching Eric St
+        L.latLng(-31.993, 115.766)    // Near Eric St
       ]
     },
     {
@@ -1565,6 +1605,10 @@ async function loadSitesForNetwork(network) {
 // Simulated site data for terminal output
 const terminalSites = {
   arterial: [
+    { name: 'Stirling Hwy @ Winthrop Ave', direction: 'NB', baseFlow: 480 },  // High traffic - SCGH/UWA
+    { name: 'Stirling Hwy @ Winthrop Ave', direction: 'SB', baseFlow: 460 },
+    { name: 'Stirling Hwy @ Broadway', direction: 'NB', baseFlow: 440 },
+    { name: 'Stirling Hwy @ Broadway', direction: 'SB', baseFlow: 450 },
     { name: 'Mounts Bay Rd @ Kings Park', direction: 'NB', baseFlow: 450 },
     { name: 'Mounts Bay Rd @ Kings Park', direction: 'SB', baseFlow: 420 },
     { name: 'Mounts Bay Rd @ Mill Point', direction: 'NB', baseFlow: 380 },
@@ -1573,6 +1617,14 @@ const terminalSites = {
     { name: 'Mounts Bay Rd @ Fraser Ave', direction: 'SB', baseFlow: 380 },
     { name: 'Mounts Bay Rd @ Malcolm St', direction: 'NB', baseFlow: 320 },
     { name: 'Mounts Bay Rd @ Malcolm St', direction: 'SB', baseFlow: 340 },
+    // Claremont-Cottesloe (Phase 2)
+    { name: 'Stirling Hwy @ Stirling Rd', direction: 'NB', baseFlow: 380, zone: 'commercial' },  // Bunnings/Claremont Quarter
+    { name: 'Stirling Hwy @ Stirling Rd', direction: 'SB', baseFlow: 360, zone: 'commercial' },
+    { name: 'Stirling Hwy @ Jarrad St', direction: 'NB', baseFlow: 350, zone: 'school' },        // School zone
+    { name: 'Stirling Hwy @ Jarrad St', direction: 'SB', baseFlow: 340, zone: 'school' },
+    { name: 'Stirling Hwy @ Eric St', direction: 'NB', baseFlow: 320 },
+    { name: 'Stirling Hwy @ Eric St', direction: 'SB', baseFlow: 310 },
+    // Mosman Park
     { name: 'Stirling Hwy @ Forrest St', direction: 'NB', baseFlow: 310 },
     { name: 'Stirling Hwy @ Forrest St', direction: 'SB', baseFlow: 305 },
     { name: 'Stirling Hwy @ Bay View Terrace', direction: 'NB', baseFlow: 295 },
