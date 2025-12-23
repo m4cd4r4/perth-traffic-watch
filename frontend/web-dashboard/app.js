@@ -209,14 +209,6 @@ const siteCoordinates = {
   'Mounts Bay Rd @ Malcolm St (Northbound)': [-31.963231, 115.842311],
   'Mounts Bay Rd @ Malcolm St (Southbound)': [-31.963231, 115.842311],
 
-  // Stirling Highway - Swanbourne
-  'Stirling Hwy @ Grant St (Northbound)': [-31.985, 115.763],
-  'Stirling Hwy @ Grant St (Southbound)': [-31.985, 115.763],
-  'Stirling Hwy @ Campbell Barracks (Northbound)': [-31.990, 115.762],
-  'Stirling Hwy @ Campbell Barracks (Southbound)': [-31.990, 115.762],
-  'Stirling Hwy @ Eric St (Northbound)': [-31.998, 115.762],
-  'Stirling Hwy @ Eric St (Southbound)': [-31.998, 115.762],
-
   // Stirling Highway - Mosman Park
   'Stirling Hwy @ Forrest St (Northbound)': [-32.008, 115.757],
   'Stirling Hwy @ Forrest St (Southbound)': [-32.008, 115.757],
@@ -691,30 +683,6 @@ function updateMapMarkers(sites) {
         L.latLng(-31.9668462, 115.8390952),
         L.latLng(-31.9662305, 115.8395033),
         L.latLng(-31.9653717, 115.8398791)
-      ]
-    },
-    {
-      name: 'Stirling Highway - Swanbourne',
-      shortName: 'Swanbourne',
-      filter: 'Stirling Hwy @ Campbell Barracks|Stirling Hwy @ Eric St',
-      start: L.latLng(-31.990, 115.762),  // Campbell Barracks
-      end: L.latLng(-31.998, 115.762),    // Eric St
-      label: 'Campbell Barracks → Eric St',
-      waypoints: [
-        // EXACT coordinates from OpenStreetMap (sampled for performance)
-        L.latLng(-31.9900419, 115.7619476),
-        L.latLng(-31.9906974, 115.7619281),
-        L.latLng(-31.9911854, 115.7619154),
-        L.latLng(-31.9918138, 115.7619067),
-        L.latLng(-31.9926278, 115.7619101),
-        L.latLng(-31.9933467, 115.7619175),
-        L.latLng(-31.9940649, 115.7619276),
-        L.latLng(-31.9946888, 115.7619375),
-        L.latLng(-31.9952177, 115.7619449),
-        L.latLng(-31.9959354, 115.7619566),
-        L.latLng(-31.9967473, 115.7619727),
-        L.latLng(-31.9973699, 115.7619839),
-        L.latLng(-31.9980904, 115.7619976)
       ]
     },
     {
@@ -1389,10 +1357,6 @@ const terminalSites = {
     { name: 'Mounts Bay Rd @ Fraser Ave', direction: 'SB', baseFlow: 380 },
     { name: 'Mounts Bay Rd @ Malcolm St', direction: 'NB', baseFlow: 320 },
     { name: 'Mounts Bay Rd @ Malcolm St', direction: 'SB', baseFlow: 340 },
-    { name: 'Stirling Hwy @ Campbell Barracks', direction: 'NB', baseFlow: 280 },
-    { name: 'Stirling Hwy @ Campbell Barracks', direction: 'SB', baseFlow: 260 },
-    { name: 'Stirling Hwy @ Eric St', direction: 'NB', baseFlow: 300 },
-    { name: 'Stirling Hwy @ Eric St', direction: 'SB', baseFlow: 290 },
     { name: 'Stirling Hwy @ Forrest St', direction: 'NB', baseFlow: 310 },
     { name: 'Stirling Hwy @ Forrest St', direction: 'SB', baseFlow: 305 },
     { name: 'Stirling Hwy @ Bay View Terrace', direction: 'NB', baseFlow: 295 },

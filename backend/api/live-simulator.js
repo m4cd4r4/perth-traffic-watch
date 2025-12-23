@@ -23,14 +23,6 @@ const sites = [
   { name: 'Mounts Bay Rd @ Malcolm St (Northbound)', multiplier: 0.85, direction: 'NB' },
   { name: 'Mounts Bay Rd @ Malcolm St (Southbound)', multiplier: 1.15, direction: 'SB' },
 
-  // Stirling Hwy - Swanbourne (Grant St → Eric St) - Phase 1
-  { name: 'Stirling Hwy @ Grant St (Northbound)', multiplier: 1.15, direction: 'NB' },
-  { name: 'Stirling Hwy @ Grant St (Southbound)', multiplier: 1.05, direction: 'SB' },
-  { name: 'Stirling Hwy @ Campbell Barracks (Northbound)', multiplier: 1.1, direction: 'NB' },
-  { name: 'Stirling Hwy @ Campbell Barracks (Southbound)', multiplier: 1.0, direction: 'SB' },
-  { name: 'Stirling Hwy @ Eric St (Northbound)', multiplier: 1.05, direction: 'NB' },
-  { name: 'Stirling Hwy @ Eric St (Southbound)', multiplier: 0.95, direction: 'SB' },
-
   // Stirling Hwy - Mosman Park (Forrest St → Victoria St) - Phase 1
   { name: 'Stirling Hwy @ Forrest St (Northbound)', multiplier: 1.1, direction: 'NB' },
   { name: 'Stirling Hwy @ Forrest St (Southbound)', multiplier: 1.0, direction: 'SB' },

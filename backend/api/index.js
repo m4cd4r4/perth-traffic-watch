@@ -75,14 +75,6 @@ if (siteCount.count === 0) {
     { name: 'Mounts Bay Rd @ Malcolm St (Northbound)', description: 'Mounts Bay Road at Malcolm Street' },
     { name: 'Mounts Bay Rd @ Malcolm St (Southbound)', description: 'Mounts Bay Road at Malcolm Street' },
 
-    // Stirling Hwy - Swanbourne (Grant St → Eric St) - Phase 1
-    { name: 'Stirling Hwy @ Grant St (Northbound)', description: 'Stirling Highway at Grant Street, Swanbourne' },
-    { name: 'Stirling Hwy @ Grant St (Southbound)', description: 'Stirling Highway at Grant Street, Swanbourne' },
-    { name: 'Stirling Hwy @ Campbell Barracks (Northbound)', description: 'Stirling Highway near Campbell Barracks' },
-    { name: 'Stirling Hwy @ Campbell Barracks (Southbound)', description: 'Stirling Highway near Campbell Barracks' },
-    { name: 'Stirling Hwy @ Eric St (Northbound)', description: 'Stirling Highway at Eric Street' },
-    { name: 'Stirling Hwy @ Eric St (Southbound)', description: 'Stirling Highway at Eric Street' },
-
     // Stirling Hwy - Mosman Park (Forrest St → Victoria St) - Phase 1
     { name: 'Stirling Hwy @ Forrest St (Northbound)', description: 'Stirling Highway at Forrest Street, Mosman Park' },
     { name: 'Stirling Hwy @ Forrest St (Southbound)', description: 'Stirling Highway at Forrest Street, Mosman Park' },
