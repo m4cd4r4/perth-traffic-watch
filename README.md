@@ -10,7 +10,7 @@ Monitor traffic flow in real-time using affordable IoT hardware and machine lear
 
 ---
 
-## The $143 vs $500 Million Question
+## The $143 vs $50,000 Question
 
 Main Roads Western Australia has invested over **$500 million** in Smart Freeway infrastructure with **1,400+ sensors** collecting real-time traffic data. Yet their public APIs have been **offline since August 2023** with no restoration timeline.
 
