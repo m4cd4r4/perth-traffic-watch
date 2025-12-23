@@ -1,5 +1,5 @@
 /**
- * Perth Traffic Watch - Express API
+ * SwanFlow - Express API
  *
  * Receives vehicle detection data from ESP32-CAM units
  * and serves data to web dashboard
@@ -602,7 +602,7 @@ app.get('*', (req, res) => {
 // ============================================================================
 app.listen(PORT, () => {
   console.log(`\n=================================`);
-  console.log(`Perth Traffic Watch API`);
+  console.log(`SwanFlow API`);
   console.log(`=================================`);
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
