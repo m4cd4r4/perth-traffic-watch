@@ -142,6 +142,23 @@
         <div class="map-header">
           <h2>Live Traffic Map</h2>
           <div class="map-controls">
+            <div class="route-selector">
+              <label for="route-select">Route:</label>
+              <select id="route-select" aria-label="Select route to highlight">
+                <option value="">All Routes</option>
+                <option value="stirling-mounts-bay">Stirling Hwy / Mounts Bay Rd</option>
+                <option value="stirling-claremont">Stirling Hwy - Claremont</option>
+                <option value="stirling-mosman">Stirling Hwy - Mosman Park</option>
+                <option value="mitchell-freeway">Mitchell Freeway</option>
+                <option value="kwinana-freeway">Kwinana Freeway</option>
+              </select>
+            </div>
+            <div class="live-toggle">
+              <button type="button" id="live-toggle-btn" class="live-btn" aria-label="Toggle live updates" title="Toggle real-time updates">
+                <span class="live-indicator" id="live-indicator"></span>
+                <span class="live-text" id="live-text">LIVE</span>
+              </button>
+            </div>
             <div class="map-view-selector">
               <button type="button" class="map-view-btn" data-view="street">Street</button>
               <button type="button" class="map-view-btn active" data-view="satellite">Satellite</button>
