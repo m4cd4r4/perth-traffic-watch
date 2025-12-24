@@ -107,6 +107,77 @@ function startSimulator() {
   }, UPDATE_INTERVAL);
 }
 
+/**
+ * Simulate a traffic update for all sites
+ */
+function simulateTrafficUpdate() {
+  const hour = getPerthHour();
+  const baseRate = trafficPatterns[hour];
+  const timestamp = Date.now();
+
+  // Determine if it's morning rush (6-9) or evening rush (16-19)
+  const isMorningRush = hour >= 6 && hour <= 9;
+  const isEveningRush = hour >= 16 && hour <= 19;
+
+  const insertStmt = db.prepare(`
+    INSERT INTO detections (site, timestamp, total_count, hour_count, minute_count, avg_confidence, uptime, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))
+  `);
+
+  const updateTotalStmt = db.prepare(`
+    SELECT MAX(total_count) as max_total FROM detections WHERE site = ?
+  `);
+
+  let updatedCount = 0;
+
+  for (const site of sites) {
+    // Get current total for this site
+    const result = updateTotalStmt.get(site.name);
+    const currentTotal = result?.max_total || 0;
+
+    // Calculate traffic with multipliers
+    let rate = baseRate * site.multiplier;
+
+    // Apply direction modifiers for rush hours
+    if (isMorningRush) {
+      rate *= directionModifiers[site.direction]?.morning || 1.0;
+    } else if (isEveningRush) {
+      rate *= directionModifiers[site.direction]?.evening || 1.0;
+    }
+
+    // Apply zone modifiers
+    if (site.zone === 'commercial' && (hour >= 10 && hour <= 16)) {
+      rate *= 1.2; // Higher midday traffic for commercial zones
+    }
+    if (site.zone === 'school' && ((hour >= 8 && hour <= 9) || (hour >= 15 && hour <= 16))) {
+      rate *= 1.4; // Higher school-time traffic
+    }
+
+    // Add randomness (±20%)
+    rate *= 0.8 + Math.random() * 0.4;
+
+    // Calculate counts
+    const minuteCount = Math.round(rate);
+    const hourCount = Math.round(rate * 60);
+    const newTotal = currentTotal + minuteCount;
+
+    // Confidence varies slightly (85-95%)
+    const confidence = 0.85 + Math.random() * 0.1;
+
+    // Uptime in seconds (simulated)
+    const uptime = Math.floor((Date.now() - 1734789355000) / 1000); // Since Dec 21
+
+    try {
+      insertStmt.run(site.name, timestamp, newTotal, hourCount, minuteCount, confidence, uptime);
+      updatedCount++;
+    } catch (err) {
+      // Site might not exist in sites table, skip silently
+    }
+  }
+
+  console.log(`[SIMULATOR] Updated ${updatedCount} sites at hour ${hour} (base rate: ${baseRate.toFixed(2)} veh/min)`);
+}
+
 // Graceful shutdown
 process.on('SIGINT', () => {
   console.log('\n[SIMULATOR] Shutting down...');

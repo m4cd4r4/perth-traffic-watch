@@ -208,16 +208,52 @@ async function fetchAllNetworkSites() {
   }
 }
 
+/**
+ * Resolve a corridor ID to actual site names from the data-sites attribute
+ * Returns the first site name for single queries, or null if not a corridor ID
+ */
+function resolveCorridorToSites(corridorId) {
+  const option = document.querySelector(`#site-select option[value="${corridorId}"]`);
+  if (option && option.dataset.sites) {
+    return option.dataset.sites.split('|');
+  }
+  // Not a corridor ID, return as-is (might be an actual site name)
+  return [corridorId];
+}
+
 async function fetchStats(site, period) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/stats/${encodeURIComponent(site)}?period=${period}`);
-    const data = await response.json();
+    // Resolve corridor ID to actual site names
+    const siteNames = resolveCorridorToSites(site);
 
-    if (data.success) {
-      return data.stats;
-    }
+    // Fetch stats for all sites in the corridor and aggregate
+    const statsPromises = siteNames.map(async (siteName) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/stats/${encodeURIComponent(siteName)}?period=${period}`);
+        if (!response.ok) return null;
+        const data = await response.json();
+        return data.success ? data.stats : null;
+      } catch {
+        return null;
+      }
+    });
 
-    return null;
+    const allStats = (await Promise.all(statsPromises)).filter(s => s !== null);
+
+    if (allStats.length === 0) return null;
+
+    // Aggregate stats from all sites in the corridor
+    const aggregated = {
+      total_count: allStats.reduce((sum, s) => sum + (s.current_total || 0), 0),
+      current_total: allStats.reduce((sum, s) => sum + (s.current_total || 0), 0),
+      avg_hourly: allStats.reduce((sum, s) => sum + (s.avg_hourly || 0), 0) / allStats.length,
+      avg_confidence: allStats.reduce((sum, s) => sum + (s.avg_confidence || 0), 0) / allStats.length,
+      data_points: allStats.reduce((sum, s) => sum + (s.data_points || 0), 0),
+      first_seen: allStats.map(s => s.first_seen).sort()[0],
+      last_seen: allStats.map(s => s.last_seen).sort().reverse()[0]
+    };
+
+    return aggregated;
   } catch (error) {
     console.error('Error fetching stats:', error);
     setStatus('error', 'Connection error');
@@ -227,14 +263,39 @@ async function fetchStats(site, period) {
 
 async function fetchHourlyData(site, hours = 24) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/stats/${encodeURIComponent(site)}/hourly?hours=${hours}`);
-    const data = await response.json();
+    // Resolve corridor ID to actual site names
+    const siteNames = resolveCorridorToSites(site);
 
-    if (data.success) {
-      return data.data;
-    }
+    // Fetch hourly data for all sites and aggregate by hour
+    const dataPromises = siteNames.map(async (siteName) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/stats/${encodeURIComponent(siteName)}/hourly?hours=${hours}`);
+        if (!response.ok) return [];
+        const data = await response.json();
+        return data.success ? data.data : [];
+      } catch {
+        return [];
+      }
+    });
 
-    return [];
+    const allData = await Promise.all(dataPromises);
+
+    // If only one site, return its data directly
+    if (allData.length === 1) return allData[0];
+
+    // Aggregate by hour - combine all sites' data
+    const hourlyMap = new Map();
+    allData.flat().forEach(item => {
+      const hour = item.hour;
+      if (!hourlyMap.has(hour)) {
+        hourlyMap.set(hour, { hour, count: 0, sites: 0 });
+      }
+      const existing = hourlyMap.get(hour);
+      existing.count += item.count || 0;
+      existing.sites += 1;
+    });
+
+    return Array.from(hourlyMap.values()).sort((a, b) => a.hour.localeCompare(b.hour));
   } catch (error) {
     console.error('Error fetching hourly data:', error);
     return [];
@@ -243,14 +304,27 @@ async function fetchHourlyData(site, hours = 24) {
 
 async function fetchRecentDetections(site, limit = 20) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/detections?site=${encodeURIComponent(site)}&limit=${limit}`);
-    const data = await response.json();
+    // Resolve corridor ID to actual site names
+    const siteNames = resolveCorridorToSites(site);
 
-    if (data.success) {
-      return data.detections;
-    }
+    // Fetch detections for all sites
+    const detectionsPromises = siteNames.map(async (siteName) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/detections?site=${encodeURIComponent(siteName)}&limit=${Math.ceil(limit / siteNames.length)}`);
+        if (!response.ok) return [];
+        const data = await response.json();
+        return data.success ? data.detections : [];
+      } catch {
+        return [];
+      }
+    });
 
-    return [];
+    const allDetections = (await Promise.all(detectionsPromises)).flat();
+
+    // Sort by timestamp (most recent first) and limit
+    return allDetections
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      .slice(0, limit);
   } catch (error) {
     console.error('Error fetching detections:', error);
     return [];
@@ -646,13 +720,81 @@ function highlightRouteForSite(siteName) {
 function resetRouteHighlighting() {
   if (!trafficMap) return;
 
+  const baseRadius = getBaseRadiusForZoom();
   trafficMap.eachLayer(layer => {
     if (layer instanceof L.CircleMarker && layer._corridorInfo) {
       layer.setStyle({
-        radius: 1.5,  // Half the previous size
+        radius: baseRadius,
         fillOpacity: 0.6,
-        weight: 0.5
+        weight: Math.max(0.5, baseRadius / 3)
       });
+    }
+  });
+}
+
+/**
+ * Calculate base dot radius based on current zoom level
+ * Dots grow larger as you zoom in for better visibility
+ */
+function getBaseRadiusForZoom() {
+  if (!trafficMap) return 1.5;
+
+  const zoom = trafficMap.getZoom();
+
+  // Zoom level mapping:
+  // 10-11: 1.0 (zoomed out, small dots)
+  // 12: 1.5 (default view)
+  // 13: 2.5
+  // 14: 4
+  // 15: 6
+  // 16: 8
+  // 17+: 10 (zoomed in, large dots)
+
+  if (zoom <= 10) return 1.0;
+  if (zoom === 11) return 1.2;
+  if (zoom === 12) return 1.5;
+  if (zoom === 13) return 2.5;
+  if (zoom === 14) return 4;
+  if (zoom === 15) return 6;
+  if (zoom === 16) return 8;
+  return 10; // zoom 17+
+}
+
+/**
+ * Update all dot sizes when zoom level changes
+ */
+function updateDotSizeForZoom() {
+  if (!trafficMap) return;
+
+  const baseRadius = getBaseRadiusForZoom();
+  const baseWeight = Math.max(0.5, baseRadius / 3);
+
+  trafficMap.eachLayer(layer => {
+    if (layer instanceof L.CircleMarker && layer._corridorInfo) {
+      // Check if this dot is currently highlighted (from route selection)
+      const currentRadius = layer.options.radius;
+      const isHighlighted = currentRadius > baseRadius * 1.5;
+      const isDimmed = layer.options.fillOpacity < 0.4;
+
+      if (isHighlighted) {
+        // Keep highlighted dots larger relative to base
+        layer.setStyle({
+          radius: baseRadius * 2,
+          weight: baseWeight * 2
+        });
+      } else if (isDimmed) {
+        // Keep dimmed dots smaller relative to base
+        layer.setStyle({
+          radius: baseRadius * 0.7,
+          weight: baseWeight * 0.5
+        });
+      } else {
+        // Normal dots
+        layer.setStyle({
+          radius: baseRadius,
+          weight: baseWeight
+        });
+      }
     }
   });
 }
@@ -719,6 +861,9 @@ function handleRouteSelection(routeValue) {
 function highlightCorridorByName(corridorName) {
   if (!trafficMap) return;
 
+  const baseRadius = getBaseRadiusForZoom();
+  const baseWeight = Math.max(0.5, baseRadius / 3);
+
   trafficMap.eachLayer(layer => {
     if (layer instanceof L.CircleMarker && layer._corridorInfo) {
       const isMatch = layer._corridorInfo.name === corridorName;
@@ -726,16 +871,16 @@ function highlightCorridorByName(corridorName) {
       if (isMatch) {
         // Highlighted route - larger, more visible
         layer.setStyle({
-          radius: 3,
+          radius: baseRadius * 2,
           fillOpacity: 0.95,
-          weight: 1.5
+          weight: baseWeight * 2
         });
       } else {
         // Other routes - smaller, dimmed
         layer.setStyle({
-          radius: 1,
+          radius: baseRadius * 0.7,
           fillOpacity: 0.2,
-          weight: 0.3
+          weight: baseWeight * 0.5
         });
       }
     }
@@ -821,6 +966,12 @@ function initMap() {
 
   // Expose to window for debugging/testing
   window.trafficMap = trafficMap;
+
+  // Add zoom-based dot scaling
+  trafficMap.on('zoomend', updateDotSizeForZoom);
+
+  // Initial call to set correct size
+  setTimeout(updateDotSizeForZoom, 100);
 
   // Define multiple basemap layers
   const baseMaps = {
