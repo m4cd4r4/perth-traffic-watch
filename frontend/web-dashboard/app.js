@@ -1754,7 +1754,9 @@ function updateStatsCards(stats) {
 
   // Calculate time since last update
   if (stats.last_seen) {
-    const lastSeen = new Date(stats.last_seen);
+    // Backend returns UTC timestamps without timezone indicator - append 'Z' to parse as UTC
+    const lastSeenStr = stats.last_seen.endsWith('Z') ? stats.last_seen : stats.last_seen.replace(' ', 'T') + 'Z';
+    const lastSeen = new Date(lastSeenStr);
     const now = new Date();
     const diffMinutes = Math.floor((now - lastSeen) / 60000);
 
