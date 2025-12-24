@@ -43,6 +43,116 @@ let statusIndicator;
 let statusText;
 
 // ============================================================================
+// Perth Timezone Helpers (AWST, UTC+8)
+// ============================================================================
+const PERTH_TIMEZONE = 'Australia/Perth';
+
+/**
+ * Get current hour in Perth timezone
+ */
+function getPerthHour() {
+  return parseInt(new Date().toLocaleString('en-AU', {
+    timeZone: PERTH_TIMEZONE,
+    hour: 'numeric',
+    hour12: false
+  }));
+}
+
+/**
+ * Get current time string in Perth timezone
+ */
+function getPerthTimeString() {
+  return new Date().toLocaleTimeString('en-AU', {
+    timeZone: PERTH_TIMEZONE,
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+}
+
+/**
+ * Format a date/timestamp for display in Perth time
+ */
+function formatPerthTime(dateInput, format = 'short') {
+  const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+  
+  if (format === 'hour') {
+    return date.toLocaleTimeString('en-AU', {
+      timeZone: PERTH_TIMEZONE,
+      hour: 'numeric',
+      hour12: true
+    });
+  }
+  
+  return date.toLocaleString('en-AU', {
+    timeZone: PERTH_TIMEZONE,
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+}
+
+// ============================================================================
+// Corridor Stretches Configuration
+// Consolidates 22 individual sites into 4 meaningful corridor stretches
+// ============================================================================
+const CORRIDOR_STRETCHES = [
+  {
+    id: 'mounts-bay-eastbound',
+    name: 'Mounts Bay Road (Eastbound)',
+    description: 'Kings Park → CBD',
+    direction: 'Northbound',
+    sitePatterns: ['Mounts Bay Rd'],
+    directionFilter: 'Northbound'
+  },
+  {
+    id: 'mounts-bay-westbound',
+    name: 'Mounts Bay Road (Westbound)',
+    description: 'CBD → Kings Park',
+    direction: 'Southbound',
+    sitePatterns: ['Mounts Bay Rd'],
+    directionFilter: 'Southbound'
+  },
+  {
+    id: 'stirling-north',
+    name: 'Stirling Hwy North (Claremont)',
+    description: 'Grant St → Campbell Barracks',
+    direction: 'Both',
+    sitePatterns: ['Stirling Hwy @ Grant', 'Stirling Hwy @ Campbell']
+  },
+  {
+    id: 'stirling-south',
+    name: 'Stirling Hwy South (Fremantle)',
+    description: 'Eric St → Victoria St',
+    direction: 'Both',
+    sitePatterns: ['Stirling Hwy @ Eric', 'Stirling Hwy @ Forrest', 'Stirling Hwy @ Bay View', 'Stirling Hwy @ McCabe', 'Stirling Hwy @ Victoria']
+  }
+];
+
+/**
+ * Group individual sites into corridor stretches
+ */
+function consolidateSitesToStretches(sites) {
+  return CORRIDOR_STRETCHES.map(stretch => {
+    const matchingSites = sites.filter(site => {
+      const matchesPattern = stretch.sitePatterns.some(pattern => site.name.includes(pattern));
+      const matchesDirection = !stretch.directionFilter || site.name.includes(stretch.directionFilter);
+      return matchesPattern && matchesDirection;
+    });
+    const avgSpeed = matchingSites.length > 0
+      ? matchingSites.reduce((sum, s) => sum + (s.avg_speed || 0), 0) / matchingSites.length : 0;
+    const totalHourly = matchingSites.reduce((sum, s) => sum + (s.current_hourly || 0), 0);
+    return {
+      id: stretch.id, name: stretch.name, description: stretch.description,
+      sites: matchingSites, siteCount: matchingSites.length,
+      avg_speed: Math.round(avgSpeed), current_hourly: totalHourly,
+      coordinates: matchingSites[0]?.coordinates || null
+    };
+  });
+}
+
+
+// ============================================================================
 // API Functions
 // ============================================================================
 
@@ -1521,7 +1631,7 @@ function updateChart(hourlyData) {
   // Extract labels and data
   const labels = hourlyData.map(d => {
     const date = new Date(d.hour);
-    return date.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
+    return formatPerthTime(date, 'hour');
   });
 
   const counts = hourlyData.map(d => Math.round(d.avg_count));
@@ -2033,23 +2143,30 @@ async function init() {
   // Render initial flow corridor (arterial by default)
   renderFlowCorridor(currentNetwork);
 
-  // Load sites
-  const sites = await fetchSites();
+  // Load sites and consolidate into stretches
+  const rawSites = await fetchSites();
 
-  if (sites.length === 0) {
+  if (rawSites.length === 0) {
     siteSelect.innerHTML = '<option value="">No sites available</option>';
     setStatus('error', 'No monitoring sites found');
     return;
   }
 
-  // Populate site selector
-  siteSelect.innerHTML = sites.map(site =>
-    `<option value="${site.name}">${site.name}</option>`
+  // Store raw sites for data lookups
+  window.allRawSites = rawSites;
+
+  // Consolidate into 4 corridor stretches for simpler UX
+  const stretches = consolidateSitesToStretches(rawSites);
+
+  // Populate site selector with stretches
+  siteSelect.innerHTML = stretches.map(stretch =>
+    `<option value="${stretch.id}" data-sites="${stretch.sites.map(s => s.name).join('|')}">${stretch.name}</option>`
   ).join('');
 
-  // Set default site
-  currentSite = sites[0].name;
+  // Set default stretch
+  currentSite = stretches[0].id;
   siteSelect.value = currentSite;
+  window.currentStretch = stretches[0];
 
   // Load initial data
   await loadDashboard();

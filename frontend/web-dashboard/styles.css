@@ -2065,3 +2065,105 @@ body.map-fullscreen {
     height: 250px;
   }
 }
+
+/* ============================================================================
+   MOBILE MAP HERO - Full viewport map experience
+   Added Dec 24, 2025
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  /* Make map the hero on mobile - edge to edge, prominent */
+  .map-stats-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 0 -1rem; /* Bleed to edges */
+  }
+
+  .map-container {
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    order: -1; /* Map first */
+  }
+
+  #traffic-map {
+    height: 55vh; /* 55% of viewport height - prominent! */
+    min-height: 350px;
+    border-radius: 0;
+    border: none;
+    border-bottom: 3px solid var(--primary);
+  }
+
+  /* Compact map header on mobile */
+  .map-header {
+    padding: 0.5rem 1rem;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .map-header h2 {
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  /* Hide map title on mobile - map speaks for itself */
+  .map-container > h2:first-child {
+    display: none;
+  }
+
+  /* Stats below map - compact grid */
+  .stats-grid {
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+    background: var(--card-bg);
+  }
+
+  .stat-card {
+    padding: 0.75rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  /* Hide less important elements on mobile to prioritize map */
+  .controls label {
+    display: none;
+  }
+
+  .controls {
+    padding: 0.5rem;
+    gap: 0.5rem;
+    margin: 0 -1rem 0.5rem;
+    border-radius: 0;
+  }
+
+  .controls select {
+    flex: 1;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .controls button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Extra small screens - maximize map even more */
+@media (max-width: 375px) {
+  #traffic-map {
+    height: 50vh;
+    min-height: 300px;
+  }
+
+  .stat-card {
+    padding: 0.5rem;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+}
