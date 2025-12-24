@@ -5,12 +5,16 @@
 // Configuration
 const API_BASE_URL = window.location.hostname === 'localhost'
   ? 'http://localhost:3000'  // Local dev: separate frontend server
-  : 'https://45.77.233.102/traffic';  // Production: Vultr Sydney VPS API
+  : 'https://swanflow.com.au/traffic';  // Production: Vultr Sydney VPS via nginx proxy
 
-const REFRESH_INTERVAL = 60000; // 60 seconds
+const REFRESH_INTERVAL = 60000; // 60 seconds (normal mode)
+const LIVE_REFRESH_INTERVAL = 15000; // 15 seconds (live mode)
 
 // State
 let currentSite = null;
+let isLiveMode = false;
+let liveRefreshTimer = null;
+let previousTotalCount = 0;
 let currentPeriod = '24h';
 let currentTheme = 'light';
 let currentNetwork = 'arterial'; // 'arterial', 'freeway', 'all', or 'terminal'
@@ -197,18 +201,146 @@ function getThemeColors() {
 }
 
 // ============================================================================
+// Live Mode Functions
+// ============================================================================
+
+/**
+ * Toggle live update mode on/off
+ * Live mode refreshes data every 15 seconds with visual feedback
+ */
+function toggleLiveMode() {
+  isLiveMode = !isLiveMode;
+
+  const liveBtn = document.getElementById('live-toggle-btn');
+  const liveText = document.getElementById('live-text');
+
+  if (isLiveMode) {
+    // Enable live mode
+    liveBtn.classList.add('active');
+    liveText.textContent = 'LIVE';
+
+    // Clear normal refresh timer
+    if (refreshTimer) {
+      clearInterval(refreshTimer);
+      refreshTimer = null;
+    }
+
+    // Start faster live refresh
+    liveRefreshTimer = setInterval(liveUpdate, LIVE_REFRESH_INTERVAL);
+
+    // Immediate update
+    liveUpdate();
+
+    console.log('Live mode enabled - refreshing every 15 seconds');
+  } else {
+    // Disable live mode
+    liveBtn.classList.remove('active');
+    liveText.textContent = 'LIVE';
+
+    // Clear live refresh timer
+    if (liveRefreshTimer) {
+      clearInterval(liveRefreshTimer);
+      liveRefreshTimer = null;
+    }
+
+    // Restart normal refresh timer
+    refreshTimer = setInterval(loadDashboard, REFRESH_INTERVAL);
+
+    console.log('Live mode disabled - refreshing every 60 seconds');
+  }
+}
+
+/**
+ * Live update function with visual feedback
+ * Shows flash effects when data changes
+ */
+async function liveUpdate() {
+  try {
+    // Fetch latest data
+    const sites = await fetchSites();
+    if (!sites || sites.length === 0) return;
+
+    // Store previous total for comparison
+    const previousTotal = previousTotalCount;
+
+    // Update map markers
+    updateMapMarkers(sites);
+
+    // Update flow corridor
+    updateFlowCorridorData(sites);
+
+    // Update stats
+    const stats = await fetchStats(currentSite, currentPeriod);
+    if (stats) {
+      const newTotal = stats.total_count || 0;
+
+      // Check if data changed
+      if (newTotal !== previousTotal) {
+        // Animate the counter
+        animateCounter('total-count', previousTotal, newTotal);
+
+        // Flash effect on stat cards
+        document.querySelectorAll('.stat-card').forEach(card => {
+          card.classList.add('updating');
+          setTimeout(() => card.classList.remove('updating'), 500);
+        });
+
+        previousTotalCount = newTotal;
+      }
+
+      // Update other stats (without animation)
+      updateStatsCards(stats);
+    }
+
+    // Update status
+    setStatus('connected', 'Live');
+
+  } catch (error) {
+    console.error('Live update error:', error);
+    setStatus('error', 'Update failed');
+  }
+}
+
+/**
+ * Animate counter from one value to another
+ */
+function animateCounter(elementId, fromValue, toValue) {
+  const element = document.getElementById(elementId);
+  if (!element) return;
+
+  const duration = 1000; // 1 second
+  const startTime = performance.now();
+  const difference = toValue - fromValue;
+
+  element.classList.add('counting');
+
+  function updateCounter(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // Easing function (ease-out)
+    const easeOut = 1 - Math.pow(1 - progress, 3);
+
+    const currentValue = Math.round(fromValue + difference * easeOut);
+    element.textContent = currentValue.toLocaleString();
+
+    if (progress < 1) {
+      requestAnimationFrame(updateCounter);
+    } else {
+      element.classList.remove('counting');
+    }
+  }
+
+  requestAnimationFrame(updateCounter);
+}
+
+// ============================================================================
 // Map Auto-Pan & Highlight
 // ============================================================================
 
 // Site coordinates mapping (approximate locations based on street intersections)
 const siteCoordinates = {
-  // Stirling Highway - Nedlands (Winthrop Ave extension)
-  'Stirling Hwy @ Winthrop Ave (Northbound)': [-31.9812, 115.8148],
-  'Stirling Hwy @ Winthrop Ave (Southbound)': [-31.9812, 115.8148],
-  'Stirling Hwy @ Broadway (Northbound)': [-31.9785, 115.8185],
-  'Stirling Hwy @ Broadway (Southbound)': [-31.9785, 115.8185],
-
-  // Mounts Bay Road sites
+  // Mounts Bay Road sites (Kings Park to Point Lewis)
   'Mounts Bay Rd @ Kings Park (Northbound)': [-31.97339, 115.82564],
   'Mounts Bay Rd @ Kings Park (Southbound)': [-31.97339, 115.82564],
   'Mounts Bay Rd @ Mill Point (Northbound)': [-31.968, 115.834],
@@ -411,6 +543,91 @@ function resetRouteHighlighting() {
         fillOpacity: 0.6,
         weight: 0.5
       });
+    }
+  });
+}
+
+// Route selector mapping to corridor names
+const routeCorridorMap = {
+  'stirling-mounts-bay': 'Stirling Hwy / Mounts Bay Rd',
+  'stirling-claremont': 'Stirling Highway - Claremont/Cottesloe',
+  'stirling-mosman': 'Stirling Highway - Mosman Park',
+  'mitchell-freeway': 'Mitchell Freeway',
+  'kwinana-freeway': 'Kwinana Freeway'
+};
+
+// Corridor center coordinates for map panning
+const corridorCenters = {
+  'stirling-mounts-bay': { lat: -31.972, lng: 115.830, zoom: 14 },
+  'stirling-claremont': { lat: -31.988, lng: 115.775, zoom: 14 },
+  'stirling-mosman': { lat: -32.015, lng: 115.755, zoom: 14 },
+  'mitchell-freeway': { lat: -31.935, lng: 115.850, zoom: 13 },
+  'kwinana-freeway': { lat: -31.990, lng: 115.858, zoom: 13 }
+};
+
+// Currently selected route for filtering
+let currentSelectedRoute = '';
+
+/**
+ * Handle route selection from dropdown
+ * Highlights the selected route and pans map to center on it
+ */
+function handleRouteSelection(routeValue) {
+  currentSelectedRoute = routeValue;
+
+  // Clear any existing animation
+  if (routePulseAnimationInterval) {
+    clearInterval(routePulseAnimationInterval);
+    routePulseAnimationInterval = null;
+  }
+
+  if (!routeValue) {
+    // "All Routes" selected - reset to default view
+    resetRouteHighlighting();
+    if (trafficMap) {
+      trafficMap.flyTo([-31.995, 115.785], 12, { duration: 1 });
+    }
+    return;
+  }
+
+  const corridorName = routeCorridorMap[routeValue];
+  if (!corridorName) return;
+
+  // Highlight selected corridor, dim others
+  highlightCorridorByName(corridorName);
+
+  // Pan to corridor center
+  const center = corridorCenters[routeValue];
+  if (center && trafficMap) {
+    trafficMap.flyTo([center.lat, center.lng], center.zoom, { duration: 1.2 });
+  }
+}
+
+/**
+ * Highlight a specific corridor by name, dimming all others
+ */
+function highlightCorridorByName(corridorName) {
+  if (!trafficMap) return;
+
+  trafficMap.eachLayer(layer => {
+    if (layer instanceof L.CircleMarker && layer._corridorInfo) {
+      const isMatch = layer._corridorInfo.name === corridorName;
+
+      if (isMatch) {
+        // Highlighted route - larger, more visible
+        layer.setStyle({
+          radius: 3,
+          fillOpacity: 0.95,
+          weight: 1.5
+        });
+      } else {
+        // Other routes - smaller, dimmed
+        layer.setStyle({
+          radius: 1,
+          fillOpacity: 0.2,
+          weight: 0.3
+        });
+      }
     }
   });
 }
@@ -677,21 +894,16 @@ function updateMapMarkers(sites) {
     {
       name: 'Stirling Hwy / Mounts Bay Rd',
       shortName: 'Nedlands-City',
-      filter: 'Stirling Hwy @ Winthrop|Stirling Hwy @ Broadway|Mounts Bay Rd',
-      start: L.latLng(-31.9812, 115.8148),     // Winthrop Ave, Nedlands (near SCGH/UWA)
-      end: L.latLng(-31.963231, 115.842311),   // Point Lewis (Malcolm St)
-      label: 'Winthrop Ave → Point Lewis',
+      filter: 'Mounts Bay Rd',
+      start: L.latLng(-31.9755360, 115.8180240),  // Stirling Hwy meets Mounts Bay Rd
+      end: L.latLng(-31.963231, 115.842311),      // Point Lewis (Malcolm St)
+      label: 'Kings Park → Point Lewis',
       waypoints: [
-        // Stirling Highway section (Winthrop Ave → Broadway → Kings Park)
-        // CORRECTED: OSM-exact coordinates for pinpoint accuracy
-        L.latLng(-31.9805, 115.8150),   // Between Winthrop and Broadway
-        L.latLng(-31.9795, 115.8152),   // Approaching Broadway
-        L.latLng(-31.9785, 115.8156),   // Broadway intersection - FIXED (was 115.8185)
-        L.latLng(-31.9770527, 115.8141985), // Transition point - OSM EXACT
-        L.latLng(-31.9757418, 115.8178419), // Near Broadway/Kings Park - OSM EXACT
-        L.latLng(-31.9755360, 115.8180240), // Where Stirling Hwy meets Mounts Bay Rd - OSM EXACT
-        // Mounts Bay Road section (Kings Park → Malcolm St) - existing waypoints
-        L.latLng(-31.9728911, 115.8265899),
+        // Mounts Bay Road section ONLY (Kings Park → Malcolm St)
+        // Route starts where Stirling Hwy meets Mounts Bay Rd, heading east to CBD
+        L.latLng(-31.9755360, 115.8180240), // Start: Stirling Hwy meets Mounts Bay Rd
+        L.latLng(-31.9733899, 115.8256410), // Kings Park - CORRECTED OSM EXACT
+        L.latLng(-31.9728911, 115.8265899), // Along Mounts Bay Rd
         L.latLng(-31.9726546, 115.8274435),
         L.latLng(-31.9724305, 115.8289419),
         L.latLng(-31.9722547, 115.8308715),
@@ -1860,6 +2072,21 @@ async function init() {
     }
   });
 
+  // Route selector dropdown
+  const routeSelect = document.getElementById('route-select');
+  if (routeSelect) {
+    routeSelect.addEventListener('change', (e) => {
+      const selectedRoute = e.target.value;
+      handleRouteSelection(selectedRoute);
+    });
+  }
+
+  // Live mode toggle button
+  const liveToggleBtn = document.getElementById('live-toggle-btn');
+  if (liveToggleBtn) {
+    liveToggleBtn.addEventListener('click', toggleLiveMode);
+  }
+
   // Network tabs
   document.querySelectorAll('.network-tab').forEach(tab => {
     tab.addEventListener('click', async () => {
@@ -1933,6 +2160,9 @@ window.addEventListener('DOMContentLoaded', init);
 window.addEventListener('beforeunload', () => {
   if (refreshTimer) {
     clearInterval(refreshTimer);
+  }
+  if (liveRefreshTimer) {
+    clearInterval(liveRefreshTimer);
   }
   if (trafficChart) {
     trafficChart.destroy();
