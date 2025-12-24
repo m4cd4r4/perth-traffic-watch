@@ -370,8 +370,11 @@ docker restart perth-traffic-api
 
 ### Frontend not updating after deploy
 **Symptoms**: Changes don't appear on swanflow.com.au
-**Cause**: CDN cache propagation delay (5-15 minutes)
-**Fix**: Wait or hard refresh browser (Ctrl+Shift+R)
+**Cause**: CDN cache or browser cache serving stale files
+**Fix**:
+1. Deploy with `vercel --prod --yes --force` to invalidate CDN cache
+2. Hard refresh browser (Ctrl+Shift+R)
+3. Cache headers in `vercel.json` now set to `no-cache` for HTML and `must-revalidate` for CSS/JS
 
 ### Backend connection refused
 **Symptoms**: `ERR_CONNECTION_REFUSED` or timeout
