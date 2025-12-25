@@ -927,6 +927,39 @@ header h1 {
   animation: pulse 2s ease-in-out infinite;
 }
 
+/* Main Roads WA tab styling */
+.network-tab.mainroads-tab {
+  border-color: #1a5276;
+}
+
+.network-tab.mainroads-tab:hover {
+  border-color: #f39c12;
+  background: rgba(26, 82, 118, 0.3);
+}
+
+.network-tab.mainroads-tab.active {
+  background: linear-gradient(135deg, #0c2340 0%, #1a5276 100%);
+  border-color: #f39c12;
+  color: #ffffff;
+}
+
+.network-tab.mainroads-tab .tab-count.mainroads-live {
+  background: #f39c12;
+  color: #0c2340;
+  font-weight: 800;
+  animation: mainroads-pulse 1.5s ease-in-out infinite;
+}
+
+.network-tab.mainroads-tab.active .tab-count.mainroads-live {
+  background: #f39c12;
+  box-shadow: 0 0 8px rgba(243, 156, 18, 0.6);
+}
+
+@keyframes mainroads-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
 .network-info {
   padding: 1rem;
   background: var(--card-bg);
