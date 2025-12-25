@@ -898,7 +898,10 @@ header h1 {
 }
 
 .network-tab .tab-icon {
-  font-size: 1.5rem;
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  flex-shrink: 0;
 }
 
 .network-tab .tab-label {
@@ -2730,7 +2733,8 @@ body.map-fullscreen {
   }
 
   .network-tab .tab-icon {
-    font-size: 1.25rem;
+    width: 20px;
+    height: 20px;
   }
 
   .network-tab .tab-label {
@@ -3329,8 +3333,10 @@ body.map-fullscreen {
   }
 
   .mobile-bottom-nav .nav-icon {
-    font-size: 1.25rem;
-    line-height: 1;
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    flex-shrink: 0;
   }
 
   .mobile-bottom-nav .nav-label {

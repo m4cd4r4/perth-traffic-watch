@@ -12,7 +12,7 @@
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
-  <link rel="stylesheet" href="styles.css?v=20251225-21">
+  <link rel="stylesheet" href="styles.css?v=20251225-22">
 </head>
 <body>
   <div class="container">
@@ -162,22 +162,37 @@
     <div class="network-selector">
       <div class="network-tabs">
         <button type="button" class="network-tab active" data-network="arterial">
-          <span class="tab-icon">🚗</span>
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 17a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm10 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
+            <path d="M5 17H3v-4l2-3h6l4 3h4v4h-2m-8 0h4"/>
+            <path d="M6 10V7h4v3"/>
+          </svg>
           <span class="tab-label">Arterial Roads</span>
           <span class="tab-count" id="arterial-count">22</span>
         </button>
         <button type="button" class="network-tab" data-network="freeway">
-          <span class="tab-icon">🛣️</span>
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 19h16M4 5h16"/>
+            <path d="M7 5v14M12 5v14M17 5v14"/>
+            <path d="M4 12h16" stroke-dasharray="2 2"/>
+          </svg>
           <span class="tab-label">Freeways</span>
           <span class="tab-count" id="freeway-count">30</span>
         </button>
         <button type="button" class="network-tab" data-network="all">
-          <span class="tab-icon">🗺️</span>
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="10" r="3"/>
+            <path d="M12 21c-4-4-6-7-6-11a6 6 0 1 1 12 0c0 4-2 7-6 11Z"/>
+          </svg>
           <span class="tab-label">All Perth</span>
           <span class="tab-count" id="all-count">52</span>
         </button>
         <button type="button" class="network-tab" data-network="terminal">
-          <span class="tab-icon">💻</span>
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="4" width="18" height="12" rx="2"/>
+            <path d="M7 20h10M12 16v4"/>
+            <path d="M7 9l2 2-2 2M12 13h4"/>
+          </svg>
           <span class="tab-label">Live Feed</span>
           <span class="tab-count live-indicator">●</span>
         </button>
@@ -347,27 +362,45 @@
   <!-- Mobile Bottom Navigation -->
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation">
     <button type="button" class="nav-item active" data-section="hero">
-      <span class="nav-icon">🏠</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M3 12l9-9 9 9"/>
+        <path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/>
+      </svg>
       <span class="nav-label">Home</span>
     </button>
     <button type="button" class="nav-item" data-section="map">
-      <span class="nav-icon">🗺️</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="10" r="3"/>
+        <path d="M12 21c-4-4-6-7-6-11a6 6 0 1 1 12 0c0 4-2 7-6 11Z"/>
+      </svg>
       <span class="nav-label">Map</span>
     </button>
     <button type="button" class="nav-item" data-section="flow">
-      <span class="nav-icon">🚗</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M9 17a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm10 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
+        <path d="M5 17H3v-4l2-3h6l4 3h4v4h-2m-8 0h4"/>
+      </svg>
       <span class="nav-label">Flow</span>
     </button>
     <button type="button" class="nav-item" data-section="chart">
-      <span class="nav-icon">📊</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M3 3v18h18"/>
+        <path d="M7 16v-4M11 16v-8M15 16v-5M19 16v-7"/>
+      </svg>
       <span class="nav-label">Stats</span>
     </button>
     <button type="button" class="nav-item" data-section="table">
-      <span class="nav-icon">📋</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <path d="M3 9h18M3 15h18M9 3v18"/>
+      </svg>
       <span class="nav-label">Log</span>
     </button>
     <a href="knowledge.html" class="nav-item nav-link">
-      <span class="nav-icon">📚</span>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14l-8-3-8 3Z"/>
+        <path d="M8 7h8M8 11h6"/>
+      </svg>
       <span class="nav-label">Learn</span>
     </a>
   </nav>
@@ -376,6 +409,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="app.js?v=20251225-21"></script>
+  <script src="app.js?v=20251225-22"></script>
 </body>
 </html>
