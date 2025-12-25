@@ -12,7 +12,7 @@
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
-  <link rel="stylesheet" href="styles.css?v=20251225-22">
+  <link rel="stylesheet" href="styles.css?v=20251225-26">
 </head>
 <body>
   <div class="container">
@@ -258,6 +258,37 @@
 
     <!-- Traffic Flow Journey Visualization - Two Column Layout -->
     <div class="journey-grid" id="section-flow">
+      <!-- Perth-Wide Summary (shown in All Perth view) -->
+      <div class="perth-summary" id="perth-summary" style="display: none;">
+        <div class="perth-summary-content">
+          <div class="perth-summary-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+              <path d="M2 12h20"/>
+            </svg>
+          </div>
+          <div class="perth-summary-stats">
+            <div class="perth-stat">
+              <span class="perth-stat-value" id="perth-total-sites">52</span>
+              <span class="perth-stat-label">Monitoring Sites</span>
+            </div>
+            <div class="perth-stat">
+              <span class="perth-stat-value" id="perth-avg-speed">--</span>
+              <span class="perth-stat-label">Avg. Speed (km/h)</span>
+            </div>
+            <div class="perth-stat">
+              <span class="perth-stat-value" id="perth-total-journey">--</span>
+              <span class="perth-stat-label">Combined Journey</span>
+            </div>
+            <div class="perth-stat perth-status-stat">
+              <span class="perth-status-badge" id="perth-overall-status">FLOWING</span>
+              <span class="perth-stat-label">Overall Status</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Arterial Roads Column (Left) -->
       <div class="journey-container journey-arterial">
         <h2 id="flow-title-arterial">Mounts Bay Road</h2>
@@ -409,6 +440,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="app.js?v=20251225-22"></script>
+  <script src="app.js?v=20251225-26"></script>
 </body>
 </html>

@@ -35,16 +35,13 @@
 }
 
 /* ============================================================================
-   NAVIGATION BAR
+   HEADER (matching index.html header)
    ============================================================================ */
 
-.knowledge-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
+.knowledge-header {
   background: var(--card-bg);
   border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -52,38 +49,133 @@
   -webkit-backdrop-filter: blur(10px);
 }
 
-.nav-back {
+.knowledge-header .header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.knowledge-header .brand-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.knowledge-header .brand {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.2s;
+  gap: 0.75rem;
 }
 
-.nav-back:hover {
-  color: var(--primary-dark);
-  transform: translateX(-3px);
-}
-
-.back-icon {
-  font-size: 1.25rem;
-}
-
-.nav-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.knowledge-header .brand h1 {
   font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.75rem;
   font-weight: 800;
-  font-size: 1.25rem;
   color: var(--primary);
+  margin: 0;
+  letter-spacing: -0.5px;
 }
 
-.brand-icon {
-  font-size: 1.5rem;
+.knowledge-header .brand-logo {
+  height: 40px;
+  width: auto;
+}
+
+.knowledge-header .light-logo {
+  display: block;
+}
+
+.knowledge-header .dark-logo {
+  display: none;
+}
+
+[data-theme="dark"] .knowledge-header .light-logo {
+  display: none;
+}
+
+[data-theme="dark"] .knowledge-header .dark-logo {
+  display: block;
+}
+
+.knowledge-header .subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.knowledge-header .header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.knowledge-header .header-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.knowledge-header .header-nav-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.knowledge-header .header-nav-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.knowledge-header .nav-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.knowledge-header .theme-toggle {
+  margin-left: 0.5rem;
+}
+
+/* Legacy nav styles (kept for mobile fallback) */
+.knowledge-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .knowledge-header {
+    padding: 0.5rem 1rem;
+  }
+
+  .knowledge-header .nav-text {
+    display: none;
+  }
+
+  .knowledge-header .header-nav-btn {
+    padding: 0.5rem;
+  }
+
+  .knowledge-header .subtitle {
+    display: none;
+  }
+
+  .knowledge-header .brand h1 {
+    font-size: 1.25rem;
+  }
+
+  .knowledge-header .brand-logo {
+    height: 30px;
+  }
 }
 
 /* ============================================================================
@@ -273,7 +365,14 @@
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.card-icon-wrapper .card-icon {
+  width: 24px;
+  height: 24px;
+  stroke: white;
+  color: white;
 }
 
 .card-icon-wrapper.algorithm {

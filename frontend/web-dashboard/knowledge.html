@@ -11,25 +11,50 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css?v=20251225-03">
-  <link rel="stylesheet" href="knowledge.css?v=20251225-01">
+  <link rel="stylesheet" href="knowledge.css?v=20251225-23">
 </head>
 <body>
   <div class="knowledge-page">
-    <!-- Navigation Bar -->
-    <nav class="knowledge-nav">
-      <a href="index.html" class="nav-back">
-        <span class="back-icon">&larr;</span>
-        <span>Back to Dashboard</span>
-      </a>
-      <div class="nav-brand">
-        <span class="brand-icon">🦢</span>
-        <span class="brand-text">SwanFlow</span>
+    <!-- Header (matching index.html) -->
+    <header class="knowledge-header">
+      <div class="header-content">
+        <div class="brand-wrapper">
+          <div class="brand">
+            <img src="swan-logo-light.png" alt="SwanFlow" class="brand-logo light-logo">
+            <img src="swan-logo-dark.png" alt="SwanFlow" class="brand-logo dark-logo">
+            <h1>SwanFlow</h1>
+          </div>
+          <p class="subtitle">Real-time vehicle detection using Edge AI</p>
+        </div>
+        <div class="header-actions">
+          <a href="index.html" class="header-nav-btn" title="Dashboard">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            <span class="nav-text">Dashboard</span>
+          </a>
+          <a href="knowledge.html" class="header-nav-btn active" title="Technical Documentation">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            <span class="nav-text">Technical Docs</span>
+          </a>
+          <div class="theme-toggle">
+            <button type="button" id="theme-toggle-btn" class="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+              <span class="icon-sun">☀️</span>
+              <span class="icon-moon">🌙</span>
+            </button>
+          </div>
+        </div>
       </div>
-      <button type="button" id="theme-toggle-btn" class="theme-btn" aria-label="Toggle dark mode">
-        <span class="icon-sun">☀️</span>
-        <span class="icon-moon">🌙</span>
-      </button>
-    </nav>
+    </header>
 
     <!-- Hero Section -->
     <header class="knowledge-hero">
@@ -72,7 +97,13 @@
         <article class="knowledge-card" data-category="algorithm">
           <div class="card-header">
             <div class="card-icon-wrapper algorithm">
-              <span class="card-icon">🧠</span>
+              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.4V11h3a3 3 0 0 1 3 3v1"/>
+                <path d="M12 2a4 4 0 0 0-4 4c0 1.5.8 2.8 2 3.4V11H7a3 3 0 0 0-3 3v1"/>
+                <circle cx="12" cy="6" r="2"/>
+                <path d="M5 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm14 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/>
+                <path d="M12 14v4"/>
+              </svg>
             </div>
             <div class="card-title-group">
               <h2>Traffic Flow Algorithm</h2>
@@ -166,7 +197,14 @@ corridors: {
         <article class="knowledge-card" data-category="ml">
           <div class="card-header">
             <div class="card-icon-wrapper ml">
-              <span class="card-icon">🤖</span>
+              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="10" rx="2"/>
+                <circle cx="12" cy="5" r="3"/>
+                <path d="M12 8v3"/>
+                <circle cx="8" cy="16" r="1"/>
+                <circle cx="16" cy="16" r="1"/>
+                <path d="M9 19h6"/>
+              </svg>
             </div>
             <div class="card-title-group">
               <h2>Edge AI & ML Models</h2>
@@ -275,7 +313,11 @@ TfLiteTensor* input = interpreter->input(0);
         <article class="knowledge-card" data-category="hardware">
           <div class="card-header">
             <div class="card-icon-wrapper hardware">
-              <span class="card-icon">🔧</span>
+              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2"/>
+                <rect x="9" y="9" width="6" height="6"/>
+                <path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/>
+              </svg>
             </div>
             <div class="card-title-group">
               <h2>Hardware Architecture</h2>
@@ -382,7 +424,17 @@ TfLiteTensor* input = interpreter->input(0);
         <article class="knowledge-card" data-category="infrastructure">
           <div class="card-header">
             <div class="card-icon-wrapper infrastructure">
-              <span class="card-icon">🔄</span>
+              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3v6"/>
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 15v6"/>
+                <path d="M5.6 5.6l3.5 3.5"/>
+                <path d="M14.9 14.9l3.5 3.5"/>
+                <path d="M3 12h6"/>
+                <path d="M15 12h6"/>
+                <path d="M5.6 18.4l3.5-3.5"/>
+                <path d="M14.9 9.1l3.5-3.5"/>
+              </svg>
             </div>
             <div class="card-title-group">
               <h2>Data Pipeline</h2>
@@ -495,7 +547,15 @@ CREATE TABLE sites (
         <article class="knowledge-card" data-category="algorithm">
           <div class="card-header">
             <div class="card-icon-wrapper algorithm">
-              <span class="card-icon">🛣️</span>
+              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19h16"/>
+                <path d="M4 5h16"/>
+                <path d="M8 5v14"/>
+                <path d="M16 5v14"/>
+                <path d="M4 12h16" stroke-dasharray="3 3"/>
+                <circle cx="12" cy="9" r="1.5" fill="currentColor"/>
+                <circle cx="12" cy="15" r="1.5" fill="currentColor"/>
+              </svg>
             </div>
             <div class="card-title-group">
               <h2>Corridor Intelligence</h2>
@@ -598,7 +658,11 @@ CREATE TABLE sites (
         <article class="knowledge-card" data-category="infrastructure">
           <div class="card-header">
             <div class="card-icon-wrapper infrastructure">
-              <span class="card-icon">☁️</span>
+              <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.5 19H9a7 7 0 1 1 6.7-9h1.8a4.5 4.5 0 1 1 0 9Z"/>
+                <path d="M12 13v5"/>
+                <path d="M10 17l2 2 2-2"/>
+              </svg>
             </div>
             <div class="card-title-group">
               <h2>Deployment & Infrastructure</h2>
