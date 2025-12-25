@@ -872,6 +872,7 @@ function updateDotSizeForZoom() {
 
 // Route selector mapping to corridor names
 const routeCorridorMap = {
+  'stirling-highway': ['Stirling Hwy / Mounts Bay Rd', 'Stirling Highway - Claremont/Cottesloe', 'Stirling Highway - Mosman Park'],
   'stirling-mounts-bay': 'Stirling Hwy / Mounts Bay Rd',
   'stirling-claremont': 'Stirling Highway - Claremont/Cottesloe',
   'stirling-mosman': 'Stirling Highway - Mosman Park',
@@ -881,6 +882,7 @@ const routeCorridorMap = {
 
 // Corridor center coordinates for map panning
 const corridorCenters = {
+  'stirling-highway': { lat: -31.985, lng: 115.795, zoom: 13 },
   'stirling-mounts-bay': { lat: -31.972, lng: 115.830, zoom: 14 },
   'stirling-claremont': { lat: -31.988, lng: 115.775, zoom: 14 },
   'stirling-mosman': { lat: -32.015, lng: 115.755, zoom: 14 },
@@ -908,16 +910,17 @@ function handleRouteSelection(routeValue) {
     // "All Routes" selected - reset to default view
     resetRouteHighlighting();
     if (trafficMap) {
-      trafficMap.flyTo([-31.995, 115.785], 12, { duration: 1 });
+      trafficMap.flyTo([-31.965, 115.82], 13, { duration: 1 });
     }
     return;
   }
 
-  const corridorName = routeCorridorMap[routeValue];
-  if (!corridorName) return;
+  const corridorNames = routeCorridorMap[routeValue];
+  if (!corridorNames) return;
 
   // Highlight selected corridor, dim others
-  highlightCorridorByName(corridorName);
+  // corridorNames can be string or array (for "Stirling Highway All")
+  highlightCorridorByName(corridorNames);
 
   // Pan to corridor center
   const center = corridorCenters[routeValue];
@@ -929,7 +932,9 @@ function handleRouteSelection(routeValue) {
 /**
  * Highlight a specific corridor by name, dimming all others
  */
-function highlightCorridorByName(corridorName) {
+function highlightCorridorByName(corridorNames) {
+  // Normalize to array for consistent handling
+  const namesToMatch = Array.isArray(corridorNames) ? corridorNames : [corridorNames];
   if (!trafficMap) return;
 
   const baseRadius = getBaseRadiusForZoom();
@@ -937,7 +942,7 @@ function highlightCorridorByName(corridorName) {
 
   trafficMap.eachLayer(layer => {
     if (layer instanceof L.CircleMarker && layer._corridorInfo) {
-      const isMatch = layer._corridorInfo.name === corridorName;
+      const isMatch = namesToMatch.includes(layer._corridorInfo.name);
 
       if (isMatch) {
         // Highlighted route - larger, more visible
@@ -1026,11 +1031,11 @@ function animateRouteArrow(siteName) {
 
 function initMap() {
   // Center on SwanFlow traffic corridor
-  const center = [-31.995, 115.785];
+  const center = [-31.965, 115.82]; // Optimized to show all arterials at 1km scale
 
   trafficMap = L.map('traffic-map', {
     center: center,
-    zoom: 12,
+    zoom: 13,
     zoomControl: true,
     attributionControl: true
   });
@@ -1082,7 +1087,7 @@ function initMap() {
 
   // Set default based on theme
   const isDark = currentTheme === 'dark';
-  const defaultLayer = isDark ? baseMaps['Dark Mode'] : baseMaps['Satellite'];
+  const defaultLayer = isDark ? baseMaps['Dark Mode'] : baseMaps['Street Map'];
   defaultLayer.addTo(trafficMap);
 
   // Add scale control (bottom left)
