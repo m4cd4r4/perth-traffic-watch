@@ -4,7 +4,7 @@
 
 // Configuration
 const API_BASE_URL = window.location.hostname === 'localhost'
-  ? 'http://localhost:3000'  // Local dev: separate frontend server
+  ? 'https://swanflow.com.au/traffic'  // Local dev: separate frontend server
   : 'https://swanflow.com.au/traffic';  // Production: Vultr Sydney VPS via nginx proxy
 
 const REFRESH_INTERVAL = 60000; // 60 seconds (normal mode)
@@ -2512,4 +2512,102 @@ window.addEventListener('beforeunload', () => {
   if (trafficChart) {
     trafficChart.destroy();
   }
+});
+
+// ============================================================================
+// MOBILE BOTTOM NAVIGATION
+// Smooth scroll to sections with active state management
+// ============================================================================
+
+function initMobileBottomNav() {
+  const bottomNav = document.getElementById('mobile-bottom-nav');
+  if (!bottomNav) return;
+
+  const navItems = bottomNav.querySelectorAll('.nav-item');
+  const sections = {
+    hero: document.getElementById('section-hero'),
+    map: document.getElementById('section-map'),
+    flow: document.getElementById('section-flow'),
+    chart: document.getElementById('section-chart'),
+    table: document.getElementById('section-table')
+  };
+
+  // Click handler for nav items
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const sectionId = item.dataset.section;
+      const section = sections[sectionId];
+
+      if (section) {
+        // Smooth scroll to section
+        section.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+
+        // Update active state
+        setActiveNavItem(sectionId);
+      }
+    });
+  });
+
+  // Track scroll position to update active nav item
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      updateActiveNavOnScroll(sections, navItems);
+    }, 100);
+  }, { passive: true });
+}
+
+function setActiveNavItem(sectionId) {
+  const bottomNav = document.getElementById('mobile-bottom-nav');
+  if (!bottomNav) return;
+
+  bottomNav.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.remove('active');
+    if (item.dataset.section === sectionId) {
+      item.classList.add('active');
+    }
+  });
+}
+
+function updateActiveNavOnScroll(sections, navItems) {
+  const scrollTop = window.scrollY;
+  const windowHeight = window.innerHeight;
+
+  // Find which section is most visible
+  let activeSection = 'hero';
+  let maxVisibility = 0;
+
+  Object.entries(sections).forEach(([id, section]) => {
+    if (!section) return;
+
+    const rect = section.getBoundingClientRect();
+    const sectionTop = rect.top;
+    const sectionBottom = rect.bottom;
+
+    // Calculate how much of the section is visible in viewport
+    const visibleTop = Math.max(0, sectionTop);
+    const visibleBottom = Math.min(windowHeight, sectionBottom);
+    const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+
+    // Weight sections near the top of viewport more heavily
+    const topBonus = sectionTop < windowHeight / 3 && sectionTop > -100 ? 200 : 0;
+    const visibility = visibleHeight + topBonus;
+
+    if (visibility > maxVisibility) {
+      maxVisibility = visibility;
+      activeSection = id;
+    }
+  });
+
+  setActiveNavItem(activeSection);
+}
+
+// Initialize bottom nav after DOM is ready
+window.addEventListener('DOMContentLoaded', () => {
+  // Delay slightly to ensure all elements are rendered
+  setTimeout(initMobileBottomNav, 100);
 });

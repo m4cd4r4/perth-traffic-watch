@@ -2351,3 +2351,102 @@ body.map-fullscreen {
     z-index: 1000 !important;
   }
 }
+
+/* ============================================================================
+   MOBILE BOTTOM NAVIGATION
+   iOS/Android style fixed bottom nav with glassmorphism
+   ============================================================================ */
+
+.mobile-bottom-nav {
+  display: none; /* Hidden on desktop */
+}
+
+@media (max-width: 768px) {
+  /* Add bottom padding for bottom nav */
+  .container {
+    padding-bottom: 80px !important;
+  }
+
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+
+    /* Glassmorphism */
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.1);
+
+    /* Safe area for notched phones */
+    padding-bottom: env(safe-area-inset-bottom, 0);
+
+    justify-content: space-around;
+    align-items: stretch;
+  }
+
+  [data-theme="dark"] .mobile-bottom-nav {
+    background: rgba(26, 26, 42, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .mobile-bottom-nav .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 10px 4px 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text-muted);
+    position: relative;
+    min-height: 56px;
+  }
+
+  .mobile-bottom-nav .nav-item:active {
+    transform: scale(0.95);
+    background: rgba(45, 139, 148, 0.1);
+  }
+
+  .mobile-bottom-nav .nav-item.active {
+    color: var(--primary);
+  }
+
+  .mobile-bottom-nav .nav-item.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 0 0 3px 3px;
+  }
+
+  .mobile-bottom-nav .nav-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .mobile-bottom-nav .nav-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  /* Adjust theme FAB position when bottom nav is visible */
+  .theme-fab {
+    bottom: 80px !important;
+  }
+}

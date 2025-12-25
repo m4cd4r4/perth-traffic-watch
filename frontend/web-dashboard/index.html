@@ -12,7 +12,7 @@
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
-  <link rel="stylesheet" href="styles.css?v=20251225-01">
+  <link rel="stylesheet" href="styles.css?v=20251225-02">
 </head>
 <body>
   <div class="container">
@@ -41,7 +41,7 @@
       </div>
 
       <!-- Hero Status Card - "Should I Drive Now?" -->
-      <div class="hero-status-card">
+      <div class="hero-status-card" id="section-hero">
         <div class="hero-label">Perth CBD → Fremantle Corridor</div>
         <div class="hero-metric" id="corridor-status">Loading...</div>
         <div class="hero-speed">Average Speed: <span id="avg-speed-hero">--</span> km/h</div>
@@ -136,7 +136,7 @@
     </div>
 
     <!-- Map and Stats Row -->
-    <div class="map-stats-row">
+    <div class="map-stats-row" id="section-map">
       <!-- Live Map -->
       <div class="map-container">
         <div class="map-header">
@@ -207,7 +207,7 @@
     </div>
 
     <!-- Traffic Flow Corridor (Dynamically rendered based on network selection) -->
-    <div class="flow-container" id="flow-container">
+    <div class="flow-container" id="section-flow">
       <h2 id="flow-title">Mounts Bay Road Traffic Flow</h2>
       <div class="flow-corridor" id="flow-corridor">
         <!-- Flow sites will be dynamically rendered -->
@@ -221,13 +221,13 @@
     </div>
 
     <!-- Chart -->
-    <div class="chart-container">
+    <div class="chart-container" id="section-chart">
       <h2>Hourly Traffic Flow</h2>
       <canvas id="traffic-chart"></canvas>
     </div>
 
     <!-- Recent Detections Table -->
-    <div class="table-container">
+    <div class="table-container" id="section-table">
       <h2>Recent Detections</h2>
       <table id="detections-table">
         <thead>
@@ -268,10 +268,34 @@
     <span class="icon-moon">🌙</span>
   </button>
 
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation">
+    <button type="button" class="nav-item active" data-section="hero">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </button>
+    <button type="button" class="nav-item" data-section="map">
+      <span class="nav-icon">🗺️</span>
+      <span class="nav-label">Map</span>
+    </button>
+    <button type="button" class="nav-item" data-section="flow">
+      <span class="nav-icon">🚗</span>
+      <span class="nav-label">Flow</span>
+    </button>
+    <button type="button" class="nav-item" data-section="chart">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">Stats</span>
+    </button>
+    <button type="button" class="nav-item" data-section="table">
+      <span class="nav-icon">📋</span>
+      <span class="nav-label">Log</span>
+    </button>
+  </nav>
+
   <!-- Libraries -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="app.js?v=20251225-01"></script>
+  <script src="app.js?v=20251225-02"></script>
 </body>
 </html>
