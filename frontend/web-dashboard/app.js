@@ -2112,6 +2112,75 @@ function updateBothJourneyTimelines(arterialSites, freewaySites) {
 }
 
 /**
+ * Update Perth-wide summary banner with combined stats
+ */
+function updatePerthSummary() {
+  // Get journey times from both corridors
+  const arterialTimeEl = document.getElementById('journey-total-time');
+  const freewayTimeEl = document.getElementById('journey-total-time-freeway');
+
+  const arterialTime = arterialTimeEl ? parseInt(arterialTimeEl.textContent.replace(/[^0-9]/g, '')) || 0 : 0;
+  const freewayTime = freewayTimeEl ? parseInt(freewayTimeEl.textContent.replace(/[^0-9]/g, '')) || 0 : 0;
+  const combinedTime = arterialTime + freewayTime;
+
+  // Get status from both corridors
+  const arterialBadge = document.getElementById('journey-status-badge');
+  const freewayBadge = document.getElementById('journey-status-badge-freeway');
+
+  // Determine overall status (worst of the two)
+  const statusPriority = { 'gridlock': 4, 'heavy': 3, 'moderate': 2, 'flowing': 1 };
+  let arterialStatus = 'flowing';
+  let freewayStatus = 'flowing';
+
+  if (arterialBadge) {
+    if (arterialBadge.classList.contains('gridlock')) arterialStatus = 'gridlock';
+    else if (arterialBadge.classList.contains('heavy')) arterialStatus = 'heavy';
+    else if (arterialBadge.classList.contains('moderate')) arterialStatus = 'moderate';
+  }
+
+  if (freewayBadge) {
+    if (freewayBadge.classList.contains('gridlock')) freewayStatus = 'gridlock';
+    else if (freewayBadge.classList.contains('heavy')) freewayStatus = 'heavy';
+    else if (freewayBadge.classList.contains('moderate')) freewayStatus = 'moderate';
+  }
+
+  // Take the worse status for overall Perth
+  const overallStatus = statusPriority[arterialStatus] > statusPriority[freewayStatus]
+    ? arterialStatus
+    : freewayStatus;
+
+  // Calculate average speed (rough estimate from journey times vs normal)
+  const arterialConfig = journeyCorridorConfigs['arterial'];
+  const freewayConfig = journeyCorridorConfigs['freeway'];
+  const normalArterial = arterialConfig?.normalTime || 7;
+  const normalFreeway = freewayConfig?.normalTime || 12;
+
+  // Estimate speed based on time ratio
+  const arterialRatio = arterialTime > 0 ? normalArterial / arterialTime : 1;
+  const freewayRatio = freewayTime > 0 ? normalFreeway / freewayTime : 1;
+  const avgRatio = (arterialRatio + freewayRatio) / 2;
+  const estimatedAvgSpeed = Math.round(55 * avgRatio); // Base 55 km/h
+
+  // Update the Perth summary elements
+  const avgSpeedEl = document.getElementById('perth-avg-speed');
+  const totalJourneyEl = document.getElementById('perth-total-journey');
+  const overallStatusEl = document.getElementById('perth-overall-status');
+
+  if (avgSpeedEl) {
+    avgSpeedEl.textContent = Math.min(Math.max(estimatedAvgSpeed, 15), 75);
+  }
+
+  if (totalJourneyEl) {
+    totalJourneyEl.textContent = `~${combinedTime} min`;
+  }
+
+  if (overallStatusEl) {
+    overallStatusEl.className = `perth-status-badge ${overallStatus}`;
+    overallStatusEl.textContent = overallStatus.toUpperCase();
+  }
+}
+
+/**
  * Update journey visualization with live data (legacy - updates based on current network)
  */
 function updateJourneyTimeline(sites) {
@@ -2499,12 +2568,20 @@ function getPeriodHours(period) {
 async function switchNetwork(network) {
   currentNetwork = network;
 
-  // Update tab active states
+  // Update tab active states with animation trigger
   document.querySelectorAll('.network-tab').forEach(tab => {
     tab.classList.remove('active');
     if (tab.dataset.network === network) {
       tab.classList.add('active');
     }
+  });
+
+  // Animate content containers - trigger re-animation by removing/adding class
+  const animatedContainers = document.querySelectorAll('.controls, .map-stats-row, .flow-container, .chart-container, .table-container, .journey-grid');
+  animatedContainers.forEach(el => {
+    el.style.animation = 'none';
+    el.offsetHeight; // Trigger reflow
+    el.style.animation = '';
   });
 
   // Show/hide terminal container
@@ -2517,13 +2594,17 @@ async function switchNetwork(network) {
     mainContent.forEach(el => el.style.display = 'none');
     startTerminal();
 
-    // Update network info
+    // Update network info with transition
     const networkInfo = document.getElementById('network-info');
     if (networkInfo) {
-      const infoText = networkInfo.querySelector('p');
-      if (infoText) {
-        infoText.textContent = 'Live simulation feed showing real-time traffic data generation';
-      }
+      networkInfo.classList.add('transitioning');
+      setTimeout(() => {
+        const infoText = networkInfo.querySelector('p');
+        if (infoText) {
+          infoText.textContent = 'Live simulation feed showing real-time traffic data generation';
+        }
+        networkInfo.classList.remove('transitioning');
+      }, 150);
     }
     return;
   } else {
@@ -2533,19 +2614,23 @@ async function switchNetwork(network) {
     stopTerminal();
   }
 
-  // Update network info text
+  // Update network info text with smooth transition
   const networkInfo = document.getElementById('network-info');
   if (networkInfo) {
-    const infoText = networkInfo.querySelector('p');
-    if (infoText) {
-      if (network === 'arterial') {
-        infoText.textContent = 'Monitoring arterial roads: Mounts Bay Road & Stirling Highway';
-      } else if (network === 'freeway') {
-        infoText.textContent = 'Monitoring freeways: Mitchell Freeway (18 sites) & Kwinana Freeway (12 sites)';
-      } else {
-        infoText.textContent = 'Unified SwanFlow traffic view: All arterial roads and freeways (52 monitoring sites)';
+    networkInfo.classList.add('transitioning');
+    setTimeout(() => {
+      const infoText = networkInfo.querySelector('p');
+      if (infoText) {
+        if (network === 'arterial') {
+          infoText.textContent = 'Monitoring arterial roads: Mounts Bay Road & Stirling Highway';
+        } else if (network === 'freeway') {
+          infoText.textContent = 'Monitoring freeways: Mitchell Freeway (18 sites) & Kwinana Freeway (12 sites)';
+        } else {
+          infoText.textContent = 'Unified SwanFlow traffic view: All arterial roads and freeways (52 monitoring sites)';
+        }
       }
-    }
+      networkInfo.classList.remove('transitioning');
+    }, 150);
   }
 
   // Render the appropriate flow corridor for the selected network
@@ -2554,6 +2639,17 @@ async function switchNetwork(network) {
   // Always render both journey timelines (two-column layout shows both)
   renderBothJourneyTimelines();
   document.querySelector('.journey-grid')?.style.setProperty('display', 'grid');
+
+  // Show/hide Perth-wide summary banner based on network
+  const perthSummary = document.getElementById('perth-summary');
+  if (perthSummary) {
+    if (network === 'all') {
+      perthSummary.style.display = 'block';
+      updatePerthSummary();
+    } else {
+      perthSummary.style.display = 'none';
+    }
+  }
 
   // Reset route highlighting when switching networks
   resetRouteHighlighting();

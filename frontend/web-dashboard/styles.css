@@ -938,6 +938,99 @@ header h1 {
 
 .network-info p {
   margin: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* ============================================
+   Network Tab Content Transitions
+   ============================================ */
+
+/* Fade in/out animation for content switching */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* Content containers that animate */
+.controls,
+.map-stats-row,
+.flow-container,
+.chart-container,
+.table-container,
+.journey-grid,
+.journey-container {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* Network info slide transition */
+.network-info {
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.network-info.transitioning {
+  opacity: 0.5;
+  transform: translateX(-5px);
+}
+
+/* Tab indicator animation */
+.network-tab::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background: var(--primary);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.network-tab.active::after {
+  width: 100%;
+}
+
+.network-tab:not(.active)::after {
+  width: 0;
+}
+
+/* Tab icon bounce on active */
+.network-tab.active .tab-icon {
+  animation: tabIconBounce 0.4s ease;
+}
+
+@keyframes tabIconBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Tab count pop animation */
+.network-tab.active .tab-count {
+  animation: tabCountPop 0.3s ease, pulse 2s ease-in-out infinite 0.3s;
+}
+
+@keyframes tabCountPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
 /* Responsive Network Tabs */
@@ -1387,6 +1480,221 @@ header h1 {
 
 .legend-dot.gridlock {
   background: #991b1b;
+}
+
+/* ============================================
+   Perth-Wide Summary Banner (All Perth View)
+   ============================================ */
+
+.perth-summary {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.perth-summary-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.perth-summary-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.perth-summary-icon svg {
+  width: 28px;
+  height: 28px;
+  stroke: white;
+}
+
+.perth-summary-stats {
+  display: flex;
+  flex: 1;
+  gap: 2rem;
+  justify-content: space-around;
+}
+
+.perth-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.perth-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  color: white;
+}
+
+.perth-stat-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.perth-status-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.perth-status-badge.flowing {
+  background: rgba(16, 185, 129, 0.3);
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.perth-status-badge.moderate {
+  background: rgba(245, 158, 11, 0.3);
+  border-color: rgba(245, 158, 11, 0.5);
+}
+
+.perth-status-badge.heavy {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.perth-status-badge.gridlock {
+  background: rgba(153, 27, 27, 0.3);
+  border-color: rgba(153, 27, 27, 0.5);
+}
+
+/* Perth Summary Responsive */
+@media (max-width: 768px) {
+  .perth-summary-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .perth-summary-stats {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .perth-stat {
+    flex: 1 1 40%;
+    min-width: 80px;
+  }
+
+  .perth-stat-value {
+    font-size: 1.25rem;
+  }
+}
+
+/* ============================================
+   Journey Visualization Dark Mode Enhancements
+   ============================================ */
+
+/* Enhanced glow effects in dark mode */
+[data-theme="dark"] .journey-container {
+  border: 1px solid rgba(74, 157, 165, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 40px rgba(74, 157, 165, 0.05);
+}
+
+[data-theme="dark"] .journey-dot {
+  box-shadow: 0 0 12px currentColor;
+}
+
+[data-theme="dark"] .journey-dot.flowing {
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+}
+
+[data-theme="dark"] .journey-dot.moderate {
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+}
+
+[data-theme="dark"] .journey-dot.heavy {
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+}
+
+[data-theme="dark"] .journey-dot.gridlock {
+  box-shadow: 0 0 12px rgba(153, 27, 27, 0.6);
+}
+
+/* Enhanced status badges in dark mode */
+[data-theme="dark"] .journey-status-badge.flowing {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.4);
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+}
+
+[data-theme="dark"] .journey-status-badge.moderate {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.4);
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+[data-theme="dark"] .journey-status-badge.heavy {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.4);
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+[data-theme="dark"] .journey-status-badge.gridlock {
+  background: rgba(153, 27, 27, 0.25);
+  color: #dc2626;
+  border-color: rgba(153, 27, 27, 0.5);
+  text-shadow: 0 0 8px rgba(220, 38, 38, 0.5);
+}
+
+/* Enhanced legend dots glow in dark mode */
+[data-theme="dark"] .legend-dot.flowing {
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+}
+
+[data-theme="dark"] .legend-dot.moderate {
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+[data-theme="dark"] .legend-dot.heavy {
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+[data-theme="dark"] .legend-dot.gridlock {
+  box-shadow: 0 0 8px rgba(153, 27, 27, 0.5);
+}
+
+/* Journey line glow effect in dark mode */
+[data-theme="dark"] .journey-line {
+  box-shadow: 0 0 6px currentColor;
+}
+
+[data-theme="dark"] .journey-line.flowing {
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+}
+
+[data-theme="dark"] .journey-line.moderate {
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+}
+
+[data-theme="dark"] .journey-line.heavy {
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+}
+
+[data-theme="dark"] .journey-line.gridlock {
+  box-shadow: 0 0 6px rgba(153, 27, 27, 0.4);
 }
 
 /* Responsive Journey Timeline */
