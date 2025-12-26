@@ -17,8 +17,8 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-  <div class="knowledge-page">
-    <!-- Header (matching index.html) -->
+  <div class="container">
+    <!-- Header (identical to Dashboard) -->
     <header class="knowledge-header">
       <div class="header-content">
         <div class="brand-wrapper">
@@ -67,10 +67,11 @@
       </div>
     </div>
 
-    <!-- Filter Bar (immediately under header) -->
-    <div class="filter-bar">
-      <div class="filter-bar-content">
-        <span class="filter-label">Filter:</span>
+    <!-- Knowledge Cards Grid -->
+    <main class="knowledge-container">
+      <!-- Filter Bar (inside content area) -->
+      <div class="filter-bar-inline">
+        <span class="filter-label">FILTER:</span>
         <div class="filter-buttons">
           <button type="button" class="filter-btn active" data-target="all">
             <i data-lucide="layers"></i> All
@@ -89,10 +90,6 @@
           </button>
         </div>
       </div>
-    </div>
-
-    <!-- Knowledge Cards Grid -->
-    <main class="knowledge-container">
       <div class="knowledge-grid">
 
         <!-- Card 1: Traffic Flow Algorithm -->
