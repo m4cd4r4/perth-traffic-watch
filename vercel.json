@@ -14,7 +14,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "http://45.77.233.102/api/:path*"
+      "destination": "https://perth-traffic-watch.onrender.com/api/:path*"
     }
   ],
   "routes": [
