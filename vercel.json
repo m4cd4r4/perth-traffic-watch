@@ -1,16 +1,6 @@
 {
   "version": 2,
   "name": "swanflow",
-  "builds": [
-    {
-      "src": "frontend/web-dashboard/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "frontend/landing/**",
-      "use": "@vercel/static"
-    }
-  ],
   "rewrites": [
     {
       "source": "/landing",
