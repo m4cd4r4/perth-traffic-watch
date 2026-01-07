@@ -11,13 +11,11 @@
       "use": "@vercel/static"
     }
   ],
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "https://perth-traffic-watch.onrender.com/api/:path*"
-    }
-  ],
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "https://perth-traffic-watch.onrender.com/api/$1"
+    },
     {
       "src": "/landing",
       "dest": "/frontend/landing/index.html"
