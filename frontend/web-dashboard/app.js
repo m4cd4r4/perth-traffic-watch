@@ -1818,7 +1818,7 @@ function updateFlowCorridor(sites) {
 // Journey Visualization (Road Segment Timeline)
 // ============================================================================
 
-// Journey corridor configuration with segment distances (km)
+// Journey corridor configuration for arterial network only (freeway removed)
 const journeyCorridorConfigs = {
   arterial: {
     title: 'Mounts Bay Road',
@@ -1830,41 +1830,21 @@ const journeyCorridorConfigs = {
       { id: 4, name: 'Fraser', location: 'Malcolm', distanceToNext: 1.2, sitePrefix: 'Mounts Bay Rd @ Malcolm St' },
       { id: 5, name: 'End', location: 'CBD', distanceToNext: 0, sitePrefix: null }
     ]
-  },
-  freeway: {
-    title: 'Mitchell & Kwinana Freeways',
-    normalTime: 12, // Normal travel time in minutes
-    segments: [
-      { id: 'f1', name: 'Start', location: 'Joondalup', distanceToNext: 8.5, sitePrefix: 'Mitchell Fwy @ Joondalup' },
-      { id: 'f2', name: 'Warwick', location: 'Warwick', distanceToNext: 6.0, sitePrefix: 'Mitchell Fwy @ Warwick' },
-      { id: 'f3', name: 'Stirling', location: 'Stirling', distanceToNext: 5.5, sitePrefix: 'Mitchell Fwy @ Stirling' },
-      { id: 'f4', name: 'Narrows', location: 'Narrows', distanceToNext: 4.0, sitePrefix: 'Kwinana Fwy @ Narrows' },
-      { id: 'f5', name: 'Como', location: 'Como', distanceToNext: 5.0, sitePrefix: 'Kwinana Fwy @ Como' },
-      { id: 'f6', name: 'End', location: 'Murdoch', distanceToNext: 0, sitePrefix: null }
-    ]
   }
 };
 
 /**
- * Get traffic status class from speed
+ * Get traffic status class from speed (arterial network only)
  * @param {number} speed - Speed in km/h
- * @param {string} roadType - 'arterial' or 'freeway'
+ * @param {string} roadType - 'arterial' (freeway removed)
  * @returns {string} Status class name
  */
 function getTrafficStatusClass(speed, roadType = 'arterial') {
-  if (roadType === 'freeway') {
-    // Freeway thresholds (100 km/h limit)
-    if (speed >= 80) return 'flowing';
-    if (speed >= 50) return 'moderate';
-    if (speed >= 25) return 'heavy';
-    return 'gridlock';
-  } else {
-    // Arterial thresholds (60 km/h limit)
-    if (speed >= 50) return 'flowing';
-    if (speed >= 30) return 'moderate';
-    if (speed >= 15) return 'heavy';
-    return 'gridlock';
-  }
+  // Arterial thresholds (60 km/h limit)
+  if (speed >= 50) return 'flowing';
+  if (speed >= 30) return 'moderate';
+  if (speed >= 15) return 'heavy';
+  return 'gridlock';
 }
 
 /**
@@ -1937,28 +1917,25 @@ function renderJourneyTimeline(network = 'arterial', timelineId = null) {
 }
 
 /**
- * Render both arterial and freeway journey timelines (two-column layout)
+ * Render arterial journey timeline (freeway removed)
  */
 function renderBothJourneyTimelines() {
-  // Render arterial (left column)
+  // Render arterial timeline only
   renderJourneyTimeline('arterial', 'journey-timeline');
-
-  // Render freeway (right column)
-  renderJourneyTimeline('freeway', 'journey-timeline-freeway');
 }
 
 /**
- * Update journey visualization with live data
+ * Update journey visualization with live data (arterial network only)
  * @param {Array} sites - Array of site data
- * @param {string} network - 'arterial' or 'freeway'
- * @param {string} suffix - Element ID suffix ('' for arterial, '-freeway' for freeway)
+ * @param {string} network - 'arterial' (freeway removed)
+ * @param {string} suffix - Element ID suffix
  */
 function updateJourneyTimelineForNetwork(sites, network, suffix = '') {
-  const config = journeyCorridorConfigs[network];
+  const config = journeyCorridorConfigs.arterial;
   if (!config || !config.segments) return;
 
-  // Determine road type for threshold selection
-  const roadType = network === 'freeway' ? 'freeway' : 'arterial';
+  // Arterial network only
+  const roadType = 'arterial';
 
   // Build a map from site prefix to site data
   const siteDataMap = {};
@@ -2067,62 +2044,38 @@ function updateJourneyTimelineForNetwork(sites, network, suffix = '') {
 }
 
 /**
- * Update both journey timelines (arterial and freeway columns)
+ * Update arterial journey timeline (freeway removed)
  */
 function updateBothJourneyTimelines(arterialSites, freewaySites) {
   updateJourneyTimelineForNetwork(arterialSites, 'arterial', '');
-  updateJourneyTimelineForNetwork(freewaySites, 'freeway', '-freeway');
+  // Freeway removed - freewaySites parameter kept for compatibility
 }
 
 /**
- * Update Perth-wide summary banner with combined stats
+ * Update Perth-wide summary banner with arterial stats (freeway removed)
  */
 function updatePerthSummary() {
-  // Get journey times from both corridors
+  // Get journey time from arterial corridor only
   const arterialTimeEl = document.getElementById('journey-total-time');
-  const freewayTimeEl = document.getElementById('journey-total-time-freeway');
-
   const arterialTime = arterialTimeEl ? parseInt(arterialTimeEl.textContent.replace(/[^0-9]/g, '')) || 0 : 0;
-  const freewayTime = freewayTimeEl ? parseInt(freewayTimeEl.textContent.replace(/[^0-9]/g, '')) || 0 : 0;
-  const combinedTime = arterialTime + freewayTime;
 
-  // Get status from both corridors
+  // Get status from arterial corridor
   const arterialBadge = document.getElementById('journey-status-badge');
-  const freewayBadge = document.getElementById('journey-status-badge-freeway');
 
-  // Determine overall status (worst of the two)
-  const statusPriority = { 'gridlock': 4, 'heavy': 3, 'moderate': 2, 'flowing': 1 };
   let arterialStatus = 'flowing';
-  let freewayStatus = 'flowing';
-
   if (arterialBadge) {
     if (arterialBadge.classList.contains('gridlock')) arterialStatus = 'gridlock';
     else if (arterialBadge.classList.contains('heavy')) arterialStatus = 'heavy';
     else if (arterialBadge.classList.contains('moderate')) arterialStatus = 'moderate';
   }
 
-  if (freewayBadge) {
-    if (freewayBadge.classList.contains('gridlock')) freewayStatus = 'gridlock';
-    else if (freewayBadge.classList.contains('heavy')) freewayStatus = 'heavy';
-    else if (freewayBadge.classList.contains('moderate')) freewayStatus = 'moderate';
-  }
-
-  // Take the worse status for overall Perth
-  const overallStatus = statusPriority[arterialStatus] > statusPriority[freewayStatus]
-    ? arterialStatus
-    : freewayStatus;
-
-  // Calculate average speed (rough estimate from journey times vs normal)
-  const arterialConfig = journeyCorridorConfigs['arterial'];
-  const freewayConfig = journeyCorridorConfigs['freeway'];
+  // Calculate average speed based on arterial time
+  const arterialConfig = journeyCorridorConfigs.arterial;
   const normalArterial = arterialConfig?.normalTime || 7;
-  const normalFreeway = freewayConfig?.normalTime || 12;
 
   // Estimate speed based on time ratio
   const arterialRatio = arterialTime > 0 ? normalArterial / arterialTime : 1;
-  const freewayRatio = freewayTime > 0 ? normalFreeway / freewayTime : 1;
-  const avgRatio = (arterialRatio + freewayRatio) / 2;
-  const estimatedAvgSpeed = Math.round(55 * avgRatio); // Base 55 km/h
+  const estimatedAvgSpeed = Math.round(55 * arterialRatio); // Base 55 km/h for arterial
 
   // Update the Perth summary elements
   const avgSpeedEl = document.getElementById('perth-avg-speed');
@@ -2134,12 +2087,12 @@ function updatePerthSummary() {
   }
 
   if (totalJourneyEl) {
-    totalJourneyEl.textContent = `~${combinedTime} min`;
+    totalJourneyEl.textContent = `~${arterialTime} min`;
   }
 
   if (overallStatusEl) {
-    overallStatusEl.className = `perth-status-badge ${overallStatus}`;
-    overallStatusEl.textContent = overallStatus.toUpperCase();
+    overallStatusEl.className = `perth-status-badge ${arterialStatus}`;
+    overallStatusEl.textContent = arterialStatus.toUpperCase();
   }
 }
 
