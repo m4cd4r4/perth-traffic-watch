@@ -83,8 +83,6 @@
             <option value="stirling-mounts-bay">Stirling Hwy / Mounts Bay Rd</option>
             <option value="stirling-claremont">Stirling Hwy - Claremont</option>
             <option value="stirling-mosman">Stirling Hwy - Mosman Park</option>
-            <option value="mitchell-freeway">Mitchell Freeway</option>
-            <option value="kwinana-freeway">Kwinana Freeway</option>
           </select>
           <div class="hero-map-view-btns">
             <button type="button" class="map-view-btn active" data-view="street">Street</button>
@@ -160,7 +158,7 @@
       <button type="button" class="hero-expand-btn" id="expand-stats-btn" title="Show stats">▶</button>
     </div>
 
-    <!-- Network Selector (Arterial vs Freeway vs Live Feed) -->
+    <!-- Network Selector (Arterial vs Live Feed) -->
     <div class="network-selector">
       <div class="network-tabs">
         <button type="button" class="network-tab active" data-network="arterial">
@@ -171,15 +169,6 @@
           </svg>
           <span class="tab-label">Arterial Roads</span>
           <span class="tab-count" id="arterial-count">22</span>
-        </button>
-        <button type="button" class="network-tab" data-network="freeway">
-          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M4 19h16M4 5h16"/>
-            <path d="M7 5v14M12 5v14M17 5v14"/>
-            <path d="M4 12h16" stroke-dasharray="2 2"/>
-          </svg>
-          <span class="tab-label">Freeways</span>
-          <span class="tab-count" id="freeway-count">30</span>
         </button>
         <button type="button" class="network-tab" data-network="all">
           <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -375,29 +364,7 @@
         </div>
       </div>
 
-      <!-- Freeways Column (Right) -->
-      <div class="journey-container journey-freeway">
-        <h2 id="flow-title-freeway">Mitchell & Kwinana Freeways</h2>
-
-        <!-- Journey Timeline -->
-        <div class="journey-timeline" id="journey-timeline-freeway">
-          <!-- Dynamically rendered journey segments -->
-        </div>
-
-        <!-- Journey Summary -->
-        <div class="journey-summary" id="journey-summary-freeway">
-          <div class="journey-total">
-            <span class="journey-total-label">Total:</span>
-            <span class="journey-total-time" id="journey-total-time-freeway">~15 min</span>
-            <span class="journey-normal-time" id="journey-normal-time-freeway">(normally 12 min)</span>
-          </div>
-          <div class="journey-status-badge" id="journey-status-badge-freeway">
-            <span class="status-text">FLOWING</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Shared Legend (spans both columns) -->
+      <!-- Legend -->
       <div class="journey-legend">
         <span class="legend-item"><span class="legend-dot flowing"></span> Flowing</span>
         <span class="legend-item"><span class="legend-dot moderate"></span> Moderate</span>
@@ -450,16 +417,6 @@
               <path id="route-stirling-mosman" d="M35 260 L25 290 L18 320 L15 355"
                     stroke="var(--success)" stroke-width="5" fill="none" stroke-linecap="round" class="minimap-route"/>
 
-              <!-- === FREEWAYS === -->
-
-              <!-- Mitchell Freeway (CBD north to Karrinyup) -->
-              <path id="route-mitchell" d="M420 130 L425 105 L432 80 L440 55 L450 30 L462 8"
-                    stroke="var(--success)" stroke-width="6" fill="none" stroke-linecap="round" class="minimap-route freeway"/>
-
-              <!-- Kwinana Freeway (CBD south to Murdoch) -->
-              <path id="route-kwinana" d="M420 130 L430 160 L442 195 L455 235 L468 280 L480 330 L488 365"
-                    stroke="var(--success)" stroke-width="6" fill="none" stroke-linecap="round" class="minimap-route freeway"/>
-
               <!-- === LOCATION LABELS === -->
               <!-- Major locations -->
               <text x="435" y="122" class="minimap-label-major">CBD</text>
@@ -484,24 +441,6 @@
               <circle cx="25" cy="290" r="4" fill="var(--text-muted)" opacity="0.4"/>
               <text x="38" y="295" class="minimap-label-suburb">Mosman Pk</text>
 
-              <!-- Freeway markers -->
-              <circle cx="440" cy="55" r="4" fill="var(--text-muted)" opacity="0.4"/>
-              <text x="418" y="50" class="minimap-label-suburb">Leederville</text>
-
-              <circle cx="455" cy="235" r="4" fill="var(--text-muted)" opacity="0.4"/>
-              <text x="433" y="230" class="minimap-label-suburb">Como</text>
-
-              <circle cx="468" cy="280" r="4" fill="var(--text-muted)" opacity="0.4"/>
-              <text x="446" y="275" class="minimap-label-suburb">Manning</text>
-
-              <!-- Direction indicators -->
-              <text x="475" y="45" class="minimap-direction">N ↑</text>
-              <text x="475" y="345" class="minimap-direction">S ↓</text>
-
-              <!-- Freeway labels -->
-              <text x="455" y="70" class="minimap-label-freeway">Mitchell Fwy</text>
-              <text x="470" y="255" class="minimap-label-freeway">Kwinana Fwy</text>
-
               <!-- Alert dots container (populated by JS) -->
               <g id="alert-dots"></g>
             </svg>
@@ -509,7 +448,6 @@
             <!-- Map legend -->
             <div class="minimap-legend">
               <span class="legend-item"><span class="legend-line arterial"></span> Arterial</span>
-              <span class="legend-item"><span class="legend-line freeway"></span> Freeway</span>
             </div>
           </div>
 
@@ -611,38 +549,6 @@
               <div class="trend-stat">
                 <span class="trend-stat-label">Worst Today</span>
                 <span class="trend-stat-value" id="arterial-worst-time">~12 min</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Freeway Trends Card -->
-          <div class="trend-card" data-corridor="freeway">
-            <div class="trend-card-header">
-              <span class="trend-corridor-name">Mitchell & Kwinana Freeways</span>
-              <span class="trend-comparison" id="freeway-trend-comparison">
-                <span class="trend-arrow down">↓</span>
-                <span class="trend-value">1 min faster</span>
-              </span>
-            </div>
-            <div class="trend-chart-mini">
-              <canvas id="freeway-trend-chart" height="60"></canvas>
-            </div>
-            <div class="trend-stats">
-              <div class="trend-stat">
-                <span class="trend-stat-label">Current</span>
-                <span class="trend-stat-value" id="freeway-current-time">~14 min</span>
-              </div>
-              <div class="trend-stat">
-                <span class="trend-stat-label">Avg Today</span>
-                <span class="trend-stat-value" id="freeway-avg-time">~13 min</span>
-              </div>
-              <div class="trend-stat">
-                <span class="trend-stat-label">Best Today</span>
-                <span class="trend-stat-value" id="freeway-best-time">~11 min</span>
-              </div>
-              <div class="trend-stat">
-                <span class="trend-stat-label">Worst Today</span>
-                <span class="trend-stat-value" id="freeway-worst-time">~18 min</span>
               </div>
             </div>
           </div>
