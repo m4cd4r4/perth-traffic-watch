@@ -1494,24 +1494,48 @@ header h1 {
   margin-bottom: 2rem;
 }
 
-/* Inline Journey Time Trends (in journey-grid) */
+/* Inline Journey Time Trends (in journey-grid) - Compact version */
 .historical-trends.inline-trends {
   background: var(--card-bg);
-  padding: 1.5rem;
+  padding: 1rem 1.25rem;
   border-radius: 12px;
   box-shadow: 0 2px 8px var(--shadow);
   margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .historical-trends.inline-trends .trends-header {
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   padding-bottom: 0;
   border-bottom: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .historical-trends.inline-trends .trends-header h3 {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.historical-trends.inline-trends .trends-header h3 .trends-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.historical-trends.inline-trends .trends-period-selector {
+  gap: 0.25rem;
+}
+
+.historical-trends.inline-trends .trends-period-selector .period-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
 }
 
 .historical-trends.inline-trends .trends-grid {
@@ -1522,6 +1546,38 @@ header h1 {
   background: transparent;
   padding: 0;
   box-shadow: none;
+}
+
+.historical-trends.inline-trends .trend-card-header {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.historical-trends.inline-trends .trend-corridor-name {
+  font-size: 0.85rem;
+}
+
+.historical-trends.inline-trends .trend-chart-mini {
+  height: 50px;
+  margin-bottom: 0.5rem;
+}
+
+.historical-trends.inline-trends .trend-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.historical-trends.inline-trends .trend-stat {
+  padding: 0.4rem;
+}
+
+.historical-trends.inline-trends .trend-stat-label {
+  font-size: 0.6rem;
+}
+
+.historical-trends.inline-trends .trend-stat-value {
+  font-size: 0.85rem;
 }
 
 /* Column labels */
