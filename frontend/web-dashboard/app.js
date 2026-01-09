@@ -2541,43 +2541,27 @@ async function switchNetwork(network) {
       }, 150);
     }
 
-    // Invalidate map size FIRST, then fetch and display incidents
-    setTimeout(() => {
-      if (trafficMap) {
-        trafficMap.invalidateSize();
-        // Set a default Perth view while loading incidents
-        trafficMap.setView([-31.95, 115.86], 11);
-      }
+    // Fix map loading: invalidate size multiple times as layout settles
+    if (trafficMap) {
+      // Immediate invalidate
+      trafficMap.invalidateSize();
 
-      // Now fetch incidents and display as markers
-      fetchMainRoadsIncidents().then(() => {
-        addMainRoadsIncidentsToMap();
-        displayMainRoadsIncidents();
-      });
-    }, 150);
-    return;
-  } else if (network === 'terminal') {
-    // Show terminal feed, no iframe needed
-    if (mainroadsContainer) mainroadsContainer.style.display = 'none';
-    if (terminalContainer) terminalContainer.style.display = 'block';
-    mainContent.forEach(el => el.style.display = 'none');
-    startTerminal();
+      // Set Perth metro view
+      trafficMap.setView([-31.95, 115.86], 11);
 
-    // Update network info with transition
-    const networkInfo = document.getElementById('network-info');
-    if (networkInfo) {
-      networkInfo.classList.add('transitioning');
-      setTimeout(() => {
-        const infoText = networkInfo.querySelector('p');
-        if (infoText) {
-          infoText.textContent = 'Live terminal feed - SwanFlow vehicle detection simulation';
-        }
-        networkInfo.classList.remove('transitioning');
-      }, 150);
+      // Additional invalidates as CSS transitions complete
+      setTimeout(() => trafficMap.invalidateSize(), 100);
+      setTimeout(() => trafficMap.invalidateSize(), 300);
+      setTimeout(() => trafficMap.invalidateSize(), 500);
     }
 
-    // Remove incident markers when leaving mainroads view
-    removeMainRoadsIncidentsFromMap();
+    // Fetch incidents and display as markers
+    fetchMainRoadsIncidents().then(() => {
+      addMainRoadsIncidentsToMap();
+      displayMainRoadsIncidents();
+      // Final invalidate after markers added
+      if (trafficMap) trafficMap.invalidateSize();
+    });
     return;
   } else {
     // Hide terminal and Main Roads, show main content
