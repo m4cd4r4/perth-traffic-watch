@@ -3598,23 +3598,17 @@ function addMainRoadsIncidentsToMap() {
   // Create new layer group
   mainroadsIncidentLayer = L.layerGroup().addTo(trafficMap);
 
-  // Filter for Perth metro area incidents with valid geometry
+  // Filter for incidents with valid geometry (show all WA incidents)
   const validIncidents = mainroadsIncidents.filter(inc =>
-    inc.geometry && inc.geometry.lat && inc.geometry.lng &&
-    (inc.region === 'Metropolitan' ||
-     inc.suburb?.toLowerCase().includes('perth') ||
-     ['South West', 'Metro'].some(r => inc.region?.includes(r)) ||
-     // Include all incidents within Perth metro bounds
-     (inc.geometry.lat > -32.5 && inc.geometry.lat < -31.5 &&
-      inc.geometry.lng > 115.5 && inc.geometry.lng < 116.2))
+    inc.geometry && inc.geometry.lat && inc.geometry.lng
   );
 
+  console.log(`[MainRoads Map] Total incidents: ${mainroadsIncidents.length}, with valid geometry: ${validIncidents.length}`);
+
   if (validIncidents.length === 0) {
-    console.log('[MainRoads Map] No incidents with valid geometry in Perth metro');
+    console.log('[MainRoads Map] No incidents with valid geometry');
     return;
   }
-
-  console.log(`[MainRoads Map] Adding ${validIncidents.length} incident markers`);
 
   // Define marker icons based on incident type
   const getIncidentIcon = (incident) => {
@@ -3854,12 +3848,11 @@ function addRoadworksToMap() {
   if (mainroadsRoadworksLayer) trafficMap.removeLayer(mainroadsRoadworksLayer);
   mainroadsRoadworksLayer = L.layerGroup().addTo(trafficMap);
 
-  const perthRoadworks = mainroadsRoadworks.filter(rw =>
-    rw.geometry && (rw.region === 'Metro' || rw.region === 'Metropolitan' ||
-    (rw.geometry.lat > -32.5 && rw.geometry.lat < -31.5 && rw.geometry.lng > 115.5 && rw.geometry.lng < 116.2))
-  );
+  // Show all roadworks with valid geometry
+  const validRoadworks = mainroadsRoadworks.filter(rw => rw.geometry && rw.geometry.lat && rw.geometry.lng);
+  console.log(`[MainRoads Map] Total roadworks: ${mainroadsRoadworks.length}, with valid geometry: ${validRoadworks.length}`);
 
-  perthRoadworks.forEach(rw => {
+  validRoadworks.forEach(rw => {
     const icon = L.divIcon({
       className: 'mainroads-marker roadwork-marker',
       html: `<div class="marker-inner" style="background:#f97316">🚧</div>`,
@@ -3880,7 +3873,6 @@ function addRoadworksToMap() {
     `, { maxWidth: 300 });
     marker.addTo(mainroadsRoadworksLayer);
   });
-  console.log(`[MainRoads Map] Added ${perthRoadworks.length} roadwork markers`);
 }
 
 /**
@@ -4021,25 +4013,12 @@ async function fetchAllMainRoadsData() {
  * Update layer count badges
  */
 function updateLayerCounts() {
-  const perthFilter = (item) => {
-    if (item.geometry) {
-      return item.region === 'Metro' || item.region === 'Metropolitan' ||
-             (item.geometry.lat > -32.5 && item.geometry.lat < -31.5 &&
-              item.geometry.lng > 115.5 && item.geometry.lng < 116.2);
-    }
-    if (item.paths && item.paths.length > 0) {
-      const fp = item.paths[0][0];
-      return item.region === 'Metro' || item.region === 'Metropolitan' ||
-             (fp && fp[0] > -32.5 && fp[0] < -31.5 && fp[1] > 115.5 && fp[1] < 116.2);
-    }
-    return false;
-  };
-
+  // Count all items with valid geometry
   const counts = {
-    incidents: mainroadsIncidents.filter(i => i.geometry && perthFilter(i)).length,
-    roadworks: mainroadsRoadworks.filter(perthFilter).length,
-    closures: mainroadsClosures.filter(perthFilter).length,
-    events: mainroadsEvents.filter(perthFilter).length
+    incidents: mainroadsIncidents.filter(i => i.geometry && i.geometry.lat).length,
+    roadworks: mainroadsRoadworks.filter(i => i.geometry || i.paths).length,
+    closures: mainroadsClosures.filter(i => i.paths && i.paths.length > 0).length,
+    events: mainroadsEvents.filter(i => i.geometry && i.geometry.lat).length
   };
 
   Object.entries(counts).forEach(([type, count]) => {
