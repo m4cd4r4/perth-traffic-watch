@@ -1858,11 +1858,41 @@ function updateFlowCorridor(sites) {
 // Journey Visualization (Road Segment Timeline)
 // ============================================================================
 
-// Journey corridor configuration for arterial network only (freeway removed)
+// Journey corridor configuration for each dropdown corridor
 const journeyCorridorConfigs = {
+  'mounts-bay': {
+    title: 'Mounts Bay Road',
+    normalTime: 7,
+    segments: [
+      { id: 1, name: 'Start', location: 'Kings Park', distanceToNext: 1.8, sitePrefix: 'Mounts Bay Rd @ Kings Park' },
+      { id: 2, name: 'Kings Park', location: 'Mill Point', distanceToNext: 2.0, sitePrefix: 'Mounts Bay Rd @ Mill Point' },
+      { id: 3, name: 'Mill Point', location: 'Fraser', distanceToNext: 1.5, sitePrefix: 'Mounts Bay Rd @ Fraser Ave' },
+      { id: 4, name: 'Fraser', location: 'Malcolm', distanceToNext: 1.2, sitePrefix: 'Mounts Bay Rd @ Malcolm St' },
+      { id: 5, name: 'End', location: 'CBD', distanceToNext: 0, sitePrefix: null }
+    ]
+  },
+  'stirling-north': {
+    title: 'Stirling Hwy (Cottesloe)',
+    normalTime: 3,
+    segments: [
+      { id: 1, name: 'Start', location: 'Eric St', distanceToNext: 1.5, sitePrefix: 'Stirling Hwy @ Eric St' },
+      { id: 2, name: 'End', location: 'Claremont', distanceToNext: 0, sitePrefix: null }
+    ]
+  },
+  'stirling-south': {
+    title: 'Stirling Hwy (Mosman Park)',
+    normalTime: 6,
+    segments: [
+      { id: 1, name: 'Start', location: 'Forrest St', distanceToNext: 1.2, sitePrefix: 'Stirling Hwy @ Forrest St' },
+      { id: 2, name: 'Forrest', location: 'Bay View', distanceToNext: 1.0, sitePrefix: 'Stirling Hwy @ Bay View Terrace' },
+      { id: 3, name: 'Bay View', location: 'McCabe', distanceToNext: 0.8, sitePrefix: 'Stirling Hwy @ McCabe St' },
+      { id: 4, name: 'McCabe', location: 'Victoria', distanceToNext: 1.0, sitePrefix: 'Stirling Hwy @ Victoria St' },
+      { id: 5, name: 'End', location: 'Fremantle', distanceToNext: 0, sitePrefix: null }
+    ]
+  },
   arterial: {
     title: 'Mounts Bay Road',
-    normalTime: 7, // Normal travel time in minutes
+    normalTime: 7,
     segments: [
       { id: 1, name: 'Start', location: 'Kings Park', distanceToNext: 1.8, sitePrefix: 'Mounts Bay Rd @ Kings Park' },
       { id: 2, name: 'Kings Park', location: 'Mill Point', distanceToNext: 2.0, sitePrefix: 'Mounts Bay Rd @ Mill Point' },
@@ -1959,9 +1989,24 @@ function renderJourneyTimeline(network = 'arterial', timelineId = null) {
 /**
  * Render arterial journey timeline (freeway removed)
  */
-function renderBothJourneyTimelines() {
-  // Render arterial timeline only
-  renderJourneyTimeline('arterial', 'journey-timeline');
+function renderBothJourneyTimelines(corridorId = null) {
+  // Render timeline for the selected corridor
+  const corridor = corridorId || currentSite || 'mounts-bay';
+  const config = journeyCorridorConfigs[corridor] || journeyCorridorConfigs.arterial;
+
+  // Update the journey title
+  const titleEl = document.getElementById('flow-title-arterial');
+  if (titleEl && config.title) {
+    titleEl.innerHTML = '\ud83d\ude97 ' + config.title;
+  }
+
+  // Update the trends corridor name
+  const trendNameEl = document.querySelector('.trend-corridor-name');
+  if (trendNameEl && config.title) {
+    trendNameEl.textContent = config.title;
+  }
+
+  renderJourneyTimeline(corridor, 'journey-timeline');
 }
 
 /**
@@ -1971,7 +2016,7 @@ function renderBothJourneyTimelines() {
  * @param {string} suffix - Element ID suffix
  */
 function updateJourneyTimelineForNetwork(sites, network, suffix = '') {
-  const config = journeyCorridorConfigs.arterial;
+  const config = journeyCorridorConfigs[currentSite] || journeyCorridorConfigs.arterial;
   if (!config || !config.segments) return;
 
   // Arterial network only
@@ -3019,6 +3064,7 @@ async function init() {
 
   siteSelect.addEventListener('change', async (e) => {
     currentSite = e.target.value;
+    renderBothJourneyTimelines(currentSite); // Re-render journey timeline for new corridor
     panToSite(currentSite); // Pan map to selected site
     await loadDashboard(); // loadDashboard will call highlightRouteForSite after rebuilding dots
     animateRouteArrow(currentSite); // Animate arrow along route
