@@ -110,6 +110,15 @@
 
       <!-- Status Column (Center) -->
       <div class="hero-status-column" id="section-hero">
+        <!-- Simulation Notice -->
+        <div class="simulation-notice">
+          <div class="simulation-icon">📡</div>
+          <div class="simulation-text">
+            <strong>Simulated Data</strong>
+            <span>Live hardware deployment coming Q1 2026</span>
+          </div>
+        </div>
+
         <div class="hero-status-label">STIRLING HIGHWAY CORRIDOR</div>
         <div class="hero-status-value" id="corridor-status">Loading...</div>
         <div class="hero-status-speed">Average Speed: <span id="avg-speed-hero">--</span> km/h</div>
@@ -135,6 +144,24 @@
           <div class="hero-metric-item">
             <span class="metric-label">Last Update</span>
             <span class="metric-value" id="last-update">-</span>
+          </div>
+        </div>
+
+        <!-- Mini Terminal Feed -->
+        <div class="mini-terminal" id="mini-terminal">
+          <div class="mini-terminal-header">
+            <span class="mini-terminal-title">
+              <span class="terminal-dot"></span>
+              Live Simulator Feed
+            </span>
+            <button type="button" id="expand-terminal-btn" class="expand-terminal-btn" title="Expand terminal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+              </svg>
+            </button>
+          </div>
+          <div class="mini-terminal-body" id="mini-terminal-output">
+            <div class="terminal-line">[SIM] Initializing...</div>
           </div>
         </div>
       </div>
@@ -405,10 +432,27 @@
     </a>
   </nav>
 
+  <!-- Terminal Modal (Expanded View) -->
+  <div class="terminal-modal" id="terminal-modal">
+    <div class="terminal-modal-content">
+      <div class="terminal-modal-header">
+        <div class="terminal-modal-title">
+          <span class="terminal-dot"></span>
+          SwanFlow - Live Simulator Feed
+        </div>
+        <button type="button" id="close-terminal-modal" class="close-modal-btn">Close (Esc)</button>
+      </div>
+      <div class="terminal-modal-body" id="modal-terminal-output">
+        <!-- Terminal output will be populated here -->
+      </div>
+    </div>
+  </div>
+
   <!-- Libraries -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="app.js?v=20260110-04"></script>
+  <script src="app.js?v=20260110-05"></script>
+  <script src="mini-terminal.js?v=20260110-01"></script>
 </body>
 </html>
