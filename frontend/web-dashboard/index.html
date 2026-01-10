@@ -12,7 +12,7 @@
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
-  <link rel="stylesheet" href="styles.css?v=20260110-04">
+  <link rel="stylesheet" href="styles.css?v=20260110-05">
   <link rel="stylesheet" href="knowledge.css?v=20260110-01">
 
   <!-- Lucide Icons -->
@@ -84,6 +84,18 @@
             <option value="stirling-claremont">Stirling Hwy - Claremont</option>
             <option value="stirling-mosman">Stirling Hwy - Mosman Park</option>
           </select>
+          <div class="layer-toggles-inline">
+            <button type="button" class="layer-toggle active" data-layer="incidents" title="Main Roads WA Incidents">
+              <span class="toggle-icon">⚠️</span>
+              <span class="toggle-label">Incidents</span>
+              <span class="toggle-count" id="incidents-count">0</span>
+            </button>
+            <button type="button" class="layer-toggle active" data-layer="roadworks" title="Roadworks">
+              <span class="toggle-icon">🚧</span>
+              <span class="toggle-label">Roadworks</span>
+              <span class="toggle-count" id="roadworks-count">0</span>
+            </button>
+          </div>
           <div class="hero-map-view-btns">
             <button type="button" class="map-view-btn active" data-view="street">Street</button>
             <button type="button" class="map-view-btn" data-view="satellite">Satellite</button>
@@ -263,11 +275,6 @@
             </svg>
             Journey Time Trends
           </h3>
-          <div class="trends-period-selector">
-            <button type="button" class="period-btn active" data-period="today">Today</button>
-            <button type="button" class="period-btn" data-period="week">This Week</button>
-            <button type="button" class="period-btn" data-period="month">This Month</button>
-          </div>
         </div>
         <div class="trends-grid">
           <div class="trend-card" data-corridor="arterial">
@@ -277,9 +284,6 @@
                 <span class="trend-arrow up">↑</span>
                 <span class="trend-value">2 min slower</span>
               </span>
-            </div>
-            <div class="trend-chart-mini">
-              <canvas id="arterial-trend-chart-inline" height="60"></canvas>
             </div>
             <div class="trend-stats">
               <div class="trend-stat">
@@ -396,6 +400,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="app.js?v=20260110-07"></script>
+  <script src="app.js?v=20260110-08"></script>
 </body>
 </html>
