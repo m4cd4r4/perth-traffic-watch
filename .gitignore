@@ -26,6 +26,10 @@ backend/api/*.log
 frontend/web-dashboard/node_modules/
 frontend/web-dashboard/dist/
 frontend/web-dashboard/.cache/
+frontend/web-dashboard/*.backup
+frontend/web-dashboard/mockup-*.html
+frontend/web-dashboard/test-*.html
+frontend/web-dashboard/*-new.js
 
 # ============================================================================
 # Documentation
@@ -102,6 +106,21 @@ secrets/
 # ============================================================================
 .claude/*
 !.claude/TODO.md
+
+# ============================================================================
+# Testing Artifacts
+# ============================================================================
+playwright-report/
+test-results/
+*.test.js.snap
+tests/
+screenshots/
+
+# ============================================================================
+# Node.js (root level for dev tools)
+# ============================================================================
+node_modules/
+package-lock.json
 
 # ============================================================================
 # Deployment
