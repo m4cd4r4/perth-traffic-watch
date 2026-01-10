@@ -5817,3 +5817,50 @@ body.map-fullscreen {
   line-height: 1.8;
   background: rgba(0, 0, 0, 0.2);
 }
+
+/* ============================================
+   Simulation Banner (Large Scrolling)
+   ============================================ */
+.sim-banner {
+  background: linear-gradient(90deg, #1e3a5f 0%, #0f172a 50%, #1e3a5f 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 20px 0;
+  margin-bottom: 16px;
+}
+
+.sim-banner-track {
+  display: flex;
+  animation: sim-scroll 15s linear infinite;
+}
+
+.sim-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  white-space: nowrap;
+  padding-right: 40px;
+}
+
+.sim-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #60a5fa;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.sim-dot {
+  width: 8px;
+  height: 8px;
+  background: #3b82f6;
+  border-radius: 50%;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+@keyframes sim-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
