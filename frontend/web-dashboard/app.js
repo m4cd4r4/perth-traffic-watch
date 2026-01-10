@@ -3440,7 +3440,7 @@ async function fetchMainRoadsIncidents() {
         entryDate: f.attributes.EntryDate,
         updateDate: f.attributes.UpdateDate,
         moreInfoUrl: f.attributes.SeeMoreUrl,
-        geometry: f.geometry ? { lat: f.geometry.y, lng: f.geometry.x } : null,
+        geometry: f.geometry ? webMercatorToWGS84(f.geometry.x, f.geometry.y) : null,
         source: 'mainroads' // Mark as official data
       }));
 
