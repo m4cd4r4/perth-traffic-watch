@@ -5981,3 +5981,19 @@ body.map-fullscreen {
 .sim-line .speed {
   color: #60a5fa;
 }
+
+/* Terminal in table container */
+.table-container .sim-data-terminal {
+  border-radius: 8px;
+  height: 350px;
+}
+
+.table-container h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.table-container h2 .sim-pulse {
+  flex-shrink: 0;
+}

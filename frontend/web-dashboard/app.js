@@ -4674,25 +4674,11 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================
-// Simulated Data Feed (Collapsible Section)
+// Simulated Data Feed (Always Visible)
 // ============================================
 (function initSimDataFeed() {
-  const section = document.getElementById('sim-data-section');
-  const toggle = document.getElementById('sim-data-toggle');
   const output = document.getElementById('sim-data-output');
-
-  if (!section || !toggle || !output) return;
-
-  // Toggle expand/collapse
-  toggle.addEventListener('click', () => {
-    section.classList.toggle('expanded');
-
-    // Start generating data when expanded
-    if (section.classList.contains('expanded') && !section.dataset.started) {
-      section.dataset.started = 'true';
-      startSimDataFeed();
-    }
-  });
+  if (!output) return;
 
   // Site names for simulation
   const sites = [
@@ -4713,13 +4699,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const now = new Date();
     const timestamp = now.toTimeString().split(' ')[0];
 
-    return {
-      timestamp,
-      site,
-      count,
-      speed,
-      confidence
-    };
+    return { timestamp, site, count, speed, confidence };
   }
 
   // Add line to terminal
@@ -4729,8 +4709,8 @@ window.addEventListener('DOMContentLoaded', () => {
     line.innerHTML = html;
     output.appendChild(line);
 
-    // Keep max 50 lines
-    while (output.children.length > 50) {
+    // Keep max 30 lines
+    while (output.children.length > 30) {
       output.removeChild(output.firstChild);
     }
 
@@ -4738,33 +4718,24 @@ window.addEventListener('DOMContentLoaded', () => {
     output.scrollTop = output.scrollHeight;
   }
 
-  // Start the simulated feed
-  function startSimDataFeed() {
-    addLine('[SYS] Starting live detection stream...', 'system');
+  // Start the simulated feed immediately
+  addLine('[SYS] Starting live detection stream...', 'system');
 
-    // Generate detections at random intervals
-    function scheduleNext() {
-      const delay = Math.random() * 2000 + 500; // 0.5-2.5 seconds
-      setTimeout(() => {
-        if (!section.classList.contains('expanded')) {
-          // Pause when collapsed
-          return;
-        }
-
-        const det = generateDetection();
-        addLine(
-          `<span class="timestamp">${det.timestamp}</span>` +
-          `<span class="site">[${det.site}]</span> ` +
-          `Detected <span class="count">${det.count}</span> vehicles @ ` +
-          `<span class="speed">${det.speed} km/h</span> ` +
-          `(conf: ${det.confidence})`,
-          'detection'
-        );
-
-        scheduleNext();
-      }, delay);
-    }
-
-    scheduleNext();
+  function scheduleNext() {
+    const delay = Math.random() * 2000 + 500; // 0.5-2.5 seconds
+    setTimeout(() => {
+      const det = generateDetection();
+      addLine(
+        `<span class="timestamp">${det.timestamp}</span>` +
+        `<span class="site">[${det.site}]</span> ` +
+        `Detected <span class="count">${det.count}</span> vehicles @ ` +
+        `<span class="speed">${det.speed} km/h</span> ` +
+        `(conf: ${det.confidence})`,
+        'detection'
+      );
+      scheduleNext();
+    }, delay);
   }
+
+  scheduleNext();
 })();
