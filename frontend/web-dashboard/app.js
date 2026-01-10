@@ -1997,7 +1997,7 @@ function renderBothJourneyTimelines(corridorId = null) {
   // Update the journey title
   const titleEl = document.getElementById('flow-title-arterial');
   if (titleEl && config.title) {
-    titleEl.innerHTML = '\ud83d\ude97 ' + config.title;
+    titleEl.textContent = config.title;
   }
 
   // Update the trends corridor name
