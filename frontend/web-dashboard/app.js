@@ -3567,6 +3567,15 @@ function truncateText(text, maxLength) {
  * Initialize Main Roads WA data monitoring (incidents, roadworks, closures, events)
  */
 function initMainRoadsMonitoring() {
+  // Setup layer toggle click handlers
+  document.querySelectorAll('.layer-toggle[data-layer]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const layer = btn.dataset.layer;
+      const isActive = btn.classList.contains('active');
+      toggleMainRoadsLayer(layer, !isActive);
+    });
+  });
+
   // Fetch all layers immediately
   fetchAllMainRoadsData();
 
