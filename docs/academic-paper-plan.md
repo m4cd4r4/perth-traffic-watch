@@ -10,7 +10,7 @@
 
 1. *"Democratising Traffic Monitoring: A Cost-Effectiveness Analysis of Citizen-Led Edge AI Systems vs. Government Infrastructure in Perth, Western Australia"*
 
-2. *"$143 vs $500 Million: Citizen Science Approaches to Urban Traffic Monitoring Using Low-Cost Edge AI"*
+2. *"$250 vs $50,000: Citizen Science Approaches to Urban Traffic Monitoring Using Low-Cost Edge AI"*
 
 3. *"Open Traffic Data Advocacy Through Citizen Infrastructure: A Case Study of SwanFlow"*
 
@@ -62,12 +62,16 @@
 
 ### 2. Cost-Effectiveness Framework
 - **Novelty**: Quantified comparison of citizen vs. government infrastructure
-- **Differentiation**: 350:1 cost ratio with evidence
+- **Differentiation**: 200:1 cost ratio ($250 vs $50,000 per site)
 - **Evidence needed**: BOM breakdown, government budget analysis, TCO comparison
+- **Precise costing**: Bidirectional solar-powered site = ~$250 AUD
+  - 2 × ESP32-CAM + SIM7000A modules: $120
+  - Solar infrastructure (20W panel + 12V battery + charge controller): $80
+  - Enclosure, mounting, cabling: ~$50 (shared across cameras)
 
 ### 3. Edge AI for Traffic Monitoring
 - **Novelty**: FOMO model on ESP32 ($15 MCU) for vehicle detection
-- **Differentiation**: Sub-$150 complete monitoring node
+- **Differentiation**: ~$250 complete bidirectional solar-powered monitoring site
 - **Evidence needed**: Detection accuracy, power consumption, inference latency
 
 ### 4. Open Data Advocacy Case Study
@@ -75,14 +79,20 @@
 - **Differentiation**: Specific case (Main Roads WA API broken 16+ months)
 - **Evidence needed**: API audit, FOI responses, comparison with NSW/VIC
 
+### 5. Government API Integration
+- **Novelty**: Citizen infrastructure augmented with live government incident data
+- **Differentiation**: Main Roads WA ArcGIS API integration (incidents, roadworks, closures, events)
+- **Implementation**: Web Mercator to WGS84 coordinate conversion, 5-minute refresh
+- **Evidence needed**: API endpoint documentation, data quality assessment
+
 ---
 
 ## Proposed Paper Structure
 
 ### Abstract (~250 words)
 - Problem: Government traffic infrastructure costly, data inaccessible
-- Solution: Citizen-led Edge AI monitoring at 350:1 cost advantage
-- Contribution: UFD algorithm, cost framework, open data advocacy
+- Solution: Citizen-led Edge AI monitoring at 200:1 cost advantage ($250 vs $50,000)
+- Contribution: UFD algorithm, cost framework, open data advocacy, government API integration
 - Results: Functional system, quantified comparison, policy recommendations
 
 ### 1. Introduction (~1,000 words)
@@ -151,13 +161,17 @@
   - Government budget sources
   - Citizen infrastructure costing
 - 5.2 Results
-  - Per-site comparison ($143 vs $50,000+)
-  - System-wide comparison ($4,500 vs $500M+)
-  - Operational cost comparison
+  - Per-site comparison ($250 vs $50,000 = 200:1 ratio)
+  - Bidirectional solar-powered site breakdown:
+    - 2 × ESP32-CAM + SIM7000A modules: $120
+    - Solar power system (20W panel, 12V 7Ah battery, charge controller): $80
+    - Weatherproof enclosure and mounting: $50 (shared)
+    - M2M SIM data (monthly): $5-8
+  - Operational cost comparison (solar = $0 power costs)
 - 5.3 Limitations
-  - Capability differences
-  - Reliability considerations
-  - Scale factors
+  - Capability differences (detection accuracy vs. inductive loops)
+  - Reliability considerations (consumer hardware vs. industrial)
+  - Scale factors (~$250/site for bidirectional solar)
 
 ### 6. Open Data Accessibility Audit (~1,500 words)
 - 6.1 Methodology
@@ -191,16 +205,18 @@
 
 ### 7. Case Study: SwanFlow (~1,000 words)
 - 7.1 Deployment context
-  - CBD to Fremantle corridor
-  - Stirling Highway monitoring sites
+  - CBD to Fremantle arterial corridor
+  - Stirling Highway monitoring sites (bidirectional)
+  - Solar-powered off-grid deployment
 - 7.2 System performance
   - Detection accuracy (simulated/validated)
   - Speed estimation validation
   - Uptime and reliability
-- 7.3 Freeway expansion plan
-  - Mitchell/Kwinana corridor design
-  - Simulator development
-  - 30-site deployment plan
+- 7.3 Government data integration
+  - Main Roads WA ArcGIS API integration (live incidents, roadworks, closures)
+  - Complementing citizen data with official incident feeds
+  - Web Mercator to WGS84 coordinate conversion
+  - Real-time overlay on citizen dashboard
 
 ### 8. Discussion (~1,000 words)
 - 8.1 Implications for policy
@@ -218,9 +234,9 @@
 
 ### 9. Conclusion (~500 words)
 - Summary of contributions
-- Key findings (350:1 cost, broken API, UFD concept)
+- Key findings (200:1 cost advantage, government API integration, UFD concept)
 - Call to action for open transport data
-- Future research directions
+- Future research directions (arterial network expansion, multi-city deployment)
 
 ### References (~50-80 citations)
 - Traffic engineering fundamentals
@@ -230,10 +246,11 @@
 - Australian transport policy
 
 ### Appendices
-- A: Full hardware bill of materials
-- B: API endpoint documentation
+- A: Full hardware bill of materials (bidirectional solar-powered site)
+- B: SwanFlow API endpoint documentation
 - C: UFD algorithm pseudocode
-- D: Main Roads WA FOI correspondence (if obtained)
+- D: Main Roads WA ArcGIS API endpoint reference
+- E: Main Roads WA FOI correspondence (if obtained)
 
 ---
 
@@ -244,12 +261,13 @@
 | # | Description | Source |
 |---|-------------|--------|
 | F1 | System architecture diagram | New (draw.io/Excalidraw) |
-| F2 | Hardware assembly photo | Photograph |
+| F2 | Hardware assembly photo (bidirectional solar unit) | Photograph |
 | F3 | UFD pipeline flowchart | New |
-| F4 | Dashboard screenshot | Screenshot |
-| F5 | Perth corridor map with sites | Leaflet export |
-| F6 | Cost comparison bar chart | Generated from data |
+| F4 | Dashboard screenshot (with Main Roads WA overlay) | Screenshot |
+| F5 | Stirling Highway arterial corridor map | Leaflet export |
+| F6 | Cost comparison bar chart ($250 vs $50,000) | Generated from data |
 | F7 | Data accessibility heatmap (AU states) | New |
+| F8 | Main Roads WA ArcGIS incident layer example | Screenshot |
 
 ### Tables
 
@@ -423,9 +441,11 @@ swanflow/
 
 | Field | Value |
 |-------|-------|
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Created** | 2025-12-19 |
+| **Updated** | 2026-01-11 |
 | **Status** | Planning |
+| **Changes** | Updated costs to $250 bidirectional solar (200:1 ratio), removed freeway scope, added Main Roads WA API integration |
 | **Next Action** | Continue on home workstation |
 
 ---
