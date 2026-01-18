@@ -10,16 +10,17 @@ Monitor traffic flow in real-time using affordable IoT hardware and machine lear
 
 ---
 
-## The $223 vs $50,000 Question
+## Citizen-Augmented Traffic Monitoring
 
-Main Roads Western Australia has invested over **$500 million** in Smart Freeway infrastructure with **1,400+ sensors** collecting real-time traffic data. Yet their public APIs have been **offline since August 2023** with no restoration timeline.
+Main Roads Western Australia operates sophisticated Smart Freeway infrastructure with **1,400+ sensors** — a significant investment that requires coordination across departments, professional installation, ongoing maintenance, and integration with broader transport systems.
 
-SwanFlow demonstrates that **citizen-led monitoring can provide functional, open traffic data for ~$223 per site** (solar-powered, off-grid) — a 224:1 cost advantage.
+SwanFlow explores how **citizen-led monitoring might complement official infrastructure** by providing additional data points on arterial roads that may fall outside freeway sensor coverage.
 
-> **This project is both a technical proof-of-concept and an advocacy tool for open traffic data.**
+> **This project is a technical proof-of-concept and a gentle advocacy tool for greater open data access.**
 
-📊 See [docs/cost-effectiveness-analysis.md](docs/cost-effectiveness-analysis.md) for the full comparison.
-🔍 See [docs/mainroads-api-investigation.md](docs/mainroads-api-investigation.md) for our research into the API outage.
+We believe that combining official infrastructure with citizen contributions could create richer traffic datasets for researchers, urban planners, and commuters alike.
+
+📖 See [docs/mainroads-api-investigation.md](docs/mainroads-api-investigation.md) for our research into public API availability.
 
 ---
 
@@ -287,7 +288,7 @@ swanflow/
 │
 ├── docs/
 │   ├── corridor-architecture.md      # 3-stretch system architecture
-│   ├── cost-effectiveness-analysis.md # $223 vs $500M comparison
+│   ├── cost-effectiveness-analysis.md # Hardware cost breakdown
 │   ├── mainroads-api-investigation.md # API outage research
 │   ├── academic-paper-plan.md        # Research publication roadmap
 │   ├── ml-development-guide.md       # Edge Impulse training guide
@@ -361,37 +362,31 @@ swanflow/
 
 ---
 
-## The Open Data Gap
+## A Case for More Open Data
 
-### What We Found
+### Current Situation
 
-Our investigation into Main Roads WA's public traffic data revealed:
+Main Roads WA operates extensive traffic monitoring infrastructure. Our research found:
 
-| Finding | Detail |
-|---------|--------|
-| **APIs Offline** | Real-Time + Daily Traffic APIs down since August 2023 |
-| **No Timeline** | "No estimated time of resolution" |
-| **Sensors Working** | 1,400+ Smart Freeway sensors actively collecting data |
-| **Internal Systems** | RTOP platform processes data every 15 minutes |
-| **Security Issues** | WA Auditor General found vulnerabilities in Traffic Management System |
+| Observation | Detail |
+|-------------|--------|
+| **Infrastructure** | 1,400+ Smart Freeway sensors collecting real-time data |
+| **Internal Systems** | Sophisticated RTOP platform for traffic management |
+| **Public APIs** | Currently unavailable (since August 2023) |
+| **Operations** | 24/7 Operations Centre managing traffic flow |
 
-### The Paradox
+We understand that maintaining public-facing APIs requires resources, security considerations, and ongoing support — challenges that may not be immediately visible to outside observers.
 
-| Internal (Main Roads) | Public Access |
-|----------------------|---------------|
-| Real-time data from 1,400+ sensors | APIs offline 16+ months |
-| 15-minute processing intervals | Annual averages only |
-| Sophisticated RTOP dashboard | No functional APIs |
-| 24/7 Operations Centre | "Contact 138 138" |
+### Our Gentle Advocacy
 
-### What We're Advocating For
+We'd love to see more open traffic data available to researchers and the public:
 
-1. **Restore the broken APIs** — they were previously public
-2. **Publish Smart Freeway sensor data** — taxpayers funded it
-3. **Follow NSW's example** — Transport for NSW provides excellent open data
-4. **Consider citizen-augmented monitoring** — we can help, not replace
+1. **Public API restoration** — when resources and security concerns allow
+2. **Arterial road coverage** — where freeway sensors may not reach
+3. **Citizen-augmented data** — complementing (not replacing) official sources
+4. **Following leaders like NSW** — Transport for NSW provides excellent open data as a model
 
-**See**: [docs/mainroads-api-investigation.md](docs/mainroads-api-investigation.md) for full research with citations.
+**See**: [docs/mainroads-api-investigation.md](docs/mainroads-api-investigation.md) for our research.
 
 ---
 
@@ -474,19 +469,17 @@ Dashboard → Fetch API → Chart.js → User
 
 ## Cost Breakdown
 
-### SwanFlow vs Government Infrastructure
+### DIY Hardware Costs
 
-| Metric | SwanFlow (Solar) | Main Roads WA Smart Freeway |
-|--------|--------------------|-----------------------------|
-| **Per-site cost** | ~$223 | ~$50,000+ |
-| **Per co-located location** | **$270** | ~$100,000+ |
-| **Proof of concept (bidirectional co-located)** | **$540** | ~$200,000+ |
-| **Full arterial corridor (18 sensors)** | $4,014 | ~$900,000+ |
-| **Data accessibility** | 100% open | APIs offline |
-| **Power requirements** | Off-grid (solar) | Mains power |
-| **Cost ratio** | 1 | **185-224x** |
+The figures below represent **hardware-only costs** for a hobbyist/citizen project. They don't include:
+- Professional labour and installation
+- Permitting and compliance
+- Long-term maintenance contracts
+- Integration with existing systems
+- Metal fabrication and weatherproofing to commercial standards
+- Interdepartmental coordination
 
-**See**: [docs/cost-effectiveness-analysis.md](docs/cost-effectiveness-analysis.md) for detailed analysis.
+Government infrastructure serves different purposes (reliability, coverage, legal compliance, integration) and direct cost comparisons aren't meaningful. SwanFlow is a **complementary proof-of-concept**, not a replacement for professional traffic monitoring.
 
 ### Phase 1: Single Site (Proof of Concept - Solar-Powered)
 
@@ -541,7 +534,6 @@ Dashboard → Fetch API → Chart.js → User
 - ✅ **No electrician costs** - Self-contained solar system
 - ✅ **No SSL cert costs** - HTTPS included
 - ✅ **Auto-deployment** - Push to GitHub = instant deploy
-- ✅ **224:1 cost advantage** vs government infrastructure
 
 **Compare to Traditional Setup:**
 - VPS: ~$5-15/month
@@ -608,9 +600,8 @@ See [docs/requirements-and-todos.md](docs/requirements-and-todos.md) for full ro
 | Document | Description |
 |----------|-------------|
 | [**docs/corridor-architecture.md**](docs/corridor-architecture.md) | **3-stretch system architecture, algorithm details, ML integration** |
-| [**docs/cost-effectiveness-analysis.md**](docs/cost-effectiveness-analysis.md) | **$223 vs $500M: Citizen monitoring vs government infrastructure** |
 | [**docs/academic-paper-plan.md**](docs/academic-paper-plan.md) | **Research publication roadmap: structure, venues, contributions** |
-| [**docs/mainroads-api-investigation.md**](docs/mainroads-api-investigation.md) | **API outage research: 16+ months offline, internal systems, Auditor General findings** |
+| [**docs/mainroads-api-investigation.md**](docs/mainroads-api-investigation.md) | **Research into public traffic data availability in WA** |
 | [hardware/bom.md](hardware/bom.md) | Bill of materials |
 | [hardware/shopping-lists.md](hardware/shopping-lists.md) | AliExpress + Bunnings orders |
 | [docs/ml-development-guide.md](docs/ml-development-guide.md) | Edge Impulse FOMO training |
@@ -811,14 +802,14 @@ Free to use, modify, and distribute. No warranty.
 
 **Built with love in Perth, Western Australia**
 
-*Open-source traffic monitoring for everyone. Open data advocacy for all.*
+*Open-source traffic monitoring for hobbyists and researchers. Gentle advocacy for more open data.*
 
 ---
 
 ## Next Steps
 
 1. ⭐ Star this repository
-2. 📖 Read [docs/cost-effectiveness-analysis.md](docs/cost-effectiveness-analysis.md) to understand the advocacy mission
+2. 📖 Read [docs/mainroads-api-investigation.md](docs/mainroads-api-investigation.md) to understand the open data landscape
 3. 🛒 Order hardware (see [hardware/shopping-lists.md](hardware/shopping-lists.md))
 4. 📸 Collect training images
 5. 🤖 Train FOMO model (see [docs/ml-development-guide.md](docs/ml-development-guide.md))
@@ -833,13 +824,12 @@ Free to use, modify, and distribute. No warranty.
 This project is being developed with academic publication in mind. Key documents:
 
 - [docs/academic-paper-plan.md](docs/academic-paper-plan.md) — Full research roadmap
-- [docs/mainroads-api-investigation.md](docs/mainroads-api-investigation.md) — Objective research findings
-- [docs/cost-effectiveness-analysis.md](docs/cost-effectiveness-analysis.md) — Evidence-based cost comparison
+- [docs/mainroads-api-investigation.md](docs/mainroads-api-investigation.md) — Research into public data availability
 
-**Novel Contributions**:
+**Research Contributions**:
 - **Closed-Segment Monitoring Theory** — Entry/exit point tracking for arterial roads
-- **224:1 Cost Framework** — Citizen vs government infrastructure
-- **Open Data Accessibility Audit** — WA vs NSW comparison
+- **Citizen-Augmented Monitoring Framework** — How hobbyist projects can complement official infrastructure
+- **Open Data Accessibility Study** — Comparing approaches across Australian states
 
 ---
 
