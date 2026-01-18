@@ -26,30 +26,37 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
+  <link rel="stylesheet" href="/dashboard/styles.css">
+  <link rel="stylesheet" href="/dashboard/knowledge.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <!-- Header (matching dashboard) -->
-  <header class="lp-header">
-    <div class="lp-header-content">
-      <div class="lp-brand">
-        <img src="/dashboard/swan-logo-light.png" alt="SwanFlow" class="brand-logo light-logo">
-        <img src="/dashboard/swan-logo-dark.png" alt="SwanFlow" class="brand-logo dark-logo">
-        <h1>SwanFlow</h1>
+  <header class="knowledge-header">
+    <div class="header-content">
+      <div class="brand-wrapper">
+        <div class="brand">
+          <img src="/dashboard/swan-logo-light.png" alt="SwanFlow" class="brand-logo light-logo">
+          <img src="/dashboard/swan-logo-dark.png" alt="SwanFlow" class="brand-logo dark-logo">
+          <h1>SwanFlow</h1>
+        </div>
+        <p class="subtitle">Real-time vehicle detection using Edge AI</p>
       </div>
-      <div class="lp-header-actions">
-        <a href="/dashboard" class="lp-header-btn">
+      <div class="header-actions">
+        <a href="/dashboard" class="header-nav-btn">
           <i data-lucide="layout-dashboard" class="nav-icon"></i>
-          <span>Dashboard</span>
+          <span class="nav-text">Dashboard</span>
         </a>
-        <a href="/dashboard/knowledge.html" class="lp-header-btn">
+        <a href="/dashboard/knowledge.html" class="header-nav-btn">
           <i data-lucide="book-open" class="nav-icon"></i>
-          <span>Knowledge Base</span>
+          <span class="nav-text">Knowledge Base</span>
         </a>
-        <button type="button" id="theme-toggle-btn" class="lp-theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
-          <i data-lucide="sun" class="icon-sun"></i>
-          <i data-lucide="moon" class="icon-moon"></i>
-        </button>
+        <div class="theme-toggle">
+          <button type="button" id="theme-toggle-btn" class="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <i data-lucide="sun" class="icon-sun"></i>
+            <i data-lucide="moon" class="icon-moon"></i>
+          </button>
+        </div>
       </div>
     </div>
   </header>
