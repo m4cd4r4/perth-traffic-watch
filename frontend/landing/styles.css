@@ -1,24 +1,46 @@
-/* Perth Traffic Watch - Landing Page Styles */
+/* SwanFlow - Landing Page Styles */
 
-:root {
-  /* Colors */
-  --lp-primary: #0066ff;
-  --lp-primary-dark: #0052cc;
-  --lp-background: #0a0a0f;
-  --lp-surface: rgba(255, 255, 255, 0.05);
-  --lp-surface-elevated: rgba(255, 255, 255, 0.08);
-  --lp-text: #ffffff;
-  --lp-text-muted: rgba(255, 255, 255, 0.7);
-  --lp-border: rgba(255, 255, 255, 0.1);
-  --lp-gradient-start: #667eea;
-  --lp-gradient-end: #764ba2;
-  --lp-success: #28c840;
-  --lp-warning: #febc2e;
-  --lp-danger: #ff5f57;
+/* ============================================================================
+   LIGHT THEME (Default)
+   Clean, professional light mode with ocean blues
+   ============================================================================ */
+:root,
+[data-theme="light"] {
+  /* Primary colors */
+  --lp-primary: #2D8B94;
+  --lp-primary-rgb: 45, 139, 148;
+  --lp-primary-dark: #236A72;
+  --lp-primary-light: #4A9DA5;
+  --lp-accent: #E89B5F;
+  --lp-accent-dark: #D68847;
+
+  /* Status colors */
+  --lp-success: #10b981;
+  --lp-warning: #E89B5F;
+  --lp-danger: #CC5544;
+
+  /* Background colors */
+  --lp-background: #F5F2EB;
+  --lp-bg-secondary: #E8DCC4;
+  --lp-surface: #FFFFFF;
+  --lp-surface-elevated: rgba(255, 255, 255, 0.95);
+
+  /* Text colors */
+  --lp-text: #2C3E50;
+  --lp-text-muted: #6B7280;
+  --lp-text-inverse: #FFFFFF;
+
+  /* Border and shadow */
+  --lp-border: #D4C4A8;
+  --lp-shadow: rgba(45, 139, 148, 0.15);
+
+  /* Gradient */
+  --lp-gradient-start: #2D8B94;
+  --lp-gradient-end: #236A72;
 
   /* Typography */
   --lp-font-display: 'Space Grotesk', -apple-system, sans-serif;
-  --lp-font-body: 'Inter', -apple-system, sans-serif;
+  --lp-font-body: 'Space Grotesk', -apple-system, sans-serif;
   --lp-font-mono: 'JetBrains Mono', monospace;
 
   /* Spacing */
@@ -26,10 +48,51 @@
   --lp-container-max: 1200px;
 
   /* Effects */
-  --lp-glass-bg: rgba(255, 255, 255, 0.03);
+  --lp-glass-bg: rgba(255, 255, 255, 0.7);
   --lp-glass-blur: blur(20px);
   --lp-border-radius: 16px;
-  --lp-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --lp-shadow: 0 4px 24px rgba(45, 139, 148, 0.1);
+}
+
+/* ============================================================================
+   DARK THEME
+   Modern dark mode with subtle ocean blues
+   ============================================================================ */
+[data-theme="dark"] {
+  /* Primary colors */
+  --lp-primary: #4A9DA5;
+  --lp-primary-rgb: 74, 157, 165;
+  --lp-primary-dark: #5CB3BB;
+  --lp-primary-light: #6EC9D1;
+  --lp-accent: #E89B5F;
+  --lp-accent-dark: #F4B17A;
+
+  /* Status colors */
+  --lp-success: #34D399;
+  --lp-warning: #E89B5F;
+  --lp-danger: #EF4444;
+
+  /* Background colors */
+  --lp-background: #0F1419;
+  --lp-bg-secondary: #1A2027;
+  --lp-surface: #1E2A35;
+  --lp-surface-elevated: rgba(30, 42, 53, 0.95);
+
+  /* Text colors */
+  --lp-text: #E8F0F2;
+  --lp-text-muted: #9CA3AF;
+  --lp-text-inverse: #0F1419;
+
+  /* Border and shadow */
+  --lp-border: #2D4A5C;
+  --lp-shadow: rgba(74, 157, 165, 0.2);
+
+  /* Gradient */
+  --lp-gradient-start: #4A9DA5;
+  --lp-gradient-end: #236A72;
+
+  /* Effects */
+  --lp-glass-bg: rgba(30, 42, 53, 0.7);
 }
 
 /* Reset */
@@ -59,6 +122,149 @@ body {
 }
 
 /* ============================================
+   HEADER
+   ============================================ */
+.lp-header {
+  background: var(--lp-background);
+  border-bottom: 1px solid var(--lp-border);
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.lp-header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.lp-brand {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.lp-brand h1 {
+  font-size: 2rem;
+  font-family: var(--lp-font-display);
+  font-weight: 800;
+  color: var(--lp-primary);
+  letter-spacing: -0.5px;
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+.brand-logo {
+  height: 1.8rem;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Theme-aware logo switching */
+[data-theme="light"] .dark-logo {
+  display: block;
+}
+
+[data-theme="light"] .light-logo {
+  display: none;
+}
+
+[data-theme="dark"] .dark-logo {
+  display: none;
+}
+
+[data-theme="dark"] .light-logo {
+  display: block;
+}
+
+.lp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lp-header-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--lp-text);
+  text-decoration: none;
+  border: 1px solid var(--lp-border);
+  border-radius: 8px;
+  font-family: var(--lp-font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.lp-header-btn:hover {
+  background: var(--lp-surface);
+  border-color: var(--lp-primary);
+  color: var(--lp-primary);
+}
+
+.lp-header-btn .nav-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.lp-theme-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  background: var(--lp-surface);
+  border: 1px solid var(--lp-border);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.lp-theme-btn:hover {
+  border-color: var(--lp-primary);
+}
+
+.lp-theme-btn .icon-sun,
+.lp-theme-btn .icon-moon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transition: all 0.3s ease;
+}
+
+[data-theme="light"] .lp-theme-btn .icon-sun {
+  opacity: 1;
+  transform: rotate(0deg);
+}
+
+[data-theme="light"] .lp-theme-btn .icon-moon {
+  opacity: 0;
+  transform: rotate(90deg);
+}
+
+[data-theme="dark"] .lp-theme-btn .icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg);
+}
+
+[data-theme="dark"] .lp-theme-btn .icon-moon {
+  opacity: 1;
+  transform: rotate(0deg);
+}
+
+/* ============================================
    HERO SECTION
    ============================================ */
 .lp-hero {
@@ -74,15 +280,15 @@ body {
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, var(--lp-gradient-start) 0%, var(--lp-gradient-end) 100%);
-  opacity: 0.15;
+  opacity: 0.08;
 }
 
 .hero-bg::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 70%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
-              radial-gradient(circle at 70% 30%, rgba(118, 75, 162, 0.3) 0%, transparent 50%);
+  background: radial-gradient(circle at 30% 70%, rgba(var(--lp-primary-rgb), 0.12) 0%, transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(var(--lp-primary-rgb), 0.08) 0%, transparent 50%);
 }
 
 .lp-hero-badge {
@@ -103,14 +309,11 @@ body {
 
 .lp-hero-title {
   font-family: var(--lp-font-display);
-  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.8) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--lp-text);
 }
 
 .lp-hero-subtitle {
@@ -178,7 +381,7 @@ body {
 .lp-btn-primary:hover {
   background: var(--lp-primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.4);
+  box-shadow: 0 8px 24px rgba(var(--lp-primary-rgb), 0.4);
 }
 
 .lp-btn-secondary {
