@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/frontend/landing/index.html"
+      "destination": "/frontend/web-dashboard/index.html"
     },
     {
       "source": "/dashboard",
@@ -16,7 +16,7 @@
     },
     {
       "source": "/:path*",
-      "destination": "/frontend/landing/:path*"
+      "destination": "/frontend/web-dashboard/:path*"
     }
   ],
   "headers": [
