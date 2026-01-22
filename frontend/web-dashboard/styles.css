@@ -440,8 +440,8 @@ header h1 {
   display: grid;
   grid-template-columns: 1fr 8px 320px;
   gap: 0;
-  height: calc(100vh - 180px);
-  min-height: 500px;
+  height: calc(67vh - 120px);
+  min-height: 350px;
   background: var(--card-bg);
   border-radius: 12px;
   overflow: hidden;
@@ -571,6 +571,24 @@ header h1 {
   text-align: center;
   border-left: 1px solid var(--border);
   border-right: 1px solid var(--border);
+  transition: background 0.5s ease;
+}
+
+/* Traffic status color variations for status column */
+.hero-status-column.status-flowing {
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.08) 100%);
+}
+
+.hero-status-column.status-moderate {
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.25) 0%, rgba(245, 158, 11, 0.08) 100%);
+}
+
+.hero-status-column.status-heavy {
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.25) 0%, rgba(239, 68, 68, 0.08) 100%);
+}
+
+.hero-status-column.status-gridlock {
+  background: linear-gradient(180deg, rgba(153, 27, 27, 0.35) 0%, rgba(153, 27, 27, 0.12) 100%);
 }
 
 .hero-status-label {
@@ -589,6 +607,24 @@ header h1 {
   text-transform: uppercase;
   letter-spacing: 4px;
   margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+
+/* Traffic status text colors */
+.hero-status-column.status-flowing .hero-status-value {
+  color: #10b981;
+}
+
+.hero-status-column.status-moderate .hero-status-value {
+  color: #f59e0b;
+}
+
+.hero-status-column.status-heavy .hero-status-value {
+  color: #ef4444;
+}
+
+.hero-status-column.status-gridlock .hero-status-value {
+  color: #991b1b;
 }
 
 .hero-status-speed {
@@ -602,6 +638,24 @@ header h1 {
   font-size: 2rem;
   font-weight: 700;
   color: var(--success);
+  transition: color 0.3s ease;
+}
+
+/* Speed value colors based on status */
+.hero-status-column.status-flowing .hero-status-speed span {
+  color: #10b981;
+}
+
+.hero-status-column.status-moderate .hero-status-speed span {
+  color: #f59e0b;
+}
+
+.hero-status-column.status-heavy .hero-status-speed span {
+  color: #ef4444;
+}
+
+.hero-status-column.status-gridlock .hero-status-speed span {
+  color: #991b1b;
 }
 
 .hero-status-recommendation {

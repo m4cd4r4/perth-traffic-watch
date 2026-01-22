@@ -894,11 +894,11 @@ function recalculateCorridorStatus(routeValue) {
  */
 function updateHeroStatusWithSpeed(minSpeed, avgSpeed, siteCount) {
   // Update corridor status text - use minSpeed (worst case) with getTrafficColor thresholds
-  let statusText;
-  if (minSpeed >= 50) statusText = 'Flowing';
-  else if (minSpeed >= 30) statusText = 'Moderate';
-  else if (minSpeed >= 15) statusText = 'Heavy';
-  else statusText = 'Gridlock';
+  let statusText, statusClass;
+  if (minSpeed >= 50) { statusText = 'Flowing'; statusClass = 'status-flowing'; }
+  else if (minSpeed >= 30) { statusText = 'Moderate'; statusClass = 'status-moderate'; }
+  else if (minSpeed >= 15) { statusText = 'Heavy'; statusClass = 'status-heavy'; }
+  else { statusText = 'Gridlock'; statusClass = 'status-gridlock'; }
 
   const corridorStatus = document.getElementById('corridor-status');
   if (corridorStatus) {
@@ -907,6 +907,13 @@ function updateHeroStatusWithSpeed(minSpeed, avgSpeed, siteCount) {
       setTimeout(() => corridorStatus.classList.remove('value-updated'), 400);
     }
     corridorStatus.textContent = statusText;
+  }
+
+  // Update status column background color based on traffic status
+  const statusColumn = document.querySelector('.hero-status-column');
+  if (statusColumn) {
+    statusColumn.classList.remove('status-flowing', 'status-moderate', 'status-heavy', 'status-gridlock');
+    statusColumn.classList.add(statusClass);
   }
 
   // Update average speed display
@@ -2226,6 +2233,15 @@ function updateHeroStatusCard(sites) {
   }, 0);
   const trafficLevel = getTrafficLevel(maxTraffic);
 
+  // Map traffic level to CSS class
+  const statusClassMap = {
+    'Flowing': 'status-flowing',
+    'Moderate': 'status-moderate',
+    'Heavy': 'status-heavy',
+    'Gridlock': 'status-gridlock'
+  };
+  const statusClass = statusClassMap[trafficLevel] || 'status-flowing';
+
   const corridorStatus = document.getElementById('corridor-status');
   if (corridorStatus) {
     if (corridorStatus.textContent !== trafficLevel) {
@@ -2233,6 +2249,13 @@ function updateHeroStatusCard(sites) {
       setTimeout(() => corridorStatus.classList.remove('value-updated'), 400);
     }
     corridorStatus.textContent = trafficLevel;
+  }
+
+  // Update status column background color based on traffic status
+  const statusColumn = document.querySelector('.hero-status-column');
+  if (statusColumn) {
+    statusColumn.classList.remove('status-flowing', 'status-moderate', 'status-heavy', 'status-gridlock');
+    statusColumn.classList.add(statusClass);
   }
 
   const avgSpeedElement = document.getElementById('avg-speed-hero');
