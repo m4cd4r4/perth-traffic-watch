@@ -131,7 +131,7 @@
 
             <div class="content-section">
               <h3>Corridor Aggregation</h3>
-              <p class="section-text">Sites are grouped into corridors (Mounts Bay, Stirling Highway, Mitchell Freeway, Kwinana Freeway) with directional filtering for accurate flow analysis.</p>
+              <p class="section-text">Sites are grouped into corridors (Mounts Bay Road, Stirling Highway) with directional filtering for accurate flow analysis.</p>
               <div class="code-block">
                 <pre><code>// Corridor grouping example
 corridors: {
@@ -139,9 +139,9 @@ corridors: {
     sitePatterns: ['Mounts Bay'],
     directionFilter: 'Eastbound'
   },
-  'mitchell-northbound': {
-    sitePatterns: ['Mitchell Fwy'],
-    directionFilter: 'Northbound'
+  'stirling-southbound': {
+    sitePatterns: ['Stirling Hwy'],
+    directionFilter: 'Southbound'
   }
 }</code></pre>
               </div>
@@ -175,31 +175,6 @@ corridors: {
                   <span class="status-speed">&lt;15 km/h</span>
                 </div>
               </div>
-
-              <h4 class="subsection-title">Freeways (100 km/h limit)</h4>
-              <p class="section-text-small">Mitchell Freeway & Kwinana Freeway</p>
-              <div class="status-legend">
-                <div class="status-item flowing">
-                  <span class="status-dot"></span>
-                  <span class="status-name">Flowing</span>
-                  <span class="status-speed">80-100 km/h</span>
-                </div>
-                <div class="status-item moderate">
-                  <span class="status-dot"></span>
-                  <span class="status-name">Moderate</span>
-                  <span class="status-speed">50-80 km/h</span>
-                </div>
-                <div class="status-item heavy">
-                  <span class="status-dot"></span>
-                  <span class="status-name">Heavy</span>
-                  <span class="status-speed">25-50 km/h</span>
-                </div>
-                <div class="status-item gridlock">
-                  <span class="status-dot"></span>
-                  <span class="status-name">Gridlock</span>
-                  <span class="status-speed">&lt;25 km/h</span>
-                </div>
-              </div>
             </div>
 
             <div class="content-section">
@@ -208,7 +183,6 @@ corridors: {
               <ul class="feature-list">
                 <li>Morning peak: Inbound flow dominates (towards CBD)</li>
                 <li>Evening peak: Outbound flow dominates (towards suburbs)</li>
-                <li>Freeway multipliers: 1.5x stronger directional bias than arterials</li>
               </ul>
             </div>
           </div>
@@ -577,22 +551,6 @@ CREATE TABLE sites (
                     <span>Claremont → Nedlands (2 directions)</span>
                   </div>
                   <span class="corridor-count">16 sites</span>
-                </div>
-                <div class="corridor-item">
-                  <span class="corridor-icon freeway"></span>
-                  <div class="corridor-info">
-                    <strong>Mitchell Freeway</strong>
-                    <span>Narrows → Scarborough Beach Rd (2 directions)</span>
-                  </div>
-                  <span class="corridor-count">18 sites</span>
-                </div>
-                <div class="corridor-item">
-                  <span class="corridor-icon freeway"></span>
-                  <div class="corridor-info">
-                    <strong>Kwinana Freeway</strong>
-                    <span>Narrows → Leach Hwy (2 directions)</span>
-                  </div>
-                  <span class="corridor-count">12 sites</span>
                 </div>
               </div>
             </div>
