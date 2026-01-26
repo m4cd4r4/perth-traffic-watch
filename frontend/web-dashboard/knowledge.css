@@ -579,6 +579,20 @@
   font-weight: 600;
 }
 
+.privacy-highlight {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  border-left: 4px solid #667eea;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.privacy-highlight .section-text {
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
 .section-text-small {
   font-size: 0.8rem;
   color: var(--text-muted);

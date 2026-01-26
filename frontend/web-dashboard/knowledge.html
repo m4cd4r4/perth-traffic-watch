@@ -206,6 +206,9 @@ corridors: {
             <div class="content-section">
               <h3>FOMO Architecture</h3>
               <p class="section-text"><strong>FOMO</strong> (Faster Objects, More Objects) is a novel machine learning architecture designed specifically for constrained devices. It outputs a heatmap instead of bounding boxes, enabling much faster inference.</p>
+              <div class="privacy-highlight">
+                <p class="section-text"><strong>🔒 Privacy-Preserving:</strong> The system processes 96x96 grayscale heatmaps, not photographs. No identifiable images are stored or transmitted—only anonymous vehicle detection coordinates.</p>
+              </div>
               <ul class="spec-list">
                 <li>
                   <span class="spec-label">Backbone</span>
@@ -255,7 +258,7 @@ corridors: {
                 </div>
               </div>
               <ul class="feature-list">
-                <li>2,000+ labeled vehicle images from Perth roads</li>
+                <li>Will collect 2,000+ images for ML training</li>
                 <li>Data augmentation: rotation, brightness, Gaussian noise</li>
                 <li>80/20 train/test split with stratified sampling</li>
                 <li>Cloud-based training on Edge Impulse platform</li>
