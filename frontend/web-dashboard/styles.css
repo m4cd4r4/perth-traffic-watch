@@ -6356,7 +6356,7 @@ header.scrolled + .ticker-banner {
   gap: 1.5rem;
   margin-bottom: 2rem;
   width: 100%;
-  max-width: 450px;
+  max-width: 600px;
 }
 
 .onboarding-stat {
@@ -6397,6 +6397,10 @@ header.scrolled + .ticker-banner {
   animation-delay: 0.6s;
 }
 
+.onboarding-stat:nth-child(4) {
+  animation-delay: 0.8s;
+}
+
 @keyframes statFadeIn {
   from {
     opacity: 0;
@@ -6428,6 +6432,11 @@ header.scrolled + .ticker-banner {
 .stat-icon.gradient-orange {
   background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
   box-shadow: 0 4px 12px rgba(250, 112, 154, 0.3);
+}
+
+.stat-icon.gradient-purple {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
 }
 
 .stat-number {
