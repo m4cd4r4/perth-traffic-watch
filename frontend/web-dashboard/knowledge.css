@@ -530,13 +530,13 @@
 }
 
 .expand-icon {
-  font-size: 1.25rem;
-  font-weight: bold;
+  width: 20px;
+  height: 20px;
   transition: transform 0.3s;
 }
 
 .knowledge-card.expanded .expand-icon {
-  transform: rotate(45deg);
+  transform: rotate(180deg);
 }
 
 /* Card Content */
