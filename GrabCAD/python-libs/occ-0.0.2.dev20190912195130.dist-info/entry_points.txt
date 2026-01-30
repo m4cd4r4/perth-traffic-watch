@@ -1,0 +1,4 @@
+
+        [console_scripts]
+        occ = occ.main:main
+    

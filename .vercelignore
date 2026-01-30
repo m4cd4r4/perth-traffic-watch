@@ -1,0 +1,31 @@
+# Large directories not needed for frontend deployment
+GrabCAD/
+backend/
+firmware/
+hardware/
+deployment/
+
+# Test files and reports
+tests/
+test-results/
+playwright-report/
+screenshots/
+*.spec.js
+
+# Development files
+node_modules/
+.git/
+*.log
+*.png
+!frontend/**/*.png
+
+# Test scripts at root
+test-*.js
+debug-*.js
+inspect-*.js
+dev-server.js
+capture-mockups.js
+
+# Other
+.env.local
+.claude/

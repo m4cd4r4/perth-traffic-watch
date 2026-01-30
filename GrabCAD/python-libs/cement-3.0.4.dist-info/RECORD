@@ -1,0 +1,300 @@
+../../bin/cement.exe,sha256=Bg-RP7mH3tnNKuzG9Sy2KTa38MwgAXLkDgeawuvmvpE,108373
+cement-3.0.4.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+cement-3.0.4.dist-info/LICENSE,sha256=Ogi0AjDCrrFLojpQQd0Gk6vI0r66HKY4boA9G_vevmU,1532
+cement-3.0.4.dist-info/METADATA,sha256=Jij34AWHCjZ1Arnc8EGTCrMBvH2zTPtwNWJornsHCfk,5869
+cement-3.0.4.dist-info/RECORD,,
+cement-3.0.4.dist-info/WHEEL,sha256=U88EhGIw8Sj2_phqajeu_EAi3RAo8-C6zV3REsWbWbs,92
+cement-3.0.4.dist-info/entry_points.txt,sha256=qQlM_iBAhXGR00XmFHTHyj4kLWGyGfQI2-S7AjDNwYM,69
+cement-3.0.4.dist-info/top_level.txt,sha256=zVn_TJl4LoBqdpEaHc_EiZoPqtlVzrszKgWiULQFI1s,7
+cement/__init__.py,sha256=xvSUjrTlbAgYxrT52gS-WFuW1mksjZno_PWTanILHLs,432
+cement/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/__pycache__/main.cpython-313.pyc,,
+cement/cli/contrib/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/contrib/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__init__.py,sha256=xJHjaMoy51_KXn1wf0cysH6tUUifUxZCwSOfcJGEYZw,2614
+cement/cli/contrib/jinja2/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/_compat.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/_identifier.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/asyncfilters.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/asyncsupport.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/bccache.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/compiler.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/constants.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/debug.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/defaults.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/environment.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/exceptions.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/ext.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/filters.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/idtracking.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/lexer.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/loaders.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/meta.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/nativetypes.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/nodes.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/optimizer.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/parser.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/runtime.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/sandbox.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/tests.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/utils.cpython-313.pyc,,
+cement/cli/contrib/jinja2/__pycache__/visitor.cpython-313.pyc,,
+cement/cli/contrib/jinja2/_compat.py,sha256=xP60CE5Qr8FTYcDE1f54tbZLKGvMwYml4-8T7Q4KG9k,2596
+cement/cli/contrib/jinja2/_identifier.py,sha256=W1QBSY-iJsyt6oR_nKSuNNCzV95vLIOYgUNPUI1d5gU,1726
+cement/cli/contrib/jinja2/asyncfilters.py,sha256=cTDPvrS8Hp_IkwsZ1m9af_lr5nHysw7uTa5gV0NmZVE,4144
+cement/cli/contrib/jinja2/asyncsupport.py,sha256=UErQ3YlTLaSjFb94P4MVn08-aVD9jJxty2JVfMRb-1M,7878
+cement/cli/contrib/jinja2/bccache.py,sha256=nQldx0ZRYANMyfvOihRoYFKSlUdd5vJkS7BjxNwlOZM,12794
+cement/cli/contrib/jinja2/compiler.py,sha256=BqC5U6JxObSRhblyT_a6Tp5GtEU5z3US1a4jLQaxxgo,65386
+cement/cli/contrib/jinja2/constants.py,sha256=uwwV8ZUhHhacAuz5PTwckfsbqBaqM7aKfyJL7kGX5YQ,1626
+cement/cli/contrib/jinja2/debug.py,sha256=WTVeUFGUa4v6ReCsYv-iVPa3pkNB75OinJt3PfxNdXs,12045
+cement/cli/contrib/jinja2/defaults.py,sha256=Em-95hmsJxIenDCZFB1YSvf9CNhe9rBmytN3yUrBcWA,1400
+cement/cli/contrib/jinja2/environment.py,sha256=VnkAkqw8JbjZct4tAyHlpBrka2vqB-Z58RAP-32P1ZY,50849
+cement/cli/contrib/jinja2/exceptions.py,sha256=_Rj-NVi98Q6AiEjYQOsP8dEIdu5AlmRHzcSNOPdWix4,4428
+cement/cli/contrib/jinja2/ext.py,sha256=atMQydEC86tN1zUsdQiHw5L5cF62nDbqGue25Yiu3N4,24500
+cement/cli/contrib/jinja2/filters.py,sha256=yOAJk0MsH-_gEC0i0U6NweVQhbtYaC-uE8xswHFLF4w,36528
+cement/cli/contrib/jinja2/idtracking.py,sha256=2GbDSzIvGArEBGLkovLkqEfmYxmWsEf8c3QZwM4uNsw,9197
+cement/cli/contrib/jinja2/lexer.py,sha256=ySEPoXd1g7wRjsuw23uimS6nkGN5aqrYwcOKxCaVMBQ,28559
+cement/cli/contrib/jinja2/loaders.py,sha256=xiTuURKAEObyym0nU8PCIXu_Qp8fn0AJ5oIADUUm-5Q,17382
+cement/cli/contrib/jinja2/meta.py,sha256=fmKHxkmZYAOm9QyWWy8EMd6eefAIh234rkBMW2X4ZR8,4340
+cement/cli/contrib/jinja2/nativetypes.py,sha256=_sJhS8f-8Q0QMIC0dm1YEdLyxEyoO-kch8qOL5xUDfE,7308
+cement/cli/contrib/jinja2/nodes.py,sha256=L10L_nQDfubLhO3XjpF9qz46FSh2clL-3e49ogVlMmA,30853
+cement/cli/contrib/jinja2/optimizer.py,sha256=MsdlFACJ0FRdPtjmCAdt7JQ9SGrXFaDNUaslsWQaG3M,1722
+cement/cli/contrib/jinja2/parser.py,sha256=lPzTEbcpTRBLw8ii6OYyExHeAhaZLMA05Hpv4ll3ULk,35875
+cement/cli/contrib/jinja2/runtime.py,sha256=DHdD38Pq8gj7uWQC5usJyWFoNWL317A9AvXOW_CLB34,27755
+cement/cli/contrib/jinja2/sandbox.py,sha256=TVyZHlNqqTzsv9fv2NvJNmSdWRHTguhyMHdxjWms32U,16708
+cement/cli/contrib/jinja2/tests.py,sha256=iJQLwbapZr-EKquTG_fVOVdwHUUKf3SX9eNkjQDF8oU,4237
+cement/cli/contrib/jinja2/utils.py,sha256=q24VupGZotQ-uOyrJxCaXtDWhZC1RgsQG7kcdmjck2Q,20629
+cement/cli/contrib/jinja2/visitor.py,sha256=JD1H1cANA29JcntFfN5fPyqQxB4bI4wC00BzZa-XHks,3316
+cement/cli/contrib/markupsafe/__init__.py,sha256=xtkRdxhzJzgp65wUo1D4DjnazxHU88pPldaAuDekBeY,10697
+cement/cli/contrib/markupsafe/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/contrib/markupsafe/__pycache__/_compat.cpython-313.pyc,,
+cement/cli/contrib/markupsafe/__pycache__/_constants.cpython-313.pyc,,
+cement/cli/contrib/markupsafe/__pycache__/_native.cpython-313.pyc,,
+cement/cli/contrib/markupsafe/_compat.py,sha256=r1HE0CpcAZeb-AiTV9wITR91PeLHn0CzZ_XHkYoozpI,565
+cement/cli/contrib/markupsafe/_constants.py,sha256=U_xybFQsyXKCgHSfranJnFzo-z9nn9fuBeSk243sE5Q,4795
+cement/cli/contrib/markupsafe/_native.py,sha256=E2Un1ysOf-w45d18YCj8UelT5UP7Vt__IuFPYJ7YRIs,1187
+cement/cli/contrib/yaml/__init__.py,sha256=53VZayqtIKrdWEuauzPtjPqiyQ3XydjDsD5Yo2KKbak,9607
+cement/cli/contrib/yaml/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/composer.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/constructor.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/cyaml.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/dumper.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/emitter.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/error.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/events.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/loader.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/nodes.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/parser.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/reader.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/representer.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/resolver.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/scanner.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/serializer.cpython-313.pyc,,
+cement/cli/contrib/yaml/__pycache__/tokens.cpython-313.pyc,,
+cement/cli/contrib/yaml/composer.py,sha256=rAskP6VXqfAZcZxGIQFyPwVkNZYtnmmylV4TBSn4EUk,4881
+cement/cli/contrib/yaml/constructor.py,sha256=SVt8piayRVwV7Pd9RDvIM60BftFrqkA35z7HWwubHkg,25554
+cement/cli/contrib/yaml/cyaml.py,sha256=zajOEEo_11ZJC0pko7O-mqT9JYxhXVdFIXYAHTW9COU,3294
+cement/cli/contrib/yaml/dumper.py,sha256=86Yz2GmUk6lk6xUKRRWZwDmvSMp3pPekmWDIarq93Iw,2723
+cement/cli/contrib/yaml/emitter.py,sha256=16CwscYPx2DejDyE8MqfMybsm1DnFsSUwDvSQuC-3Rc,42954
+cement/cli/contrib/yaml/error.py,sha256=Ah9z-toHJUbE9j-M8YpxgSRM5CgLCcwVzJgLLRF2Fxo,2533
+cement/cli/contrib/yaml/events.py,sha256=50_TksgQiE4up-lKo_V-nBy-tAIxkIPQxY5qDhKCeHw,2445
+cement/cli/contrib/yaml/loader.py,sha256=aQ71rMxcAW_oA1dt0x3hlRDdqYjzwXXfpvSFFewh9NA,1138
+cement/cli/contrib/yaml/nodes.py,sha256=gPKNj8pKCdh2d4gr3gIYINnPOaOxGhJAUiYhGRnPE84,1440
+cement/cli/contrib/yaml/parser.py,sha256=ilWp5vvgoHFGzvOZDItFoGjD6D42nhlZrZyjAwa0oJo,25495
+cement/cli/contrib/yaml/reader.py,sha256=r22-ns0QvKAqGopu3IgczoK5VLGA7oZ3XN9sBESkb04,6854
+cement/cli/contrib/yaml/representer.py,sha256=ZmBbegM-yVa3NBBTo-LqF-O2IcgGIT5LlDweB8SDgAE,14097
+cement/cli/contrib/yaml/resolver.py,sha256=DJCjpQr8YQCEYYjKEYqTl0GrsZil2H4aFOI9b0Oe-U4,8970
+cement/cli/contrib/yaml/scanner.py,sha256=6LVPebouAqunvxw3tFVMa34pDgPsDKg2JuaaeNeTLtk,51695
+cement/cli/contrib/yaml/serializer.py,sha256=ChuFgmhU01hj4xgI8GaKv6vfM2Bujwa9i7d2FAHj7cA,4165
+cement/cli/contrib/yaml/tokens.py,sha256=lTQIzSVw8Mg9wv459-TjiOQe6wVziqaRlqX2_89rp54,2573
+cement/cli/controllers/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/controllers/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/controllers/__pycache__/base.cpython-313.pyc,,
+cement/cli/controllers/base.py,sha256=S-gs6Re6M6UcIVGnJXlC2smZcYmBND9Fjb6rBR9SZzQ,473
+cement/cli/main.py,sha256=iODD_uIVBUkV29qgIvVla3OUXWUPNVODW210768PCkM,1347
+cement/cli/templates/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/extension/.generate.yml,sha256=3LgcHAV_hxTFNtarDqDtjIe2iuhJEQClRxnukMVovr8,329
+cement/cli/templates/generate/extension/ext_{{ label }}.py,sha256=q3CoDYdbkyW3LD1dX3-FjLeXf0L0QUv5-3Y3pJlZjaQ,292
+cement/cli/templates/generate/plugin/.generate.yml,sha256=cn13nIwPjUQ61V7asGEozYAYGYgrNhzwS_iD2TkeR5Q,457
+cement/cli/templates/generate/plugin/{{ label }}/__init__.py,sha256=N1GxmbEPyVMB5IrMU7_c2MVfM41bhzZH-TuqdGXzE34,301
+cement/cli/templates/generate/plugin/{{ label }}/controllers/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/plugin/{{ label }}/controllers/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/plugin/{{ label }}/controllers/{{ label }}.py,sha256=Ngn_PU5My9-wJn01O-dteoDidTaQjoh0R91VLi7EIXc,858
+cement/cli/templates/generate/plugin/{{ label }}/templates/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/plugin/{{ label }}/templates/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/plugin/{{ label }}/templates/plugins/{{ label }}/command1.jinja2,sha256=Ah_CrdU0HPnziLFFNmL3CCdBURlSXMWSDHNw6SHMYkI,35
+cement/cli/templates/generate/project/.generate.yml,sha256=lk4vBtqN6QPBOqfNIvJfn7sFj1RxzYFhpFyZxMwo3RM,953
+cement/cli/templates/generate/project/.gitignore,sha256=oj31l_JKADFy_7W948jy0XS3h_Uc5-DtPSoDn7HUaU0,1220
+cement/cli/templates/generate/project/CHANGELOG.md,sha256=sfJhPnM3q-2B9IXS6Xi1mR6u-hFc1vh2O7rsQgi59Iw,56
+cement/cli/templates/generate/project/Dockerfile,sha256=SXXzg_qVL1iql-NWLzRwbfdnniufTjApL6HqsDPm4QY,293
+cement/cli/templates/generate/project/LICENSE.md,sha256=AbpHGcgLb-kRsJGnwFEktk7uzpZOCcBY74-YBdrKVGs,1
+cement/cli/templates/generate/project/MANIFEST.in,sha256=roYjZ91yW_u1-5DL5ffgZNhwruN6p-joztuDXzSeb8Q,139
+cement/cli/templates/generate/project/Makefile,sha256=lMk36rVHSKsrljVvu-FYoHwPjTdzE2Qj0EQchvkPf4g,608
+cement/cli/templates/generate/project/README.md,sha256=tzUvH222YVAQgo1xghawFoqg5OX8iniPGnp3PRnFOuM,1015
+cement/cli/templates/generate/project/config/{{ label }}.yml.example,sha256=BjwSK-akpWae54xI6INz1TP0oxCLvieggBUq7HQlA4A,1069
+cement/cli/templates/generate/project/docs/.gitkeep,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/project/requirements-dev.txt,sha256=Gm-GGTgYp-SB-MLJxvFFyG1cFLdNiEhBBPFM8Cg0DM0,95
+cement/cli/templates/generate/project/requirements.txt,sha256=WrX6gNkuKSkGaUglpPa0VzdG8PaA5CO65xOYdun0Hzc,52
+cement/cli/templates/generate/project/setup.cfg,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/project/setup.py,sha256=FGkXRdLeHOc1Yj8wmjpfR6zhO9ReVs07ilW5CnRf2rE,727
+cement/cli/templates/generate/project/tests/__pycache__/conftest.cpython-313.pyc,,
+cement/cli/templates/generate/project/tests/conftest.py,sha256=ZmESEeBKxDQBZVHWT6z6gQc_EmM107z6W0GLJ0W8XbU,299
+cement/cli/templates/generate/project/tests/test_{{ label }}.py,sha256=S6jcbmH1A740ADG50mt8gYqA8kDNEgcjC94TAldJNkU,992
+cement/cli/templates/generate/project/{{ label }}/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/project/{{ label }}/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/project/{{ label }}/controllers/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/project/{{ label }}/controllers/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/project/{{ label }}/controllers/__pycache__/base.cpython-313.pyc,,
+cement/cli/templates/generate/project/{{ label }}/controllers/base.py,sha256=o3X5byvr5g6KzB2v2XvBpdDurVbZzY9tfpSQL7WD5BU,1548
+cement/cli/templates/generate/project/{{ label }}/core/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/project/{{ label }}/core/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/project/{{ label }}/core/__pycache__/version.cpython-313.pyc,,
+cement/cli/templates/generate/project/{{ label }}/core/exc.py,sha256=olrV7LGC_cnviG3RbE2lGZZgpazg0afgYkg5ERHwxBI,76
+cement/cli/templates/generate/project/{{ label }}/core/version.py,sha256=bQrG-6huG_3Usx_-WD9CCCVTOgNOvhHeFFyhXfiM36E,175
+cement/cli/templates/generate/project/{{ label }}/ext/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/project/{{ label }}/ext/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/project/{{ label }}/main.py,sha256=kdcTDeoN93v8ObjrqPNcAbGn3iW39Jn5yJ8bhx0zum0,1961
+cement/cli/templates/generate/project/{{ label }}/plugins/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/project/{{ label }}/plugins/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/project/{{ label }}/templates/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/project/{{ label }}/templates/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/project/{{ label }}/templates/command1.jinja2,sha256=HHOy5da8brHPDncTBgXDKkK1AKnGfmni4fc_Nk7R534,64
+cement/cli/templates/generate/script/.generate.yml,sha256=sbD_0Bs8nt3j8Iq_jW3uiMs_XY0f-8RfSso-oZvkB0Y,300
+cement/cli/templates/generate/script/__pycache__/{{ label }}.cpython-313.pyc,,
+cement/cli/templates/generate/script/{{ label }}.py,sha256=hDhnvAyuSQx0BmKISgEJ3GEehxH9KJcbYLALOzGTAmM,1611
+cement/cli/templates/generate/todo-tutorial/.generate.yml,sha256=g_HvkvKG0_W8oeQ7EbTPByFwCfVlhfnalIytmCpdavI,27
+cement/cli/templates/generate/todo-tutorial/.gitignore,sha256=oj31l_JKADFy_7W948jy0XS3h_Uc5-DtPSoDn7HUaU0,1220
+cement/cli/templates/generate/todo-tutorial/CHANGELOG.md,sha256=l-NHDp7HhrViaTt3whqeIFR9NM_g8WrxLQniYtYotdw,65
+cement/cli/templates/generate/todo-tutorial/Dockerfile,sha256=dfXOYbvTil8ZEuVJSvdlIFhldhNgjcNyS-0kaqvIwss,501
+cement/cli/templates/generate/todo-tutorial/LICENSE.md,sha256=AbpHGcgLb-kRsJGnwFEktk7uzpZOCcBY74-YBdrKVGs,1
+cement/cli/templates/generate/todo-tutorial/MANIFEST.in,sha256=ivX5lzOHwfNksWh8Wqc9bHB_3VswB4pZc7annTAnUzo,132
+cement/cli/templates/generate/todo-tutorial/Makefile,sha256=3ccor0wyYsxuS4Qitm2OqpqPIFriFHnv-w_NP4PUJTY,587
+cement/cli/templates/generate/todo-tutorial/README.md,sha256=8fQJdmTxCk6J0yTmfFKePwd_BhH1ZhhdVQKMDmRUZW0,1011
+cement/cli/templates/generate/todo-tutorial/__pycache__/setup.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/config/todo.yml.example,sha256=pyeblsEFOWunQzN_rM1lMDTPGAKgvWzpqdW3dQBhb8A,1101
+cement/cli/templates/generate/todo-tutorial/docs/.gitkeep,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/todo-tutorial/requirements-dev.txt,sha256=Gm-GGTgYp-SB-MLJxvFFyG1cFLdNiEhBBPFM8Cg0DM0,95
+cement/cli/templates/generate/todo-tutorial/requirements.txt,sha256=0GNorfrf3rcIkfs1H65DqM5MK-RkgW497lOF2QX0wck,158
+cement/cli/templates/generate/todo-tutorial/setup.cfg,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/todo-tutorial/setup.py,sha256=tGx9xDjkmVOp8z7HI3gl-5f6sSGs9JTckLjElVNfc18,715
+cement/cli/templates/generate/todo-tutorial/tests/__pycache__/conftest.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/tests/__pycache__/test_main.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/tests/conftest.py,sha256=vfbCimyqWzsKhIO-ApzAvPXLVciHVuFKbhFindAENGA,575
+cement/cli/templates/generate/todo-tutorial/tests/test_main.py,sha256=qySKmK6oaBW1jw-5ulEupGt5yAeFVohKyG_QLR2flQA,252
+cement/cli/templates/generate/todo-tutorial/todo/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/todo-tutorial/todo/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/todo/__pycache__/main.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/todo/controllers/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/todo-tutorial/todo/controllers/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/todo/controllers/__pycache__/base.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/todo/controllers/__pycache__/items.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/todo/controllers/base.py,sha256=0ZtyZvvd0ivT3hmvkqx_LLXW0Y4XHyA7r-qXB_ABD_w,1543
+cement/cli/templates/generate/todo-tutorial/todo/controllers/items.py,sha256=CFA7U9T-Kw18kEDrZ8fHtz37OdDOYgcl4LrO65sAwQE,2790
+cement/cli/templates/generate/todo-tutorial/todo/core/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/todo-tutorial/todo/core/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/todo/core/__pycache__/exc.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/todo/core/__pycache__/version.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/todo/core/exc.py,sha256=EmKCZABYJvADC67qLrHaCC8qxTx9JPFLSwrQguSnUro,259
+cement/cli/templates/generate/todo-tutorial/todo/core/version.py,sha256=bQrG-6huG_3Usx_-WD9CCCVTOgNOvhHeFFyhXfiM36E,175
+cement/cli/templates/generate/todo-tutorial/todo/ext/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/todo-tutorial/todo/ext/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/todo/main.py,sha256=svo-KCy0sz3nv09auX0m9_AjVxQIpIf73UAKZdlonHk,2603
+cement/cli/templates/generate/todo-tutorial/todo/plugins/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/todo-tutorial/todo/plugins/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/todo/templates/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/cli/templates/generate/todo-tutorial/todo/templates/__pycache__/__init__.cpython-313.pyc,,
+cement/cli/templates/generate/todo-tutorial/todo/templates/command1.jinja2,sha256=HHOy5da8brHPDncTBgXDKkK1AKnGfmni4fc_Nk7R534,64
+cement/cli/templates/generate/todo-tutorial/todo/templates/items/list.jinja2,sha256=lk8OLGOYWPXAA3hxXvDIkfXcnDuK0N6TZj0sd82Cdwo,130
+cement/core/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/core/__pycache__/__init__.cpython-313.pyc,,
+cement/core/__pycache__/arg.cpython-313.pyc,,
+cement/core/__pycache__/backend.cpython-313.pyc,,
+cement/core/__pycache__/cache.cpython-313.pyc,,
+cement/core/__pycache__/config.cpython-313.pyc,,
+cement/core/__pycache__/controller.cpython-313.pyc,,
+cement/core/__pycache__/exc.cpython-313.pyc,,
+cement/core/__pycache__/extension.cpython-313.pyc,,
+cement/core/__pycache__/foundation.cpython-313.pyc,,
+cement/core/__pycache__/handler.cpython-313.pyc,,
+cement/core/__pycache__/hook.cpython-313.pyc,,
+cement/core/__pycache__/interface.cpython-313.pyc,,
+cement/core/__pycache__/log.cpython-313.pyc,,
+cement/core/__pycache__/mail.cpython-313.pyc,,
+cement/core/__pycache__/meta.cpython-313.pyc,,
+cement/core/__pycache__/output.cpython-313.pyc,,
+cement/core/__pycache__/plugin.cpython-313.pyc,,
+cement/core/__pycache__/template.cpython-313.pyc,,
+cement/core/arg.py,sha256=Do5oAhBwx8V-y38dbEEEcfNtzZE6K1S3lrtDfk4rqtI,2742
+cement/core/backend.py,sha256=1SNFA6GiyDgB7AAL3weBvqDA16LEdYsxhKJm5vbahLk,86
+cement/core/cache.py,sha256=1ku52LASsfV2nFzRc2mHtnz2_NeEi4RT8mp40dIK8e8,2486
+cement/core/config.py,sha256=ZEpHJzUHOxc_Q34h66mgnAXg4oASKDi91g3rczadtGc,6248
+cement/core/controller.py,sha256=BqnOdBzQ-JWj9KoT16mQjutSGFuy4FM2HgCHqsUASxk,1509
+cement/core/exc.py,sha256=AWZ2NzgjT78UohGe_jPy0jTqr72SjFbzGRwSPO5Gvn8,917
+cement/core/extension.py,sha256=KLonsB_c76NaXl-vlYAtivwdvG_GAwP9Ia71AKVdhkQ,3997
+cement/core/foundation.py,sha256=g5ZQLJ0ZBd9WjLvGkp44HKKVeoy9Op-NIXmrmITkVp0,58413
+cement/core/handler.py,sha256=j3TsbNFW1Do8RJnLiA4kbRJhPNgmdH_gN3F8o1KxJE8,13164
+cement/core/hook.py,sha256=URQPRjfUcnwRt_LEUifidHRAUwYTS488yQCG4kb14xQ,5182
+cement/core/interface.py,sha256=Nsp2qRD7BQoKuoQhL3X1Yz7upDbiMEvTKP6tFjBwD0g,3646
+cement/core/log.py,sha256=zfwC0OFf5wD5RuCEDmec_JqdxPOHhB8uzhZNY1nLjqg,2114
+cement/core/mail.py,sha256=dFGYg87psKEKIkhK8CF5cyI7cMXTmLwdQfYKMmUWeIs,3825
+cement/core/meta.py,sha256=Wp_JMJfkx5ijDkMMjDKfIpnpEJ1GdcOcy9DQrNVgCmM,1424
+cement/core/output.py,sha256=j7-DdwVdUy_FZilZr3O09_3YtVZYu-5cnDl5p0hAfaM,1361
+cement/core/plugin.py,sha256=eATiU0cgKmLLM7Og1Pzbdgj-2a7xveVOk-CqKcfru2I,1713
+cement/core/template.py,sha256=ECizRi9M5Pk2m-_2WYLHZUbNxryKjQgymprj1N7oCZI,14335
+cement/ext/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/ext/__pycache__/__init__.cpython-313.pyc,,
+cement/ext/__pycache__/ext_alarm.cpython-313.pyc,,
+cement/ext/__pycache__/ext_argparse.cpython-313.pyc,,
+cement/ext/__pycache__/ext_colorlog.cpython-313.pyc,,
+cement/ext/__pycache__/ext_configparser.cpython-313.pyc,,
+cement/ext/__pycache__/ext_daemon.cpython-313.pyc,,
+cement/ext/__pycache__/ext_dummy.cpython-313.pyc,,
+cement/ext/__pycache__/ext_generate.cpython-313.pyc,,
+cement/ext/__pycache__/ext_jinja2.cpython-313.pyc,,
+cement/ext/__pycache__/ext_json.cpython-313.pyc,,
+cement/ext/__pycache__/ext_logging.cpython-313.pyc,,
+cement/ext/__pycache__/ext_memcached.cpython-313.pyc,,
+cement/ext/__pycache__/ext_mustache.cpython-313.pyc,,
+cement/ext/__pycache__/ext_plugin.cpython-313.pyc,,
+cement/ext/__pycache__/ext_print.cpython-313.pyc,,
+cement/ext/__pycache__/ext_redis.cpython-313.pyc,,
+cement/ext/__pycache__/ext_scrub.cpython-313.pyc,,
+cement/ext/__pycache__/ext_smtp.cpython-313.pyc,,
+cement/ext/__pycache__/ext_tabulate.cpython-313.pyc,,
+cement/ext/__pycache__/ext_watchdog.cpython-313.pyc,,
+cement/ext/__pycache__/ext_yaml.cpython-313.pyc,,
+cement/ext/ext_alarm.py,sha256=AoJlmLR6_SJmbssnCi7ODeSvtrHYIqXalYDk8KWh3Ps,1275
+cement/ext/ext_argparse.py,sha256=PeJyumy10JzJXrA0P0Y7jSl0zFDZfbp9YFmFcSIUnPc,30738
+cement/ext/ext_colorlog.py,sha256=22_tneq21JFRhLDG7o-oYBd3ddPDW1rFN_W9jtmdyeI,3670
+cement/ext/ext_configparser.py,sha256=0prNmhIioc12Xnh1TyUaUrMqOWvATNcu33EyWuIdaQY,4972
+cement/ext/ext_daemon.py,sha256=h_SAjw-DZbtIjoc4mRTqGG2V5BcB0kdjuus9Fh1-_h8,8697
+cement/ext/ext_dummy.py,sha256=3gQFMVbpAszyKsYnQAljG9yC6KaeR3TuAl7EiQdmvLU,7824
+cement/ext/ext_generate.py,sha256=18ukAd37uBPbFO2KlcWFVHFWPGMNqyG5NBDB6VqsHk4,7509
+cement/ext/ext_jinja2.py,sha256=ijH6cm9uifi1VIdXHI5T-53uXooaC8FmkQ7lKEyoJUo,4798
+cement/ext/ext_json.py,sha256=ucnh6DuEqXKiutZnBhzfTEmRLRFAQIDXFHf6gadZ6vE,5077
+cement/ext/ext_logging.py,sha256=zh3SvT_fY2Y5bpw4TyHO8gGmBTIOcYBjSFveWaLNC-4,12845
+cement/ext/ext_memcached.py,sha256=rPal2WpoetxR6HS_ZxCyRtPyAxTu81pPw1tyS3SDpCE,4403
+cement/ext/ext_mustache.py,sha256=lPkOZbM5T_6zlzhCmbgTe-yVi1hNdlM1tx0IMmo9B34,3902
+cement/ext/ext_plugin.py,sha256=j4hUPTo09UNwc2OdcinqwVzg80Y6kBl6G2EWFlalgO8,7652
+cement/ext/ext_print.py,sha256=ki6rGocO8XjNq99uv0Zcf_wr8jj9PMNolUPePMX829U,3380
+cement/ext/ext_redis.py,sha256=uJ_DavQagVQYiqtl5YZdVLI_QuSIKnWHM91her3JPRY,3697
+cement/ext/ext_scrub.py,sha256=U5NHJhV14PJqRDkCSo_LHJspy_21yAz3ZYY0PCCrO44,1862
+cement/ext/ext_smtp.py,sha256=eUrTWdYXsPcP4l2sbZVnsY0l8ejBNrYd3pubjMXZ0hk,4569
+cement/ext/ext_tabulate.py,sha256=_boMT5SM8wO_CPXR3xSsl6yJdRI0_CoM5-I0o9jyJ-I,2952
+cement/ext/ext_watchdog.py,sha256=yJjAibLN5-avrAUcYt-CJQn_vuuo7vGcRrzZcf37OQE,5328
+cement/ext/ext_yaml.py,sha256=y5wX9EBzfKG4cbItuZen-qvWC-wgXNBwbzqjBGHFD1w,5376
+cement/utils/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+cement/utils/__pycache__/__init__.cpython-313.pyc,,
+cement/utils/__pycache__/fs.cpython-313.pyc,,
+cement/utils/__pycache__/misc.cpython-313.pyc,,
+cement/utils/__pycache__/shell.cpython-313.pyc,,
+cement/utils/__pycache__/test.cpython-313.pyc,,
+cement/utils/__pycache__/version.cpython-313.pyc,,
+cement/utils/fs.py,sha256=5wK-vynfZfOlrYZV7rQ2pT_eRA4jy_dyLyB6TJVfY48,5821
+cement/utils/misc.py,sha256=5uek8CV82k_bLxdb8UqgCxXQPduSOIvfH2vok0aBwN0,6535
+cement/utils/shell.py,sha256=-sbdl29BfDzkAQL26r_x-hzjQfdonrmGl_2X9B1U5f4,14377
+cement/utils/test.py,sha256=pYAG0TeWQpXntGSKqG-TcCMUCwBDgPpNl9cAtQ0IVz8,229
+cement/utils/version.py,sha256=3wbRciU7LD7PopelG7J-UDXQhCqLWAYTzm22ykhoLOQ,4297

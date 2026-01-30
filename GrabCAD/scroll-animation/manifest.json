@@ -1,0 +1,15 @@
+{
+  "frameCount": 120,
+  "formats": {
+    "png": {
+      "path": "frames-optimized/assembly_",
+      "extension": ".png",
+      "totalSize": 140494198
+    },
+    "webp": {
+      "path": "frames-webp/assembly_",
+      "extension": ".webp",
+      "totalSize": 2846608
+    }
+  }
+}

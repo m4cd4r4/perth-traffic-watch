@@ -1,0 +1,42 @@
+{
+  "name": "perth-traffic-watch",
+  "version": "0.2.0",
+  "description": "Perth Traffic Watch - Real-time vehicle monitoring with unified arterial and freeway tracking",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test --config=tests/e2e/playwright.config.js",
+    "test:ui": "playwright test --ui --config=tests/e2e/playwright.config.js",
+    "test:headed": "playwright test --headed --config=tests/e2e/playwright.config.js",
+    "test:debug": "playwright test --debug --config=tests/e2e/playwright.config.js",
+    "test:report": "playwright show-report",
+    "test:codegen": "playwright codegen https://swanflow.com.au",
+    "test:chrome": "playwright test --config=tests/e2e/playwright.config.js --project=chromium",
+    "test:firefox": "playwright test --config=tests/e2e/playwright.config.js --project=firefox",
+    "test:safari": "playwright test --config=tests/e2e/playwright.config.js --project=webkit",
+    "test:mobile": "playwright test --config=tests/e2e/playwright.config.js --project=mobile-chrome --project=mobile-safari",
+    "test:tablet": "playwright test --config=tests/e2e/playwright.config.js --project=tablet-ipad",
+    "test:a11y": "playwright test --config=tests/e2e/playwright.config.js --project=accessibility",
+    "test:perf": "playwright test --config=tests/e2e/playwright.config.js --project=performance",
+    "test:visual": "playwright test --config=tests/e2e/playwright.config.js --project=visual-regression",
+    "test:dashboard": "playwright test --config=tests/e2e/playwright.config.js tests/e2e/dashboard.spec.js",
+    "test:knowledge": "playwright test --config=tests/e2e/playwright.config.js tests/e2e/knowledge.spec.js",
+    "test:links": "playwright test --config=tests/e2e/playwright.config.js tests/e2e/links-validation.spec.js",
+    "test:network": "playwright test --config=tests/e2e/playwright.config.js tests/e2e/network-api.spec.js",
+    "test:responsive": "playwright test --config=tests/e2e/playwright.config.js tests/e2e/mobile-viewport.spec.js",
+    "test:features": "playwright test --config=tests/e2e/playwright.config.js tests/e2e/comprehensive-features.spec.js",
+    "test:all": "playwright test --config=tests/e2e/playwright.config.js --project=chromium --project=firefox --project=webkit --project=mobile-chrome --project=mobile-safari"
+  },
+  "keywords": [
+    "traffic",
+    "monitoring",
+    "perth",
+    "edge-ai",
+    "real-time"
+  ],
+  "author": "Macdara",
+  "license": "MIT",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.8.0",
+    "@playwright/test": "^1.40.0"
+  }
+}

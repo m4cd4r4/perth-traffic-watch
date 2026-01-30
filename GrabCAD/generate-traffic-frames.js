@@ -1,0 +1,357 @@
+/**
+ * SwanFlow Traffic Animation Frame Generator
+ * Generates 120 frames of road cross-section with animated traffic flow
+ * Uses actual Perth road waypoint data from the dashboard
+ */
+
+const { createCanvas } = require('canvas');
+const fs = require('fs');
+const path = require('path');
+
+// Configuration
+const WIDTH = 1920;
+const HEIGHT = 1080;
+const FRAME_COUNT = 120;
+const OUTPUT_DIR = path.join(__dirname, 'frames-traffic');
+
+// Traffic colors (from dashboard getTrafficColor function)
+const TRAFFIC_COLORS = {
+  flowing: '#10b981',    // Green - speed >= 50 km/h
+  moderate: '#f59e0b',   // Orange - speed >= 30 km/h
+  heavy: '#ef4444',      // Red - speed >= 15 km/h
+  gridlock: '#991b1b'    // Dark red - speed < 15 km/h
+};
+
+// Road waypoints (from dashboard corridorWaypoints - using key corridors)
+const corridorWaypoints = {
+  'Mounts Bay Rd': [
+    [-31.9755360, 115.8180240], [-31.9733899, 115.8256410], [-31.9728911, 115.8265899],
+    [-31.9726546, 115.8274435], [-31.9724305, 115.8289419], [-31.9722547, 115.8308715],
+    [-31.9719219, 115.8321438], [-31.9715072, 115.8331964], [-31.9710934, 115.8336485],
+    [-31.9704117, 115.8340935], [-31.9701018, 115.8345177], [-31.9696950, 115.8357989],
+    [-31.9693711, 115.8365875], [-31.9689912, 115.8371631], [-31.9684943, 115.8377125],
+    [-31.9678280, 115.8383774], [-31.9668462, 115.8390952], [-31.9662305, 115.8395033],
+    [-31.9653717, 115.8398791]
+  ],
+  'Stirling Hwy': [
+    [-31.9820, 115.7900], [-31.9834402, 115.7802709], [-31.9850921, 115.7755445],
+    [-31.9870, 115.7720], [-31.9890887, 115.7685801], [-31.9910607, 115.7675329],
+    [-31.9925, 115.7665], [-31.993, 115.766], [-31.994, 115.765]
+  ],
+  'Mitchell Fwy': [
+    [-31.9617537, 115.8474375], [-31.9600697, 115.8474955], [-31.9586325, 115.8490672],
+    [-31.9569363, 115.8494396], [-31.9553135, 115.8494540], [-31.9544093, 115.8488992],
+    [-31.9527661, 115.8483345], [-31.9508178, 115.8490068], [-31.9493950, 115.8496822],
+    [-31.9477915, 115.8501012], [-31.9460202, 115.8498387], [-31.9440531, 115.8485092],
+    [-31.9412033, 115.8439939], [-31.9396551, 115.8405922], [-31.9379469, 115.8389929],
+    [-31.9307069, 115.8350879], [-31.9261945, 115.8302721], [-31.9236279, 115.8269383],
+    [-31.9194459, 115.8240925], [-31.9144881, 115.8233710], [-31.9106849, 115.8224215],
+    [-31.9017170, 115.8208361], [-31.8990018, 115.8175891]
+  ]
+};
+
+// Mercator projection for lat/lng to screen coordinates
+function latLngToScreen(lat, lng, bounds) {
+  const x = (lng - bounds.minLng) / (bounds.maxLng - bounds.minLng);
+  const latRad = lat * Math.PI / 180;
+  const mercN = Math.log(Math.tan((Math.PI / 4) + (latRad / 2)));
+  const y = (mercN - bounds.minMercN) / (bounds.maxMercN - bounds.minMercN);
+
+  return {
+    x: x * WIDTH,
+    y: (1 - y) * HEIGHT  // Flip Y axis (screen coords are top-down)
+  };
+}
+
+// Calculate bounds for all corridors
+function calculateBounds() {
+  let minLat = Infinity, maxLat = -Infinity;
+  let minLng = Infinity, maxLng = -Infinity;
+
+  Object.values(corridorWaypoints).forEach(waypoints => {
+    waypoints.forEach(([lat, lng]) => {
+      minLat = Math.min(minLat, lat);
+      maxLat = Math.max(maxLat, lat);
+      minLng = Math.min(minLng, lng);
+      maxLng = Math.max(maxLng, lng);
+    });
+  });
+
+  // Add 10% padding
+  const latPadding = (maxLat - minLat) * 0.1;
+  const lngPadding = (maxLng - minLng) * 0.1;
+
+  minLat -= latPadding;
+  maxLat += latPadding;
+  minLng -= lngPadding;
+  maxLng += lngPadding;
+
+  return {
+    minLat, maxLat, minLng, maxLng,
+    minMercN: Math.log(Math.tan((Math.PI / 4) + (minLat * Math.PI / 180 / 2))),
+    maxMercN: Math.log(Math.tan((Math.PI / 4) + (maxLat * Math.PI / 180 / 2)))
+  };
+}
+
+// Draw road layer (asphalt base)
+function drawRoadLayer(ctx, bounds, opacity = 1) {
+  ctx.save();
+  ctx.globalAlpha = opacity;
+
+  Object.entries(corridorWaypoints).forEach(([name, waypoints]) => {
+    if (waypoints.length < 2) return;
+
+    // Project waypoints to screen coordinates
+    const screenPoints = waypoints.map(([lat, lng]) => latLngToScreen(lat, lng, bounds));
+
+    // Draw thick gray road base
+    ctx.strokeStyle = '#1f2937';
+    ctx.lineWidth = 24;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    ctx.beginPath();
+    ctx.moveTo(screenPoints[0].x, screenPoints[0].y);
+    screenPoints.slice(1).forEach(pt => ctx.lineTo(pt.x, pt.y));
+    ctx.stroke();
+  });
+
+  ctx.restore();
+}
+
+// Draw lane markings
+function drawLaneMarkings(ctx, bounds, opacity = 1) {
+  ctx.save();
+  ctx.globalAlpha = opacity;
+
+  Object.entries(corridorWaypoints).forEach(([name, waypoints]) => {
+    if (waypoints.length < 2) return;
+
+    const screenPoints = waypoints.map(([lat, lng]) => latLngToScreen(lat, lng, bounds));
+
+    // Draw white center line
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([20, 15]);
+
+    ctx.beginPath();
+    ctx.moveTo(screenPoints[0].x, screenPoints[0].y);
+    screenPoints.slice(1).forEach(pt => ctx.lineTo(pt.x, pt.y));
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+  });
+
+  ctx.restore();
+}
+
+// Draw grid overlay
+function drawGrid(ctx, opacity = 1) {
+  ctx.save();
+  ctx.globalAlpha = opacity * 0.15;
+  ctx.strokeStyle = '#3b82f6';
+  ctx.lineWidth = 1;
+
+  // Vertical lines
+  for (let x = 0; x < WIDTH; x += 100) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, HEIGHT);
+    ctx.stroke();
+  }
+
+  // Horizontal lines
+  for (let y = 0; y < HEIGHT; y += 100) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(WIDTH, y);
+    ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
+// Draw animated traffic flow lines
+function drawTrafficFlow(ctx, bounds, frameProgress, opacity = 1) {
+  ctx.save();
+  ctx.globalAlpha = opacity;
+
+  const colors = [
+    TRAFFIC_COLORS.flowing,
+    TRAFFIC_COLORS.moderate,
+    TRAFFIC_COLORS.heavy
+  ];
+
+  Object.entries(corridorWaypoints).forEach(([name, waypoints], corridorIdx) => {
+    if (waypoints.length < 2) return;
+
+    const screenPoints = waypoints.map(([lat, lng]) => latLngToScreen(lat, lng, bounds));
+    const color = colors[corridorIdx % colors.length];
+
+    // Draw two parallel lines (NB and SB lanes)
+    [1, -1].forEach((direction, dirIdx) => {
+      // Offset lanes perpendicular to road direction
+      const offsetPoints = screenPoints.map((pt, i) => {
+        if (i === 0) return pt;
+        const prev = screenPoints[i - 1];
+        const dx = pt.x - prev.x;
+        const dy = pt.y - prev.y;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        const perpX = -dy / len * 5 * direction;  // 5px offset
+        const perpY = dx / len * 5 * direction;
+        return { x: pt.x + perpX, y: pt.y + perpY };
+      });
+
+      // Background solid line
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 5;
+      ctx.globalAlpha = opacity * 0.3;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      ctx.beginPath();
+      ctx.moveTo(offsetPoints[0].x, offsetPoints[0].y);
+      offsetPoints.slice(1).forEach(pt => ctx.lineTo(pt.x, pt.y));
+      ctx.stroke();
+
+      // Animated dashed line (flow direction)
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 4;
+      ctx.globalAlpha = opacity * 0.9;
+
+      // Animate dash offset based on frame progress
+      const dashOffset = (frameProgress * 20 * direction) % 20;
+      ctx.setLineDash([8, 12]);
+      ctx.lineDashOffset = dashOffset;
+
+      ctx.beginPath();
+      ctx.moveTo(offsetPoints[0].x, offsetPoints[0].y);
+      offsetPoints.slice(1).forEach(pt => ctx.lineTo(pt.x, pt.y));
+      ctx.stroke();
+
+      ctx.setLineDash([]);
+    });
+  });
+
+  ctx.restore();
+}
+
+// Generate a single frame
+function generateFrame(frameNum, bounds) {
+  const canvas = createCanvas(WIDTH, HEIGHT);
+  const ctx = canvas.getContext('2d');
+
+  // Clear background to transparent
+  ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+  // Dark background
+  ctx.fillStyle = '#0a0f1e';
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  // Animation timeline (0.0 to 1.0)
+  const progress = frameNum / FRAME_COUNT;
+
+  // Frame 0-30: Road layer fades in
+  if (frameNum < 30) {
+    const roadOpacity = frameNum / 30;
+    drawRoadLayer(ctx, bounds, roadOpacity);
+  }
+
+  // Frame 30-60: Lane markings appear
+  else if (frameNum < 60) {
+    drawRoadLayer(ctx, bounds, 1);
+    const laneOpacity = (frameNum - 30) / 30;
+    drawLaneMarkings(ctx, bounds, laneOpacity);
+  }
+
+  // Frame 60-90: Grid overlay fades in
+  else if (frameNum < 90) {
+    drawRoadLayer(ctx, bounds, 1);
+    drawLaneMarkings(ctx, bounds, 1);
+    const gridOpacity = (frameNum - 60) / 30;
+    drawGrid(ctx, gridOpacity);
+  }
+
+  // Frame 90-120: Traffic flow lines animate in
+  else {
+    drawRoadLayer(ctx, bounds, 1);
+    drawLaneMarkings(ctx, bounds, 1);
+    drawGrid(ctx, 1);
+    const trafficOpacity = (frameNum - 90) / 30;
+    drawTrafficFlow(ctx, bounds, progress, trafficOpacity);
+  }
+
+  return canvas;
+}
+
+// Main execution
+async function main() {
+  console.log('\n' + '='.repeat(70));
+  console.log('SwanFlow Traffic Animation Frame Generator');
+  console.log('='.repeat(70));
+  console.log(`Generating ${FRAME_COUNT} frames at ${WIDTH}x${HEIGHT}...`);
+  console.log(`Output: ${OUTPUT_DIR}/`);
+  console.log('');
+
+  // Create output directory
+  if (!fs.existsSync(OUTPUT_DIR)) {
+    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+  }
+
+  // Calculate projection bounds
+  const bounds = calculateBounds();
+  console.log('Map bounds calculated:');
+  console.log(`  Latitude: ${bounds.minLat.toFixed(4)} to ${bounds.maxLat.toFixed(4)}`);
+  console.log(`  Longitude: ${bounds.minLng.toFixed(4)} to ${bounds.maxLng.toFixed(4)}`);
+  console.log('');
+
+  // Generate frames
+  const startTime = Date.now();
+
+  for (let i = 0; i < FRAME_COUNT; i++) {
+    const canvas = generateFrame(i, bounds);
+    const filename = `assembly_${String(i).padStart(4, '0')}.png`;
+    const filepath = path.join(OUTPUT_DIR, filename);
+
+    // Write PNG file
+    const buffer = canvas.toBuffer('image/png');
+    fs.writeFileSync(filepath, buffer);
+
+    // Progress indicator
+    if ((i + 1) % 10 === 0 || i === 0 || i === FRAME_COUNT - 1) {
+      const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+      const percent = ((i + 1) / FRAME_COUNT * 100).toFixed(0);
+      const sizeMB = (buffer.length / (1024 * 1024)).toFixed(2);
+      console.log(`  [${percent}%] Frame ${i + 1}/${FRAME_COUNT} - ${sizeMB}MB - ${elapsed}s elapsed`);
+    }
+  }
+
+  const totalTime = ((Date.now() - startTime) / 1000).toFixed(1);
+
+  // Calculate total size
+  const files = fs.readdirSync(OUTPUT_DIR);
+  const totalSize = files.reduce((sum, file) => {
+    const stats = fs.statSync(path.join(OUTPUT_DIR, file));
+    return sum + stats.size;
+  }, 0);
+  const totalMB = (totalSize / (1024 * 1024)).toFixed(1);
+
+  console.log('');
+  console.log('='.repeat(70));
+  console.log(`[OK] Completed in ${totalTime}s`);
+  console.log(`Total size: ${totalMB}MB (${files.length} frames)`);
+  console.log('');
+  console.log('Next steps:');
+  console.log('  1. Copy frames to scroll-animation directory:');
+  console.log('     robocopy frames-traffic scroll-animation\\frames-traffic /E');
+  console.log('');
+  console.log('  2. Update index.html framePath:');
+  console.log('     framePath: "frames-traffic/assembly_"');
+  console.log('');
+  console.log('  3. View animation:');
+  console.log('     http://localhost:8081');
+  console.log('='.repeat(70));
+}
+
+// Run
+main().catch(console.error);

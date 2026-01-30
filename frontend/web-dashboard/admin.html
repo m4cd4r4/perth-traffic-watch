@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwanFlow Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --primary: #2D8B94;
+      --primary-rgb: 45, 139, 148;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg: #0F1419;
+      --bg-secondary: #1A2027;
+      --card-bg: #1E2A35;
+      --text: #E8F0F2;
+      --text-muted: #9CA3AF;
+      --border: #2D4A5C;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .admin-badge {
+      background: var(--danger);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .back-link {
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Status Cards Grid */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .status-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .status-card h3 {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+
+    .status-value {
+      font-size: 2rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .status-value.healthy { color: var(--success); }
+    .status-value.warning { color: var(--warning); }
+    .status-value.error { color: var(--danger); }
+
+    .status-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.25rem;
+      color: var(--text);
+    }
+
+    .refresh-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    .refresh-btn:hover {
+      opacity: 0.9;
+    }
+
+    .refresh-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Sites Table */
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--bg-secondary);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: rgba(var(--primary-rgb), 0.05);
+    }
+
+    .site-name {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .status-dot.active { background: var(--success); }
+    .status-dot.inactive { background: var(--danger); }
+
+    .traffic-bar {
+      height: 6px;
+      background: var(--bg-secondary);
+      border-radius: 3px;
+      overflow: hidden;
+      width: 100px;
+    }
+
+    .traffic-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .traffic-bar-fill.low { background: var(--success); }
+    .traffic-bar-fill.medium { background: var(--warning); }
+    .traffic-bar-fill.high { background: var(--danger); }
+
+    /* Log Section */
+    .log-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .log-output {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .log-line {
+      padding: 0.25rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .log-line:last-child {
+      border-bottom: none;
+    }
+
+    .log-time {
+      color: var(--text-muted);
+      margin-right: 1rem;
+    }
+
+    .log-site {
+      color: var(--primary);
+      margin-right: 0.5rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .table-container {
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 600px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header (matching Dashboard/Knowledge pages) -->
+    <header class="knowledge-header">
+      <div class="header-content">
+        <div class="brand-wrapper">
+          <div class="brand">
+            <img src="swan-logo-light.png" alt="SwanFlow" class="brand-logo light-logo">
+            <img src="swan-logo-dark.png" alt="SwanFlow" class="brand-logo dark-logo">
+            <h1>SwanFlow <span class="admin-badge">Admin</span></h1>
+          </div>
+          <p class="subtitle">Real-time vehicle detection using Edge AI</p>
+        </div>
+        <div class="header-actions">
+          <a href="index.html" class="header-nav-btn" title="Dashboard">
+            <i data-lucide="layout-dashboard" class="nav-icon"></i>
+            <span class="nav-text">Dashboard</span>
+          </a>
+          <a href="knowledge.html" class="header-nav-btn" title="Technical Documentation">
+            <i data-lucide="file-text" class="nav-icon"></i>
+            <span class="nav-text">Technical Docs</span>
+          </a>
+          <div class="theme-toggle">
+            <button type="button" id="theme-toggle-btn" class="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+              <i data-lucide="sun" class="icon-sun"></i>
+              <i data-lucide="moon" class="icon-moon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Status Cards -->
+    <div class="status-grid">
+      <div class="status-card">
+        <h3>System Status</h3>
+        <div class="status-value healthy" id="system-status">Loading...</div>
+        <div class="status-label">API Health</div>
+      </div>
+      <div class="status-card">
+        <h3>Active Sites</h3>
+        <div class="status-value" id="active-sites">--</div>
+        <div class="status-label">Monitoring locations</div>
+      </div>
+      <div class="status-card">
+        <h3>Total Detections</h3>
+        <div class="status-value" id="total-detections">--</div>
+        <div class="status-label">All time</div>
+      </div>
+      <div class="status-card">
+        <h3>Last Update</h3>
+        <div class="status-value" id="last-update">--</div>
+        <div class="status-label">Time since last data</div>
+      </div>
+    </div>
+
+    <!-- Sites Table -->
+    <div class="section-header">
+      <h2>Monitoring Sites</h2>
+      <button class="refresh-btn" id="refresh-btn" onclick="refreshData()">
+        Refresh
+      </button>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Site Name</th>
+            <th>Status</th>
+            <th>Current Hourly</th>
+            <th>Traffic Level</th>
+            <th>Last Detection</th>
+          </tr>
+        </thead>
+        <tbody id="sites-table">
+          <tr>
+            <td colspan="5" class="loading">
+              <span class="spinner"></span> Loading sites...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Recent Activity Log -->
+    <div class="section-header">
+      <h2>Recent Activity</h2>
+    </div>
+
+    <div class="log-container">
+      <div class="log-output" id="activity-log">
+        <div class="loading">
+          <span class="spinner"></span> Loading activity...
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      SwanFlow Admin Dashboard | Powered by Edge Impulse FOMO + ESP32-CAM
+    </footer>
+  </div>
+
+  <script>
+    const API_BASE = window.location.hostname === 'localhost'
+      ? 'http://localhost:3001'
+      : 'https://api.swanflow.com.au';
+
+    let sitesData = [];
+
+    // Fetch and display health status
+    async function fetchHealth() {
+      try {
+        const res = await fetch(`${API_BASE}/health`);
+        const data = await res.json();
+
+        const statusEl = document.getElementById('system-status');
+        if (data.status === 'ok') {
+          statusEl.textContent = 'Healthy';
+          statusEl.className = 'status-value healthy';
+        } else {
+          statusEl.textContent = 'Degraded';
+          statusEl.className = 'status-value warning';
+        }
+      } catch (e) {
+        const statusEl = document.getElementById('system-status');
+        statusEl.textContent = 'Offline';
+        statusEl.className = 'status-value error';
+      }
+    }
+
+    // Fetch sites with stats
+    async function fetchSites() {
+      try {
+        const res = await fetch(`${API_BASE}/api/sites`);
+        const data = await res.json();
+
+        if (data.success) {
+          sitesData = data.sites;
+          document.getElementById('active-sites').textContent = data.count;
+          renderSitesTable(data.sites);
+        }
+      } catch (e) {
+        console.error('Error fetching sites:', e);
+      }
+    }
+
+    // Fetch recent detections for activity log
+    async function fetchRecentActivity() {
+      try {
+        // Get detections for the first site as sample
+        const res = await fetch(`${API_BASE}/api/detections?limit=20`);
+        const data = await res.json();
+
+        if (data.success) {
+          renderActivityLog(data.detections);
+
+          // Calculate total and last update
+          if (data.detections.length > 0) {
+            const latest = data.detections[0];
+            const totalCount = latest.total_count || 0;
+            document.getElementById('total-detections').textContent = totalCount.toLocaleString();
+
+            const lastTime = new Date(latest.created_at);
+            const now = new Date();
+            const diffMs = now - lastTime;
+            const diffMins = Math.floor(diffMs / 60000);
+
+            if (diffMins < 1) {
+              document.getElementById('last-update').textContent = 'Just now';
+            } else if (diffMins < 60) {
+              document.getElementById('last-update').textContent = `${diffMins}m ago`;
+            } else {
+              const diffHours = Math.floor(diffMins / 60);
+              document.getElementById('last-update').textContent = `${diffHours}h ago`;
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Error fetching activity:', e);
+      }
+    }
+
+    // Render sites table
+    function renderSitesTable(sites) {
+      const tbody = document.getElementById('sites-table');
+
+      if (!sites || sites.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">No sites found</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = sites.map(site => {
+        const hourlyCount = site.current_hourly || 0;
+        const trafficLevel = getTrafficLevel(hourlyCount);
+        const barWidth = Math.min(100, (hourlyCount / 400) * 100);
+
+        return `
+          <tr>
+            <td class="site-name">${site.name}</td>
+            <td>
+              <span class="status-dot ${site.active ? 'active' : 'inactive'}"></span>
+              ${site.active ? 'Active' : 'Inactive'}
+            </td>
+            <td>${hourlyCount} veh/hr</td>
+            <td>
+              <div class="traffic-bar">
+                <div class="traffic-bar-fill ${trafficLevel}" style="width: ${barWidth}%"></div>
+              </div>
+            </td>
+            <td>${formatDate(site.created_at)}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Render activity log
+    function renderActivityLog(detections) {
+      const logEl = document.getElementById('activity-log');
+
+      if (!detections || detections.length === 0) {
+        logEl.innerHTML = '<div class="log-line">No recent activity</div>';
+        return;
+      }
+
+      logEl.innerHTML = detections.slice(0, 15).map(d => `
+        <div class="log-line">
+          <span class="log-time">${formatTime(d.created_at)}</span>
+          <span class="log-site">${d.site}</span>
+          Count: ${d.hour_count} | Conf: ${(d.avg_confidence * 100).toFixed(0)}%
+        </div>
+      `).join('');
+    }
+
+    // Get traffic level class
+    function getTrafficLevel(hourlyCount) {
+      if (hourlyCount < 150) return 'low';
+      if (hourlyCount < 300) return 'medium';
+      return 'high';
+    }
+
+    // Format date
+    function formatDate(dateStr) {
+      if (!dateStr) return '--';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-AU', {
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Format time
+    function formatTime(dateStr) {
+      if (!dateStr) return '--';
+      const date = new Date(dateStr);
+      return date.toLocaleTimeString('en-AU', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+    }
+
+    // Refresh all data
+    async function refreshData() {
+      const btn = document.getElementById('refresh-btn');
+      btn.disabled = true;
+      btn.textContent = 'Refreshing...';
+
+      await Promise.all([
+        fetchHealth(),
+        fetchSites(),
+        fetchRecentActivity()
+      ]);
+
+      btn.disabled = false;
+      btn.textContent = 'Refresh';
+    }
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', () => {
+      refreshData();
+
+      // Auto-refresh every 30 seconds
+      setInterval(refreshData, 30000);
+    });
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Theme toggle functionality
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const html = document.documentElement;
+
+    // Check for saved theme preference or default to 'light'
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', currentTheme);
+
+    themeToggleBtn?.addEventListener('click', () => {
+      const theme = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    });
+  </script>
+</body>
+</html>

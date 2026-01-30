@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwanFlow - Assembly Animation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0f1a;
+            color: #fff;
+        }
+
+        /* Hero section with scroll animation */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            color: #8899aa;
+            max-width: 600px;
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: #556677;
+            font-size: 0.875rem;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Assembly animation section */
+        .assembly-section {
+            height: 800vh; /* 8x viewport for scroll duration - longer animation */
+            position: relative;
+        }
+
+        .assembly-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .assembly-canvas {
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+            aspect-ratio: 16/9;
+        }
+
+        /* Progress indicator */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Component labels */
+        .component-label {
+            position: absolute;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: #00d4ff;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+
+        .component-label.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Section after animation */
+        .content-section {
+            min-height: 100vh;
+            padding: 4rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .content-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #00d4ff;
+        }
+
+        .content-section p {
+            color: #8899aa;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        /* Loading state */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0f1a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid #1a2a3a;
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 1rem;
+            color: #556677;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading screen -->
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Loading assembly... <span id="load-progress">0</span>%</p>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-bar" id="progress-bar"></div>
+
+    <!-- Hero section -->
+    <section class="hero">
+        <h1>SwanFlow</h1>
+        <p>Solar-powered traffic monitoring for Perth's arterial roads. Built with ESP32-CAM, 4G LTE, and edge ML.</p>
+        <div class="scroll-indicator">
+            <span>Scroll to explore</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Assembly animation section -->
+    <section class="assembly-section" id="assembly-section">
+        <div class="assembly-container">
+            <canvas class="assembly-canvas" id="assembly-canvas"></canvas>
+
+            <!-- Component labels (shown at different scroll positions) -->
+            <div class="component-label" id="label-esp32" style="top: 30%; left: 60%;">ESP32-CAM</div>
+            <div class="component-label" id="label-camera" style="top: 20%; left: 55%;">OV2640 Camera</div>
+            <div class="component-label" id="label-lte" style="top: 35%; right: 25%;">SIM7000A LTE</div>
+            <div class="component-label" id="label-battery" style="bottom: 40%; left: 25%;">12V Battery</div>
+            <div class="component-label" id="label-solar" style="bottom: 30%; right: 30%;">Solar Controller</div>
+            <div class="component-label" id="label-box" style="bottom: 35%; left: 50%;">Junction Box</div>
+            <div class="component-label" id="label-panel" style="bottom: 20%; left: 45%;">Solar Panel</div>
+        </div>
+    </section>
+
+    <!-- Content after animation -->
+    <section class="content-section">
+        <h2>How It Works</h2>
+        <p>
+            SwanFlow uses an ESP32-CAM microcontroller with an OV2640 camera module to capture
+            traffic images. The SIM7000A LTE module transmits data over 4G to our cloud backend.
+        </p>
+        <p>
+            Powered entirely by a 20W solar panel and 12V battery, each monitoring station
+            operates autonomously without external power connections.
+        </p>
+        <p>
+            Edge ML models trained with Edge Impulse perform vehicle detection directly on
+            the ESP32, minimizing data transmission and enabling real-time counting.
+        </p>
+    </section>
+
+    <!-- GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            frameCount: 120,
+            framePath: 'frames-traffic/assembly_',  // Using real Perth traffic data (2.1MB total)
+            frameExtension: '.png',
+            preloadBatchSize: 10,  // Load frames in batches for better UX
+        };
+
+        // State
+        const images = [];
+        let currentFrame = 0;
+        let loadedCount = 0;
+        let isLoaded = false;
+
+        // DOM Elements
+        const canvas = document.getElementById('assembly-canvas');
+        const ctx = canvas.getContext('2d');
+        const loading = document.getElementById('loading');
+        const loadProgress = document.getElementById('load-progress');
+        const progressBar = document.getElementById('progress-bar');
+
+        // Set canvas size
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const maxWidth = Math.min(container.clientWidth * 0.9, 1200);
+            canvas.width = 1920;
+            canvas.height = 1080;
+            canvas.style.width = `${maxWidth}px`;
+            canvas.style.height = `${maxWidth * (9/16)}px`;
+        }
+
+        // Format frame number with leading zeros
+        function formatFrameNumber(num) {
+            return String(num).padStart(4, '0');
+        }
+
+        // Preload all images
+        async function preloadImages() {
+            const promises = [];
+
+            for (let i = 0; i < CONFIG.frameCount; i++) {
+                const img = new Image();
+                const src = `${CONFIG.framePath}${formatFrameNumber(i)}${CONFIG.frameExtension}`;
+
+                promises.push(new Promise((resolve, reject) => {
+                    img.onload = () => {
+                        loadedCount++;
+                        const progress = Math.round((loadedCount / CONFIG.frameCount) * 100);
+                        loadProgress.textContent = progress;
+                        resolve(img);
+                    };
+                    img.onerror = () => {
+                        console.warn(`Failed to load frame ${i}`);
+                        resolve(null); // Don't break on single frame failure
+                    };
+                    img.src = src;
+                }));
+
+                images[i] = img;
+            }
+
+            await Promise.all(promises);
+            isLoaded = true;
+
+            // Hide loading screen
+            loading.classList.add('hidden');
+
+            // Draw first frame
+            drawFrame(0);
+
+            // Initialize ScrollTrigger
+            initScrollTrigger();
+        }
+
+        // Draw a specific frame
+        function drawFrame(frameIndex) {
+            const frame = Math.min(Math.max(0, Math.floor(frameIndex)), CONFIG.frameCount - 1);
+            const img = images[frame];
+
+            if (img && img.complete && img.naturalWidth > 0) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                currentFrame = frame;
+            }
+        }
+
+        // Initialize GSAP ScrollTrigger
+        function initScrollTrigger() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Main animation timeline
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '#assembly-section',
+                    start: 'top top',
+                    end: 'bottom bottom',
+                    scrub: 0.5,  // Smooth scrubbing
+                    onUpdate: (self) => {
+                        // Update frame based on scroll progress
+                        const frameIndex = Math.floor(self.progress * (CONFIG.frameCount - 1));
+                        drawFrame(frameIndex);
+
+                        // Update progress bar
+                        progressBar.style.width = `${self.progress * 100}%`;
+
+                        // Show/hide component labels based on progress
+                        updateLabels(self.progress);
+                    }
+                }
+            });
+
+            // Fade out scroll indicator when scrolling starts
+            gsap.to('.scroll-indicator', {
+                opacity: 0,
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'bottom 90%',
+                    end: 'bottom 70%',
+                    scrub: true
+                }
+            });
+        }
+
+        // Update component labels visibility
+        function updateLabels(progress) {
+            const labels = {
+                'label-esp32': { start: 0.05, end: 0.20 },
+                'label-camera': { start: 0.10, end: 0.25 },
+                'label-lte': { start: 0.20, end: 0.35 },
+                'label-battery': { start: 0.30, end: 0.45 },
+                'label-solar': { start: 0.40, end: 0.55 },
+                'label-box': { start: 0.50, end: 0.70 },
+                'label-panel': { start: 0.65, end: 0.85 }
+            };
+
+            for (const [id, range] of Object.entries(labels)) {
+                const el = document.getElementById(id);
+                if (el) {
+                    const isVisible = progress >= range.start && progress <= range.end;
+                    el.classList.toggle('visible', isVisible);
+                }
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            resizeCanvas();
+            preloadImages();
+        });
+
+        window.addEventListener('resize', resizeCanvas);
+    </script>
+</body>
+</html>

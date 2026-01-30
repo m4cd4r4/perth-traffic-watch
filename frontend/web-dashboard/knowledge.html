@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Base - SwanFlow</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css?v=20251225-03">
+  <link rel="stylesheet" href="knowledge.css?v=20260110-01">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header (identical to Dashboard) -->
+    <header class="knowledge-header">
+      <div class="header-content">
+        <div class="brand-wrapper">
+          <a href="index.html" class="brand-link">
+            <div class="brand">
+              <img src="swan-logo-light.png" alt="SwanFlow" class="brand-logo light-logo">
+              <img src="swan-logo-dark.png" alt="SwanFlow" class="brand-logo dark-logo">
+              <h1>SwanFlow</h1>
+            </div>
+          </a>
+          <p class="subtitle">Real-time vehicle detection using Edge AI</p>
+        </div>
+        <div class="header-actions">
+          <a href="index.html" class="header-nav-btn" title="Dashboard">
+            <i data-lucide="layout-dashboard" class="nav-icon"></i>
+            <span class="nav-text">Dashboard</span>
+          </a>
+          <a href="knowledge.html" class="header-nav-btn active" title="Technical Documentation">
+            <i data-lucide="file-text" class="nav-icon"></i>
+            <span class="nav-text">Technical Docs</span>
+          </a>
+          <div class="theme-toggle">
+            <button type="button" id="theme-toggle-btn" class="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+              <i data-lucide="sun" class="icon-sun"></i>
+              <i data-lucide="moon" class="icon-moon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Scrolling Ticker Banner -->
+    <div class="ticker-banner">
+      <div class="ticker-track">
+        <div class="ticker-content">
+          <span>SIMULATED DATA - Phase 1 of PoC is in development</span>
+          <span class="ticker-separator">|</span>
+          <span>Hardware deployment at Mounts Bay Road coming soon</span>
+          <span class="ticker-separator">|</span>
+          <span>Real-time Edge AI vehicle detection</span>
+          <span class="ticker-separator">|</span>
+          <span>SIMULATED DATA - Phase 1 of PoC is in development</span>
+          <span class="ticker-separator">|</span>
+          <span>Hardware deployment at Mounts Bay Road coming soon</span>
+          <span class="ticker-separator">|</span>
+          <span>Real-time Edge AI vehicle detection</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Knowledge Cards Grid -->
+    <main class="knowledge-container">
+      <!-- Filter Bar (inside content area) -->
+      <div class="filter-bar-inline">
+        <span class="filter-label">FILTER:</span>
+        <div class="filter-buttons">
+          <button type="button" class="filter-btn active" data-target="all">
+            <i data-lucide="layers"></i> All
+          </button>
+          <button type="button" class="filter-btn" data-target="algorithm">
+            <i data-lucide="git-branch"></i> Algorithm
+          </button>
+          <button type="button" class="filter-btn" data-target="ml">
+            <i data-lucide="brain"></i> ML & AI
+          </button>
+          <button type="button" class="filter-btn" data-target="hardware">
+            <i data-lucide="cpu"></i> Hardware
+          </button>
+          <button type="button" class="filter-btn" data-target="infrastructure">
+            <i data-lucide="cloud"></i> Infrastructure
+          </button>
+          <button type="button" class="filter-btn" data-target="integration">
+            <i data-lucide="network"></i> Main Roads WA
+          </button>
+        </div>
+        <button type="button" id="collapse-all-btn" class="collapse-all-btn" title="Collapse All Cards">
+          <i data-lucide="chevrons-up"></i>
+        </button>
+      </div>
+      <div class="knowledge-grid">
+
+        <!-- Card 1: Traffic Flow Algorithm -->
+        <article class="knowledge-card" data-category="algorithm">
+          <div class="card-header">
+            <div class="card-icon-wrapper algorithm">
+              <i data-lucide="git-branch" class="card-icon"></i>
+            </div>
+            <div class="card-title-group">
+              <h2>Traffic Flow Algorithm</h2>
+              <span class="card-badge">Core Logic</span>
+            </div>
+            <button class="card-expand" aria-label="Expand card">
+              <i data-lucide="chevron-down" class="expand-icon"></i>
+            </button>
+          </div>
+          <div class="card-content">
+            <div class="content-section">
+              <h3>Vehicle Detection Pipeline</h3>
+              <ul class="spec-list">
+                <li>
+                  <span class="spec-label">Frame Capture</span>
+                  <span class="spec-value">320x240 @ 10 FPS</span>
+                </li>
+                <li>
+                  <span class="spec-label">Inference Time</span>
+                  <span class="spec-value">~50ms per frame</span>
+                </li>
+                <li>
+                  <span class="spec-label">Confidence Threshold</span>
+                  <span class="spec-value">&gt;0.6 (60%)</span>
+                </li>
+                <li>
+                  <span class="spec-label">Aggregation Window</span>
+                  <span class="spec-value">5 seconds</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="content-section">
+              <h3>Corridor Aggregation</h3>
+              <p class="section-text">Sites are grouped into corridors (Mounts Bay Road, Stirling Highway) with directional filtering for accurate flow analysis.</p>
+              <div class="code-block">
+                <pre><code>// Corridor grouping example
+corridors: {
+  'mounts-bay-eastbound': {
+    sitePatterns: ['Mounts Bay'],
+    directionFilter: 'Eastbound'
+  },
+  'stirling-southbound': {
+    sitePatterns: ['Stirling Hwy'],
+    directionFilter: 'Southbound'
+  }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>Speed Estimation</h3>
+              <p class="section-text">Traffic speed is estimated using detection frequency patterns and historical calibration data. Thresholds differ by road type based on posted speed limits.</p>
+
+              <h4 class="subsection-title">Arterial Roads (60 km/h limit)</h4>
+              <p class="section-text-small">Stirling Highway & Mounts Bay Road</p>
+              <div class="status-legend">
+                <div class="status-item flowing">
+                  <span class="status-dot"></span>
+                  <span class="status-name">Flowing</span>
+                  <span class="status-speed">50-60 km/h</span>
+                </div>
+                <div class="status-item moderate">
+                  <span class="status-dot"></span>
+                  <span class="status-name">Moderate</span>
+                  <span class="status-speed">30-50 km/h</span>
+                </div>
+                <div class="status-item heavy">
+                  <span class="status-dot"></span>
+                  <span class="status-name">Heavy</span>
+                  <span class="status-speed">15-30 km/h</span>
+                </div>
+                <div class="status-item gridlock">
+                  <span class="status-dot"></span>
+                  <span class="status-name">Gridlock</span>
+                  <span class="status-speed">&lt;15 km/h</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>Directional Flow Analysis</h3>
+              <p class="section-text">Each site tracks both directions independently, enabling accurate commute pattern analysis:</p>
+              <ul class="feature-list">
+                <li>Morning peak: Inbound flow dominates (towards CBD)</li>
+                <li>Evening peak: Outbound flow dominates (towards suburbs)</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2: Edge AI & ML Models -->
+        <article class="knowledge-card" data-category="ml">
+          <div class="card-header">
+            <div class="card-icon-wrapper ml">
+              <i data-lucide="brain" class="card-icon"></i>
+            </div>
+            <div class="card-title-group">
+              <h2>Edge AI & ML Models</h2>
+              <span class="card-badge">Machine Learning</span>
+            </div>
+            <button class="card-expand" aria-label="Expand card">
+              <i data-lucide="chevron-down" class="expand-icon"></i>
+            </button>
+          </div>
+          <div class="card-content">
+            <div class="content-section">
+              <h3>FOMO Architecture</h3>
+              <p class="section-text"><strong>FOMO</strong> (Faster Objects, More Objects) is a novel machine learning architecture designed specifically for constrained devices. It outputs a heatmap instead of bounding boxes, enabling much faster inference.</p>
+              <div class="privacy-highlight">
+                <p class="section-text"><strong>🔒 Privacy-Preserving:</strong> The system processes 96x96 grayscale heatmaps, not photographs. No identifiable images are stored or transmitted—only anonymous vehicle detection coordinates.</p>
+              </div>
+              <ul class="spec-list">
+                <li>
+                  <span class="spec-label">Backbone</span>
+                  <span class="spec-value">MobileNetV2 (alpha=0.35)</span>
+                </li>
+                <li>
+                  <span class="spec-label">Input Size</span>
+                  <span class="spec-value">96x96 grayscale</span>
+                </li>
+                <li>
+                  <span class="spec-label">Output</span>
+                  <span class="spec-value">Fully convolutional heatmap</span>
+                </li>
+                <li>
+                  <span class="spec-label">Model Size</span>
+                  <span class="spec-value">~50KB (int8 quantized)</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="content-section">
+              <h3>Edge Impulse Training Pipeline</h3>
+              <div class="pipeline-diagram">
+                <div class="pipeline-step">
+                  <span class="step-number">1</span>
+                  <span class="step-label">Data Collection</span>
+                </div>
+                <div class="pipeline-arrow">&rarr;</div>
+                <div class="pipeline-step">
+                  <span class="step-number">2</span>
+                  <span class="step-label">Labeling</span>
+                </div>
+                <div class="pipeline-arrow">&rarr;</div>
+                <div class="pipeline-step">
+                  <span class="step-number">3</span>
+                  <span class="step-label">Training</span>
+                </div>
+                <div class="pipeline-arrow">&rarr;</div>
+                <div class="pipeline-step">
+                  <span class="step-number">4</span>
+                  <span class="step-label">Quantization</span>
+                </div>
+                <div class="pipeline-arrow">&rarr;</div>
+                <div class="pipeline-step">
+                  <span class="step-number">5</span>
+                  <span class="step-label">Deployment</span>
+                </div>
+              </div>
+              <ul class="feature-list">
+                <li>Will collect 2,000+ images for ML training</li>
+                <li>Data augmentation: rotation, brightness, Gaussian noise</li>
+                <li>80/20 train/test split with stratified sampling</li>
+                <li>Cloud-based training on Edge Impulse platform</li>
+              </ul>
+            </div>
+
+            <div class="content-section">
+              <h3>Performance Targets</h3>
+              <p class="section-text" style="margin-bottom: 1rem; font-size: 0.85rem; opacity: 0.8;">Based on similar FOMO deployments and Edge Impulse benchmarks</p>
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <span class="metric-value">85-90%</span>
+                  <span class="metric-label">Precision Target</span>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-value">90-95%</span>
+                  <span class="metric-label">Recall Target</span>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-value">~90%</span>
+                  <span class="metric-label">F1 Target</span>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-value">~50ms</span>
+                  <span class="metric-label">Inference</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>Model Quantization</h3>
+              <p class="section-text">The model is quantized from float32 to int8 for ESP32 deployment, reducing memory footprint by 4x while maintaining >95% of original accuracy.</p>
+              <div class="code-block">
+                <pre><code>// TensorFlow Lite Micro inference
+TfLiteTensor* input = interpreter->input(0);
+// Input: 96x96 grayscale image (9,216 bytes)
+// Output: 12x12 heatmap (144 values)</code></pre>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3: Hardware Architecture -->
+        <article class="knowledge-card" data-category="hardware">
+          <div class="card-header">
+            <div class="card-icon-wrapper hardware">
+              <i data-lucide="cpu" class="card-icon"></i>
+            </div>
+            <div class="card-title-group">
+              <h2>Hardware Architecture</h2>
+              <span class="card-badge">Edge Devices</span>
+            </div>
+            <button class="card-expand" aria-label="Expand card">
+              <i data-lucide="chevron-down" class="expand-icon"></i>
+            </button>
+          </div>
+          <div class="card-content">
+            <div class="content-section">
+              <h3>ESP32-CAM Specifications</h3>
+              <ul class="spec-list">
+                <li>
+                  <span class="spec-label">MCU</span>
+                  <span class="spec-value">ESP32-S (240MHz dual-core)</span>
+                </li>
+                <li>
+                  <span class="spec-label">RAM</span>
+                  <span class="spec-value">520KB SRAM + 4MB PSRAM</span>
+                </li>
+                <li>
+                  <span class="spec-label">Flash</span>
+                  <span class="spec-value">4MB</span>
+                </li>
+                <li>
+                  <span class="spec-label">Camera</span>
+                  <span class="spec-value">OV2640 (2MP)</span>
+                </li>
+                <li>
+                  <span class="spec-label">Connectivity</span>
+                  <span class="spec-value">WiFi 802.11 b/g/n</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="content-section">
+              <h3>Camera Sensor Details</h3>
+              <p class="section-text">The OV2640 sensor provides 2 megapixel resolution, but we downsample to 320x240 for optimal inference speed while maintaining sufficient detail for vehicle detection.</p>
+              <ul class="spec-list">
+                <li>
+                  <span class="spec-label">Max Resolution</span>
+                  <span class="spec-value">1600x1200</span>
+                </li>
+                <li>
+                  <span class="spec-label">Operating Resolution</span>
+                  <span class="spec-value">320x240 (QVGA)</span>
+                </li>
+                <li>
+                  <span class="spec-label">Frame Rate</span>
+                  <span class="spec-value">10 FPS @ QVGA</span>
+                </li>
+                <li>
+                  <span class="spec-label">Lens Angle</span>
+                  <span class="spec-value">120° wide-angle</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="content-section">
+              <h3>Power Analysis</h3>
+              <div class="power-table">
+                <div class="power-row header">
+                  <span>Mode</span>
+                  <span>Current</span>
+                  <span>Power</span>
+                </div>
+                <div class="power-row">
+                  <span>Active (WiFi + Camera)</span>
+                  <span>310mA</span>
+                  <span>1.55W</span>
+                </div>
+                <div class="power-row">
+                  <span>Inference Only</span>
+                  <span>180mA</span>
+                  <span>0.90W</span>
+                </div>
+                <div class="power-row">
+                  <span>Light Sleep</span>
+                  <span>6.7mA</span>
+                  <span>33mW</span>
+                </div>
+                <div class="power-row">
+                  <span>Deep Sleep</span>
+                  <span>10μA</span>
+                  <span>50μW</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>Deployment Considerations</h3>
+              <ul class="feature-list">
+                <li><strong>Weatherproofing:</strong> IP65-rated enclosure required for outdoor deployment</li>
+                <li><strong>Power Supply:</strong> 5V 2A via solar panel + battery or mains adapter</li>
+                <li><strong>Mounting:</strong> 3-4m height, angled 15-30° down towards road</li>
+                <li><strong>Connectivity:</strong> WiFi range ~50m; cellular 4G modem for remote sites</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 4: Data Pipeline -->
+        <article class="knowledge-card" data-category="infrastructure">
+          <div class="card-header">
+            <div class="card-icon-wrapper infrastructure">
+              <i data-lucide="database" class="card-icon"></i>
+            </div>
+            <div class="card-title-group">
+              <h2>Data Pipeline</h2>
+              <span class="card-badge">Backend</span>
+            </div>
+            <button class="card-expand" aria-label="Expand card">
+              <i data-lucide="chevron-down" class="expand-icon"></i>
+            </button>
+          </div>
+          <div class="card-content">
+            <div class="content-section">
+              <h3>Detection to Dashboard Flow</h3>
+              <div class="flow-diagram">
+                <div class="flow-node">
+                  <i data-lucide="camera" class="flow-icon"></i>
+                  <span class="flow-label">ESP32-CAM</span>
+                </div>
+                <div class="flow-connector"><i data-lucide="arrow-right" class="flow-arrow"></i></div>
+                <div class="flow-node">
+                  <i data-lucide="plug" class="flow-icon"></i>
+                  <span class="flow-label">REST API</span>
+                </div>
+                <div class="flow-connector"><i data-lucide="arrow-right" class="flow-arrow"></i></div>
+                <div class="flow-node">
+                  <i data-lucide="hard-drive" class="flow-icon"></i>
+                  <span class="flow-label">SQLite DB</span>
+                </div>
+                <div class="flow-connector"><i data-lucide="arrow-right" class="flow-arrow"></i></div>
+                <div class="flow-node">
+                  <i data-lucide="bar-chart-3" class="flow-icon"></i>
+                  <span class="flow-label">Dashboard</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>SQLite Storage Schema</h3>
+              <div class="code-block">
+                <pre><code>CREATE TABLE detections (
+  id INTEGER PRIMARY KEY,
+  site_id INTEGER NOT NULL,
+  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+  vehicle_count INTEGER,
+  confidence REAL,
+  direction TEXT,
+  speed_estimate REAL,
+  FOREIGN KEY (site_id) REFERENCES sites(id)
+);
+
+CREATE TABLE sites (
+  id INTEGER PRIMARY KEY,
+  name TEXT UNIQUE NOT NULL,
+  description TEXT,
+  latitude REAL,
+  longitude REAL,
+  active BOOLEAN DEFAULT 1
+);</code></pre>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>API Endpoints</h3>
+              <div class="api-table">
+                <div class="api-row header">
+                  <span>Method</span>
+                  <span>Endpoint</span>
+                  <span>Description</span>
+                </div>
+                <div class="api-row">
+                  <span class="method get">GET</span>
+                  <span class="endpoint">/api/sites</span>
+                  <span>List all monitoring sites</span>
+                </div>
+                <div class="api-row">
+                  <span class="method get">GET</span>
+                  <span class="endpoint">/api/detections</span>
+                  <span>Get recent detections</span>
+                </div>
+                <div class="api-row">
+                  <span class="method get">GET</span>
+                  <span class="endpoint">/api/stats/:site</span>
+                  <span>Site-specific statistics</span>
+                </div>
+                <div class="api-row">
+                  <span class="method post">POST</span>
+                  <span class="endpoint">/api/detection</span>
+                  <span>Submit new detection</span>
+                </div>
+                <div class="api-row">
+                  <span class="method get">GET</span>
+                  <span class="endpoint">/api/health</span>
+                  <span>System health check</span>
+                </div>
+                <div class="api-row">
+                  <span class="method get">GET</span>
+                  <span class="endpoint">/api/devices</span>
+                  <span>Simulated device states</span>
+                </div>
+                <div class="api-row">
+                  <span class="method get">GET</span>
+                  <span class="endpoint">/api/incidents</span>
+                  <span>Simulated traffic incidents</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>Data Retention</h3>
+              <ul class="feature-list">
+                <li><strong>Raw Detections:</strong> 30 days rolling window</li>
+                <li><strong>Hourly Aggregates:</strong> 1 year retention</li>
+                <li><strong>Daily Summaries:</strong> Indefinite storage</li>
+                <li><strong>Automatic Cleanup:</strong> Nightly cron job at 3:00 AM AWST</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 5: Corridor Intelligence -->
+        <article class="knowledge-card" data-category="algorithm">
+          <div class="card-header">
+            <div class="card-icon-wrapper algorithm">
+              <i data-lucide="route" class="card-icon"></i>
+            </div>
+            <div class="card-title-group">
+              <h2>Corridor Intelligence</h2>
+              <span class="card-badge">Analytics</span>
+            </div>
+            <button class="card-expand" aria-label="Expand card">
+              <i data-lucide="chevron-down" class="expand-icon"></i>
+            </button>
+          </div>
+          <div class="card-content">
+            <div class="content-section">
+              <h3>Site Grouping Methodology</h3>
+              <p class="section-text">Sites are organized into logical corridors representing major traffic routes through Perth's western suburbs.</p>
+              <div class="corridor-list">
+                <div class="corridor-item">
+                  <span class="corridor-icon arterial"></span>
+                  <div class="corridor-info">
+                    <strong>Mounts Bay Road</strong>
+                    <span>Nedlands → Perth CBD (2 directions)</span>
+                  </div>
+                  <span class="corridor-count">6 sites</span>
+                </div>
+                <div class="corridor-item">
+                  <span class="corridor-icon arterial"></span>
+                  <div class="corridor-info">
+                    <strong>Stirling Highway</strong>
+                    <span>Claremont → Nedlands (2 directions)</span>
+                  </div>
+                  <span class="corridor-count">16 sites</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>Traffic Status Calculation</h3>
+              <p class="section-text">Corridor status is calculated using weighted averaging across all active sites, with higher weights for sites with more traffic lanes.</p>
+              <div class="code-block">
+                <pre><code>function calculateCorridorStatus(sites) {
+  const weightedSum = sites.reduce((acc, site) => {
+    return acc + (site.speed * site.laneCount);
+  }, 0);
+  const totalLanes = sites.reduce((acc, s) => acc + s.laneCount, 0);
+  return weightedSum / totalLanes;
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>Peak Hour Detection</h3>
+              <ul class="spec-list">
+                <li>
+                  <span class="spec-label">Morning Peak</span>
+                  <span class="spec-value">7:00 AM - 9:30 AM</span>
+                </li>
+                <li>
+                  <span class="spec-label">Evening Peak</span>
+                  <span class="spec-value">4:00 PM - 6:30 PM</span>
+                </li>
+                <li>
+                  <span class="spec-label">Weekend Pattern</span>
+                  <span class="spec-value">10:00 AM - 2:00 PM (shopping)</span>
+                </li>
+                <li>
+                  <span class="spec-label">Holiday Adjustment</span>
+                  <span class="spec-value">Reduced multipliers</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="content-section">
+              <h3>Future: Predictive Capabilities</h3>
+              <p class="section-text upcoming">Coming in v2.0:</p>
+              <ul class="feature-list">
+                <li>15-minute traffic predictions using LSTM neural network</li>
+                <li>Event-based surge detection (concerts, sports games)</li>
+                <li>Weather-adjusted forecasting</li>
+                <li>Personalized commute recommendations</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 6: Deployment & Infrastructure -->
+        <article class="knowledge-card" data-category="infrastructure">
+          <div class="card-header">
+            <div class="card-icon-wrapper infrastructure">
+              <i data-lucide="cloud" class="card-icon"></i>
+            </div>
+            <div class="card-title-group">
+              <h2>Deployment & Infrastructure</h2>
+              <span class="card-badge">DevOps</span>
+            </div>
+            <button class="card-expand" aria-label="Expand card">
+              <i data-lucide="chevron-down" class="expand-icon"></i>
+            </button>
+          </div>
+          <div class="card-content">
+            <div class="content-section">
+              <h3>Cloud Hosting Architecture</h3>
+              <ul class="spec-list">
+                <li>
+                  <span class="spec-label">Frontend</span>
+                  <span class="spec-value">Vercel (Global CDN)</span>
+                </li>
+                <li>
+                  <span class="spec-label">Backend API</span>
+                  <span class="spec-value">Render.com (Free Tier)</span>
+                </li>
+                <li>
+                  <span class="spec-label">Database</span>
+                  <span class="spec-value">SQLite (Render persistent disk)</span>
+                </li>
+                <li>
+                  <span class="spec-label">Monthly Cost</span>
+                  <span class="spec-value">$0 (100% free hosting)</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="content-section">
+              <h3>Backend Configuration</h3>
+              <div class="code-block">
+                <pre><code>// Render.com Web Service
+{
+  "name": "perth-traffic-watch",
+  "type": "web",
+  "env": "node",
+  "buildCommand": "npm install",
+  "startCommand": "npm start",
+  "healthCheckPath": "/api/health",
+  "envVars": {
+    "API_KEY": "generated_secret"
+  }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>Frontend Configuration</h3>
+              <ul class="feature-list">
+                <li>Vercel Edge Network for global CDN delivery</li>
+                <li>Automatic HTTPS/SSL certificates</li>
+                <li>Git-based deployments (auto-deploy on push)</li>
+                <li>Environment variable management</li>
+                <li>Custom domain support (swanflow.com.au)</li>
+              </ul>
+            </div>
+
+            <div class="content-section">
+              <h3>Monitoring & Health</h3>
+              <div class="monitoring-grid">
+                <div class="monitor-item">
+                  <i data-lucide="heart-pulse" class="monitor-icon"></i>
+                  <span class="monitor-label">Health Endpoint</span>
+                  <span class="monitor-status">/api/health</span>
+                </div>
+                <div class="monitor-item">
+                  <i data-lucide="trending-up" class="monitor-icon"></i>
+                  <span class="monitor-label">Uptime</span>
+                  <span class="monitor-status">99.9% SLA</span>
+                </div>
+                <div class="monitor-item">
+                  <i data-lucide="bell" class="monitor-icon"></i>
+                  <span class="monitor-label">Alerts</span>
+                  <span class="monitor-status">Discord webhook</span>
+                </div>
+                <div class="monitor-item">
+                  <i data-lucide="file-bar-chart" class="monitor-icon"></i>
+                  <span class="monitor-label">Logging</span>
+                  <span class="monitor-status">Docker logs</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>Deployment Commands</h3>
+              <div class="code-block">
+                <pre><code># Deploy frontend to Vercel
+cd frontend/web-dashboard
+vercel --prod
+
+# Deploy backend to Render.com
+git push origin main  # Auto-deploys via GitHub integration
+
+# View backend logs
+# Visit: https://dashboard.render.com → Select service → Logs tab</code></pre>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 7: Main Roads WA Integration -->
+        <article class="knowledge-card" data-category="integration">
+          <div class="card-header">
+            <div class="card-icon-wrapper integration">
+              <i data-lucide="network" class="card-icon"></i>
+            </div>
+            <div class="card-title-group">
+              <h2>Main Roads WA Integration</h2>
+              <span class="card-badge">Live Data</span>
+            </div>
+            <button type="button" class="card-expand" aria-label="Expand card">
+              <i data-lucide="chevron-down" class="expand-icon"></i>
+            </button>
+          </div>
+          <div class="card-content">
+            <div class="content-section">
+              <h3>Real-Time Incident Data</h3>
+              <p class="section-text">SwanFlow integrates live incident and roadworks data from Main Roads Western Australia's public ArcGIS REST API, demonstrating how <strong>citizen-augmented monitoring complements official infrastructure</strong>.</p>
+              <ul class="spec-list">
+                <li>
+                  <span class="spec-label">Data Source</span>
+                  <span class="spec-value">Main Roads WA ArcGIS API</span>
+                </li>
+                <li>
+                  <span class="spec-label">Update Frequency</span>
+                  <span class="spec-value">Real-time (15-second refresh)</span>
+                </li>
+                <li>
+                  <span class="spec-label">Coverage</span>
+                  <span class="spec-value">Perth Metro + Regional WA</span>
+                </li>
+                <li>
+                  <span class="spec-label">Data Types</span>
+                  <span class="spec-value">Incidents, Roadworks, Closures</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="content-section">
+              <h3>API Endpoints</h3>
+              <div class="code-block">
+                <pre><code>// Incidents API
+const INCIDENTS_URL = 'https://services2.arcgis.com/cHGEnmsJ165IBJRM/arcgis/rest/services/WebEoc_RoadIncidents/FeatureServer/1/query';
+
+// Roadworks API
+const ROADWORKS_URL = 'https://services2.arcgis.com/cHGEnmsJ165IBJRM/arcgis/rest/services/WebEoc_RoadworksPlanned/FeatureServer/0/query';
+
+// Fields returned
+outFields: "Location,IncidentTy,ClosureTyp,TrafficCon,TrafficImp,Road,Region,Suburb,EntryDate,UpdateDate,SeeMoreUrl"</code></pre>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>Incident Types</h3>
+              <ul class="feature-list">
+                <li><strong>Crashes</strong> — Multi-vehicle collisions, single-vehicle incidents</li>
+                <li><strong>Breakdowns</strong> — Disabled vehicles blocking lanes</li>
+                <li><strong>Hazards</strong> — Debris, oil spills, fallen trees</li>
+                <li><strong>Roadworks</strong> — Planned maintenance with lane closures</li>
+                <li><strong>Closures</strong> — Full road closures and detours</li>
+              </ul>
+            </div>
+
+            <div class="content-section">
+              <h3>Map Visualization</h3>
+              <p class="section-text">Incidents appear as <strong>orange markers</strong> on the SwanFlow map with interactive popups showing:</p>
+              <ul class="feature-list">
+                <li>Incident type badge (Maintenance, Crash, Hazard)</li>
+                <li>Location and affected road</li>
+                <li>Traffic impact and closure details</li>
+                <li>Estimated completion time</li>
+                <li>Link to Main Roads WA for updates</li>
+              </ul>
+            </div>
+
+            <div class="content-section">
+              <h3>Complementary Monitoring</h3>
+              <div class="privacy-highlight">
+                <p class="section-text"><strong>🤝 Citizen + Official:</strong> Main Roads WA operates 1,400+ Smart Freeway sensors. SwanFlow complements this with arterial road monitoring where freeway sensors don't reach—demonstrating how citizen data can augment professional infrastructure.</p>
+              </div>
+              <div class="monitoring-grid">
+                <div class="monitor-item">
+                  <i data-lucide="building-2" class="monitor-icon"></i>
+                  <span class="monitor-label">Main Roads WA</span>
+                  <span class="monitor-status">Freeways + Major Incidents</span>
+                </div>
+                <div class="monitor-item">
+                  <i data-lucide="users" class="monitor-icon"></i>
+                  <span class="monitor-label">SwanFlow</span>
+                  <span class="monitor-status">Arterial Roads + Flow Data</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-section">
+              <h3>Data Attribution</h3>
+              <p class="section-text">All incident and roadworks data is provided by Main Roads Western Australia via their public ArcGIS REST API. SwanFlow displays this data to enhance traffic awareness alongside our citizen-collected vehicle counts.</p>
+              <ul class="feature-list">
+                <li>Data source: Main Roads WA (https://www.mainroads.wa.gov.au)</li>
+                <li>API access: Public (no authentication required)</li>
+                <li>Updates: Real-time via ArcGIS Feature Service</li>
+                <li>License: Open data for public use</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="knowledge-footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <i data-lucide="bird" class="brand-icon"></i>
+          <span>SwanFlow</span>
+        </div>
+        <p class="footer-text">Real-time traffic intelligence for Perth, Western Australia</p>
+        <div class="footer-links">
+          <a href="index.html">Dashboard</a>
+          <a href="https://github.com/m4cd4r4/SwanFlow" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://edgeimpulse.com" target="_blank" rel="noopener">Edge Impulse</a>
+        </div>
+        <p class="footer-copyright">© 2025 SwanFlow Project. Built with Edge AI.</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="knowledge.js?v=20251225-01"></script>
+</body>
+</html>
