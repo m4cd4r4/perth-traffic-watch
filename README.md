@@ -5,6 +5,11 @@
 ![Status](https://img.shields.io/badge/status-proof_of_concept-yellow)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-ESP32-green)
+![Deployment](https://img.shields.io/badge/deployment-Vercel-black?logo=vercel)
+![Tests](https://img.shields.io/badge/tests-75%2B%20E2E-success?logo=playwright)
+![Node](https://img.shields.io/badge/node.js-v20-339933?logo=node.js&logoColor=white)
+![Edge Impulse](https://img.shields.io/badge/ML-Edge%20Impulse-00979D)
+![Accessibility](https://img.shields.io/badge/a11y-WCAG%202.1%20AA-green)
 
 **Live Demo:** [swanflow.com.au](https://swanflow.com.au) | **Source:** [github.com/m4cd4r4/SwanFlow](https://github.com/m4cd4r4/SwanFlow)
 
